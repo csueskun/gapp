@@ -1,0 +1,532 @@
+<?php
+
+namespace App\Http\Controllers;
+use App\Documento;
+use App\DetalleDocumento;
+use App\Pedido;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
+use DB;
+use Auth;
+
+class DocumentoController extends Controller
+{
+
+    public $conn = 'pizza';
+    /*public function __construct(){
+        DB::setDefaultConnection(Auth::user()->conn);
+        $this->conn = Auth::user()->conn;
+    }*/
+    public function todos() {
+        return Documento::orderBy("id","desc")->get();
+    }
+    public function push() {
+        $data['message'] = 'hello world desde piza';
+        \App\Util\PushService::push("my-channel","my-event", $data);
+    }
+    
+    public function encontrar($id) {
+        return Documento::with("detalles.producto")->where("id", $id)->first();
+    }
+    public function encontrarPorPedido($id) {
+        return Documento::where('pedido_id', $id)->first();
+    }
+    public function cuadre() {
+        $mail = Input::get("mail") == 1;
+        $fecha_inicio = Input::get("fecha_inicio");
+        $fecha_fin = Input::get("fecha_fin");
+        $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
+        $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
+        $cuadre = DB::select("
+            Select 'I' as ie, 'BI' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'BI' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select 'I' as ie, 'FV' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'FV' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select 'E' as ie, 'DES' as tipo, sum(COALESCE(descuento, 0)) as total 
+            from {$this->conn}_documento
+            where {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select 'I' as ie, 'PRO' as tipo, sum(COALESCE(propina, 0)) as total 
+            from {$this->conn}_pedido
+            where {$this->conn}_pedido.created_at >= $fecha_inicio 
+            and {$this->conn}_pedido.created_at <= $fecha_fin and {$this->conn}_pedido.estado = 2
+            
+            UNION ALL
+            Select 'E' as ie, 'FC' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'FC' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select 'E' as ie, 'PN' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'PN' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select '0' AS ie, '00' AS tipo, sum(
+            case when tipodoc in ('FV', 'BI', 'CO') then (total - COALESCE(descuento,0)) else (total*-1) end) as total 
+            from {$this->conn}_documento 
+            where {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            and ( pizza_documento.tipodoc = 'BI' or pizza_documento.tipodoc = 'FV'
+            or pizza_documento.tipodoc = 'FC' or pizza_documento.tipodoc = 'PN' 
+            or pizza_documento.tipodoc = 'CO')
+            ");
+        
+        $fv = DB::select("
+            select concat(tp.descripcion,' ',JSON_EXTRACT(pp.obs, '$.tamano')) as descripcion, 
+            sum(pp.cant) as cantidad, sum(pp.total) as total from {$this->conn}_documento d
+
+            join {$this->conn}_pedido as p
+            on p.id = d.pedido_id
+
+            join {$this->conn}_producto_pedido as pp
+            on p.id = pp.pedido_id
+
+            join {$this->conn}_producto as pr
+            on pr.id = pp.producto_id
+
+            join {$this->conn}_tipo_producto as tp
+            on pr.tipo_producto_id = tp.id
+
+            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV'
+            group by 1
+            
+            UNION ALL
+            Select 'Otros' as descripcion, 1 as cantidad, sum(total) as total
+            from pizza_documento where tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
+            and created_at >= $fecha_inicio and created_at <= $fecha_fin
+            ");
+
+            $descuentos = DB::select("
+            select sum(COALESCE(d.descuento, 0)) as v
+            from pizza_documento d
+            where d.tipodoc = 'FV'
+            and d.created_at >= $fecha_inicio
+            and d.created_at <= $fecha_fin
+            ");
+    
+            $propinas = DB::select("
+            select sum(COALESCE(p.propina, 0)) as v
+            from pizza_pedido p
+            where p.estado = 2
+            and p.created_at >= $fecha_inicio
+            and p.created_at <= $fecha_fin
+            ");
+    
+            $total = DB::select("
+            SELECT sum(iva) impiva, sum(impco) impcon, sum(descuento) dcto, sum(paga_efectivo) efectivo, SUM(paga_debito) debito, SUM(paga_credito) tcredito
+            FROM pizza_documento
+            WHERE created_at >= $fecha_inicio
+            AND created_at <= $fecha_fin
+            ");
+        
+            $fecha_inicio = Input::get("fecha_inicio");
+            $fecha_fin = Input::get("fecha_fin");
+            $html = \App\Util\PDF::ImpCuadre($cuadre, $fv, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total);
+        if($mail){
+            return response()->json(array('code'=>200,'msg'=>$html));
+        }
+        else{
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($html)->setPaper(array(0,0,300,1000));
+            return $pdf->stream();
+        }
+
+//        return $cuadre;
+    }
+
+    public function mail($html){
+        $to = "csueskun@gmail.com";
+        $subject = "Mensaje desde www.h-software.co";
+        $message = $html;
+
+        $from = "www.hsoftware.co";
+        $headers = "De:" . $from . "\r\n";
+        $headers .= "Content-type: text/plain; charset=UTF-8" . "\r\n";
+
+        if (mail($to, $subject, $message, $headers)) {
+            return 777;
+        } else {
+            return 666;
+        }
+    }
+    public function reporteTipodoc(){
+        $fecha_inicio = Input::get("inicio");
+        $fecha_fin = Input::get("fin");
+        $tipo = Input::get("tipo");
+        $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
+        $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
+        $nombre = Input::get("nombre");
+        if($tipo == 'FV'){
+            return $this->reporteFv($nombre, $fecha_inicio, $fecha_fin);
+        }
+        return $this->reporteTipodocPos($nombre, $tipo, $fecha_inicio, $fecha_fin);
+    }
+
+    public function preReporteVentas(){
+        $fecha_inicio = Input::get("inicio");
+        $fecha_fin = Input::get("fin");
+        $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
+        $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
+        return $this->reporteVentas($fecha_inicio, $fecha_fin);
+    }
+
+    public function reporteTipodocPos($nombre, $tipo, $fecha_inicio, $fecha_fin){
+        $reporte = DB::select("
+        select 0, dd.detalle as des, sum(dd.cantidad) as x, sum(dd.total) as v
+        from pizza_detalle_documento dd
+        join pizza_documento d
+        on dd.documento_id = d.id
+        where d.tipodoc = '$tipo'
+        and dd.created_at >= $fecha_inicio
+        and dd.created_at <= $fecha_fin
+        group by 2
+        order by 4 desc
+        ");
+        $fecha_inicio = substr($fecha_inicio,-38,-28);
+        $fecha_fin = substr($fecha_fin,-38,-28);
+        $config = app('App\Http\Controllers\ConfigController')->first();
+        return (\App\Util\POS::reporteTipodoc($nombre, $config, $reporte, $fecha_inicio, $fecha_fin));
+    }
+
+    public function reporteFv($nombre, $fecha_inicio, $fecha_fin){
+        $reporte = DB::select("
+        select dd.producto_id, coalesce(dd.detalle,p.descripcion,'OTRO') as des, sum(dd.cantidad) as x, sum(dd.total) as v 
+        from pizza_detalle_documento dd
+        left join pizza_producto as p
+        on p.id = dd.producto_id
+        join pizza_documento d
+        on dd.documento_id = d.id
+        where dd.producto_id is not null and d.tipodoc = 'FV'
+        and dd.created_at >= $fecha_inicio
+        and dd.created_at <= $fecha_fin
+        group by 1
+        union all
+        select 0, dd.detalle as des, sum(dd.cantidad), sum(dd.total)
+        from pizza_detalle_documento dd
+        join pizza_documento d
+        on dd.documento_id = d.id
+        where dd.producto_id is null and d.tipodoc = 'FV'
+        and dd.created_at >= $fecha_inicio
+        and dd.created_at <= $fecha_fin
+        group by 2
+        order by 4 desc
+        ");
+        $descuentos = DB::select("
+        select sum(COALESCE(d.descuento, 0)) as v
+        from pizza_documento d
+        where d.tipodoc = 'FV'
+        and d.created_at >= $fecha_inicio
+        and d.created_at <= $fecha_fin
+        ");
+        $fecha_inicio = substr($fecha_inicio,-38,-28);
+        $fecha_fin = substr($fecha_fin,-38,-28);
+        $config = app('App\Http\Controllers\ConfigController')->first();
+        return (\App\Util\POS::reporteTipodoc($nombre, $config, $reporte, $fecha_inicio, $fecha_fin, $descuentos));
+    }
+    public function reporteVentas($fecha_inicio, $fecha_fin){
+//        $reporte = DB::select("select * from `pizza_documento` where `created_at` >= $fecha_inicio and `created_at` <= $fecha_fin");
+        $reporte = Documento::whereRaw("`created_at` >= $fecha_inicio and `created_at` <= $fecha_fin")->with('tercero')->get();
+        $fecha_inicio = substr($fecha_inicio,-38,-28);
+        $fecha_fin = substr($fecha_fin,-38,-28);
+        $config = app('App\Http\Controllers\ConfigController')->first();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadHTML(\App\Util\PDF::reporteVentas($config, $reporte, $fecha_inicio, $fecha_fin))->setPaper('letter');
+        return $pdf->stream();
+    }
+
+    public function preCuadrePos() {
+        $fecha_inicio = Input::get("fecha_inicio");
+        $fecha_fin = Input::get("fecha_fin");
+        $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
+        $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
+        $cuadre = DB::select("
+            Select 'I' as ie, 'BI' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'BI' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select 'I' as ie, 'FV' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'FV' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select 'E' as ie, 'FC' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'FC' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select 'E' as ie, 'PN' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'PN' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select '0' AS ie, '00' AS tipo, sum(
+            case when tipodoc in ('FV', 'BI') then total else (total*-1) end) as total 
+            from {$this->conn}_documento 
+            where {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            and ( pizza_documento.tipodoc = 'BI' or pizza_documento.tipodoc = 'FV'
+            or pizza_documento.tipodoc = 'FC' or pizza_documento.tipodoc = 'PN')
+            ");
+
+        $fv = DB::select("
+            select concat(tp.descripcion,' ',JSON_EXTRACT(pp.obs, '$.tamano')) as descripcion, 
+            sum(pp.cant) as cantidad, sum(pp.total) as total from {$this->conn}_documento d
+
+            join {$this->conn}_pedido as p
+            on p.id = d.pedido_id
+
+            join {$this->conn}_producto_pedido as pp
+            on p.id = pp.pedido_id
+
+            join {$this->conn}_producto as pr
+            on pr.id = pp.producto_id
+
+            join {$this->conn}_tipo_producto as tp
+            on pr.tipo_producto_id = tp.id
+
+            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV'
+            group by 1
+            
+            UNION ALL
+            Select 'Otros' as descripcion, 1 as cantidad, sum(total) as total
+            from pizza_documento where tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
+            and created_at >= $fecha_inicio and created_at <= $fecha_fin
+            ");
+
+
+        $descuentos = DB::select("
+        select sum(COALESCE(d.descuento, 0)) as v
+        from pizza_documento d
+        where d.tipodoc = 'FV'
+        and d.created_at >= $fecha_inicio
+        and d.created_at <= $fecha_fin
+        ");
+
+        $propinas = DB::select("
+        select sum(COALESCE(p.propina, 0)) as v
+        from pizza_pedido p
+        where p.estado = 2
+        and p.created_at >= $fecha_inicio
+        and p.created_at <= $fecha_fin
+        ");
+
+        $total = DB::select("
+        SELECT sum(iva) impiva, sum(impco) impcon, sum(descuento) dcto, sum(paga_efectivo) efectivo, SUM(paga_debito) debito, SUM(paga_credito) tcredito
+        FROM pizza_documento
+        WHERE created_at >= $fecha_inicio
+        AND created_at <= $fecha_fin
+        ");
+
+            $fecha_inicio = Input::get("fecha_inicio");
+            $fecha_fin = Input::get("fecha_fin");
+        return (\App\Util\POS::cuadrePos(app('App\Http\Controllers\ConfigController')->first(),$cuadre, $fv, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total));
+    }
+
+    public function crear(){
+        $postData = Input::all();
+        
+        $rules = array(
+                'tipodoc' => 'required',
+                'mesa_id' => 'required',
+                'pedido_id' => ''
+                );
+        $validator = Validator::make($postData, $rules);
+        if ($validator->fails()) {
+
+            return Redirect::to('documento/crear')
+                            ->withErrors($validator)
+                            ->withInput(Input::except('password'))
+                            ->with('status', ["danger" => "No Se Completó el Registro."]);
+        } else {
+            $productos = json_decode(Input::get('productos'));
+            
+            $total = 0;
+            foreach($productos->detalles as $detalle){
+                $total+=$detalle->total;
+            }
+            $documento = new Documento;
+            $documento->tipodoc = Input::get('tipodoc');
+
+            $documento->tipoie = Input::get('tipoie');
+            $documento->mesa_id = Input::get('mesa_id');
+            $documento->tercero_id = Input::get('tercero_id');
+            $documento->observacion = Input::get('observacion');
+            $documento->created_at = Input::get('created_at').':00';
+            $documento->pedido_id = 0;
+            $documento->usuario_id = Auth::user()->id;
+            $documento->total = $total;
+
+            $tipo_documento_ = app('App\Http\Controllers\TipoDocumentoController')->siguienteTipo($documento->tipodoc);
+            $documento->numdoc = str_pad($tipo_documento_->consecutivo, 8, "0", STR_PAD_LEFT);
+            $documento->save();
+
+            $tipo_documento_->aumentarConsecutivo();
+            
+            foreach($productos->detalles as $detalle){
+                $detalleDocumento = new DetalleDocumento;
+                $detalleDocumento->documento_id = $documento->id;
+                if($detalle->tipo=='ingrediente'){
+                    $detalleDocumento->ingrediente_id = $detalle->producto_id;
+                }
+                else{
+                    $detalleDocumento->producto_id = $detalle->producto_id;
+                }
+                $detalleDocumento->cantidad = $detalle->cantidad;
+                $detalleDocumento->valor = $detalle->valor;
+                $detalleDocumento->total = $detalle->total;
+                $detalleDocumento->detalle = $detalle->detalle;
+                $detalleDocumento->save();
+                
+                if($detalle->tipo=='ingrediente'){
+                    if($documento->tipodoc == 'FC' || $documento->tipodoc == 'NI'){
+                        app('App\Http\Controllers\SaldosProductoController')->entradaFromDetalleDocumentoIngrediente($detalleDocumento);
+                    }
+                    else if($documento->tipodoc == 'FV'){
+                        app('App\Http\Controllers\SaldosProductoController')->salidaFromDetalleDocumentoIngrediente($detalleDocumento);
+                    }
+                    else if($documento->tipodoc == 'CO'){
+                        app('App\Http\Controllers\SaldosProductoController')->salidaFromDetalleDocumentoIngrediente($detalleDocumento);
+                    }
+                }
+                else{
+                    if($documento->tipodoc == 'FC' || $documento->tipodoc == 'NI'){
+                        app('App\Http\Controllers\SaldosProductoController')->entradaFromDetalleDocumento($detalleDocumento);
+                    }
+                    else if($documento->tipodoc == 'FV'){
+                        app('App\Http\Controllers\SaldosProductoController')->salidaFromDetalleDocumento($detalleDocumento);
+                    }
+                    else if($documento->tipodoc == 'CO'){
+                        app('App\Http\Controllers\SaldosProductoController')->salidaFromDetalleDocumento($detalleDocumento);
+                    }
+                }
+
+            }
+        
+            return Redirect::to('documento/listar')
+            ->with('status', ["success"=>"Registro Agregado."]);
+        }
+    }
+    
+    public function editar(){
+        $postData = Input::all();
+        $documento = Documento::find(Input::get('id'));
+        
+        $rules = array(
+                'tipodoc' => 'required',
+                'numdoc' => 'required',
+                'mesa_id' => 'required',
+                'pedido_id' => '',
+                'total' => 'required'
+                );
+        $validator = Validator::make($postData, $rules);
+        if ($validator->fails()) {
+
+            return Redirect::to('documento/editar/'.$documento->id)
+                            ->withErrors($validator)
+                            ->withInput(Input::except('password'))
+                            ->with('status', ["danger" => "No Se Editó el Registro."]);
+        } else {
+            
+            $documento->tipodoc = Input::get('tipodoc');
+            $documento->numdoc = Input::get('numdoc');
+            $documento->mesa_id = Input::get('mesa_id');
+            $documento->pedido_id = Input::get('pedido_id');
+            $documento->total = Input::get('total');
+            $documento->tercero_id = Input::get('tercero_id');
+            $documento->save();
+        
+            return Redirect::to('documento/editar/'.$documento->id)
+            ->with('status', ["success"=>"Registro Editado."]);
+        }
+    }
+    
+    public function editarPost($id){
+        $postData = Input::all();
+        $documento = Documento::find($id);
+        $documento->mesa_id = Input::get('mesa_id');
+        $documento->observacion = Input::get('observacion');
+        $documento->created_at = Input::get('created_at').':00';
+        $documento->tercero_id = Input::get('tercero_id');
+        $documento->save();
+        return response($documento, 200)->header('Content-Type', 'application/json');
+    }
+    public function borrar() {
+        Documento::destroy(Input::get('id'));
+        return Redirect::to('documento/listar')
+                        ->with('status', ["success" => "Registro borrado."]);
+    }
+    
+    public function vistaLista(){
+        return view('documento.listar')->with("documento_lista",$this->paginar(Input::all()));
+    }
+    
+    public function paginar($input) {
+        $tipodoc = isset($input["tipodoc"])?$input["tipodoc"]:"";;
+        $buscar = isset($input["buscar"])?$input["buscar"]:"";
+        $ordenar_por = isset($input["ordenar_por"])?$input["ordenar_por"]:"";
+        $sentido = isset($input["sentido"])?$input["sentido"]:"";
+        $por_pagina = isset($input["por_pagina"])?$input["por_pagina"]:100;
+
+        $where = [];
+        if($tipodoc!=""){
+            $where['tipodoc'] = $tipodoc;
+        }
+        return $this->paginar_($buscar, $ordenar_por, $sentido, $por_pagina, $where);
+    }
+    
+    public function paginar_($buscar, $ordenar_por, $sentido, $por_pagina, $where) {
+        if($where==null){
+            if($ordenar_por==""||$ordenar_por==null){
+                return Documento::Where("numdoc","like", "%$buscar%")
+                    ->orderBy('created_at', 'desc')
+                    ->paginate($por_pagina);
+            }
+            return Documento::Where("numdoc","like", "%$buscar%")
+                ->orderBy($ordenar_por, $sentido)
+                ->paginate($por_pagina);
+        }
+        if($ordenar_por==""||$ordenar_por==null){
+            return Documento::Where("numdoc","like", "%$buscar%")
+                ->where($where)
+                ->orderBy('created_at', 'desc')
+                ->paginate($por_pagina);
+        }
+        return Documento::Where("numdoc","like", "%$buscar%")
+            ->where($where)
+            ->orderBy($ordenar_por, $sentido)
+            ->paginate($por_pagina);
+    }
+
+    public function vistaEditar($id){
+        return view('documento.editar')
+        ->with("documento", Documento::find($id))
+        ->with("tercero_lista", app('App\Http\Controllers\TerceroController')->todos())
+        ->with("detalles", app('App\Http\Controllers\DetalleDocumentoController')->buscarPorDocumento($id));
+    }
+
+    public function impDocumento($id){
+        $documento = $this->encontrar($id);
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadHTML(\App\Util\PDF::ImpDocumento($documento))->setPaper('letter');
+        return $pdf->stream();
+    }
+}

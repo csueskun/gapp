@@ -1,0 +1,148 @@
+div#informacion{
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+div#informacion ul{
+    list-style: none !important;
+    padding: 0;
+}
+div#informacion div{
+    padding-left: 2px;
+    padding-right: 2px;
+}
+div#informacion div.arriba{
+    background-color: white;
+    color: #737373;
+    line-height: 21px;
+    padding-top: 4px;
+    text-shadow: none;
+}
+
+div#informacion ul li{
+    display: inline-block;
+    width: 100%;
+}
+div#informacion ul li h1{
+    margin-bottom: 4px;
+    margin-top: 4px;
+    font-weight: 800;
+}
+div#informacion div#esperando ul li>div{
+    background-color: #298e00;
+}
+div#informacion div#atendiendo ul li>div{
+    background-color: #f7ab20;
+}
+div#informacion ul li h2{
+    margin-top: 8px;
+    margin-bottom: 6px;
+    font-weight: 800;
+}
+
+@media (min-width: 1150px){
+    .container {
+        width: 1140px;
+    }
+}
+@media (min-width: 1100px){
+    .container {
+        width: 1090px;
+    }
+}
+@media (min-width: 1200px){
+    .container {
+        width: 1190px;
+    }
+}
+@media (min-width: 1250px){
+    .container {
+        width: 1240px;
+    }
+}
+@media (min-width: 1300px){
+    .container {
+        width: 1290px;
+    }
+}
+@media (min-width: 1350px){
+    .container {
+        width: 1340px;
+    }
+}
+@media (min-width: 1400px){
+    .container {
+        width: 1390px;
+    }
+}
+@media (min-width: 1450px){
+    .container {
+        width: 1440px;
+    }
+}
+@media (min-width: 1500px){
+    .container {
+        width: 1490px;
+    }
+}
+@media (min-width: 1550px){
+    .container {
+        width: 1540px;
+    }
+}
+@media (min-width: 1600px){
+    .container {
+        width: 1590px;
+    }
+}
+@media (max-width: 1299px){
+    div#informacion>div>div{
+        padding: 0;
+    }
+}
+
+div#modulos>a{
+    font-family: 'bebas_neuebold';
+    font-size: 30px;
+}
+div#admin>a{
+    font-family: 'bebas_neuebold';
+    font-size: 30px;
+}
+div#modulos>a.pendiente{
+    background-color: #ffe19d;
+}
+div#modulos>a.ocupado{
+    background-color: #ffafaf;
+}
+div#modulos>a.libre{
+    background-color: #e7ffce;
+}
+p.info{
+    color: red;
+    font-size: 16px;
+}
+
+div.elegir_proponente img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+div.votando_proponente img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+div.elegir_proponente img:hover {
+    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+table#votaciones tr.agregado, table#asistencias tr.agregado{
+    background-color: #c8eac8;
+    
+}
+table#totales-asistencias td, table#totales-votaciones td{
+    text-align: right;
+}

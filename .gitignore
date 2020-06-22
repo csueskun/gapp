@@ -1,0 +1,5 @@
+/laravel/vendor
+/node_modules
+/laravel/storage
+/lavarel/public/images
+/laravel/.env
