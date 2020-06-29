@@ -3,3 +3,4 @@
 /laravel/storage
 /lavarel/public/images
 /laravel/.env
+images/*

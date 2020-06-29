@@ -364,7 +364,9 @@ class POS{
                 $total -= $documento->descuento;
             }
             $stack[] = ["i"=>"doble","v"=>2];
-            $texto = (self::impLinea('Total', ' $' . number_format($total, 0), floor($caracteres/2)));
+            $stack[] = ["i"=>"texto","v"=>'Total'];
+            $stack[] = ["i"=>"sencilla","v"=>1];
+            $total_val = number_format($total, 0);
         }
         else{
             $texto = (self::impLinea('Subtotal', ' $' . number_format($total, 0), floor($caracteres)));
@@ -374,9 +376,14 @@ class POS{
             $texto .= (self::impLinea('+Propina sugerida', ' $' . number_format($total*$propina/100, 0), floor($caracteres)));
             $stack[] = ["i"=>"texto","v"=>$texto];
             $stack[] = ["i"=>"doble","v"=>2];
-            $texto = (self::impLinea('Total', ' $' . number_format($total*(1+$propina/100-$descuento/100), 0), floor($caracteres/2)));
+            $stack[] = ["i"=>"texto","v"=>'Total'];
+            $stack[] = ["i"=>"sencilla","v"=>1];
+            $total_val = number_format($total*(1+$propina/100-$descuento/100));
         }
-        $stack[] = ["i"=>"texto","v"=>$texto];
+        $stack[] = ["i"=>"texto","v"=>str_pad('$', $caracteres - ceil((5+strlen($total_val))*1.5), " ", STR_PAD_LEFT)];
+        $stack[] = ["i"=>"doble","v"=>2];
+        $stack[] = ["i"=>"texto","v"=>$total_val];
+
         $stack[] = ["i"=>"sencilla","v"=>1];
         $texto = ("\n");
         $texto.= (str_repeat("-", $caracteres));
