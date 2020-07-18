@@ -740,6 +740,7 @@ Route::delete('/tercero/modal', 'TerceroController@borrarModal');
 
 
 Route::get('/cocina', 'CocinaController@vistaCocina');
+Route::get('/cocina/nuevos/{id}', 'CocinaController@nuevosPedidos');
 Route::get('/producto_pedido/preparado/{id}', 'ProductoPedidoController@preparado');
 /*-------------------------------------------------------------------------
 |           Rutas Combo

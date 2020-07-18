@@ -8,17 +8,17 @@
 @section('contenido')
     <br/>
     <section class="borde-inferior">
-        <div class="container">
+        <div class="container" id="container-pedidos">
             @foreach($pedido_lista as $pedido)
-            <div class="panel panel-default pedido">
+            <div class="panel panel-default pedido" id="{{$pedido->id}}">
                 <div class="panel-heading">
                     <h2 class="panel-title" style="color: grey">
                         <div class="row">
                             <div class="col-md-4">Pedido #{{$pedido->id}}</div>
-                            <div class="col-md-4">Mesa: {{$pedido->mesa_id}}</div>
-                            <div class="col-md-4">Fecha y Hora: {{ date_format(date_create($pedido->fecha), 'g:i A') }}</div>
+                            <div class="col-md-3">Mesa: {{$pedido->mesa_id}}</div>
+                            <div class="col-md-5">{{ date_format(date_create($pedido->fecha), 'g:i:s A d/m/Y') }}</div>
                         </div>
-                        </h2>
+                    </h2>
                 </div>
                 <ul class="list-group">
                     @foreach($pedido->productos as $producto)
@@ -30,6 +30,7 @@
                         list-group-item-success
                         @endif
                         producto"
+                        date="{{$producto->pivot->created_at}}"
                         id="{{$producto->pivot->id}}">
                         <label class="" id="preparado-label">
                             <input type="checkbox"
@@ -104,9 +105,10 @@
         }
     </style>
     <section class="borde-inferior form fondo-comun"  style="min-height: 80vh;">
-
     </section>
     <script>
+        var lastId = '0';
+        var lastDate = '2000-01-01 00:00:00';
         function entregadoCheckbox(checkbox, id){
             if(checkbox.attr("disabled") == "disabled"){
                 return false;
@@ -133,7 +135,129 @@
             });
             $("li.producto").on("click", function(){
                 $(this).find('input').click();
-            })
-        })
+            });
+            if($("div.pedido").length){
+                lastId = $("div.pedido:first-child").attr('id');
+            }
+
+            $('.producto.list-group-item').each(function(i, j){
+                if($(this).attr('date')>lastDate){
+                    lastDate = $(this).attr('date');
+                }
+            });
+            // console.log(lastDate)
+            setInterval(buscarNuevos, 5000);
+            // buscarNuevos();
+        });
+
+        function buscarNuevos(){
+            $.get("/cocina/nuevos/"+lastDate.replace(" ", "_"), function (data) {
+            // $.get("/cocina/nuevos/801", function (data) {
+                mostrarNuevos(data.pedidos);
+            });
+        }
+        function mostrarNuevos(pedidos){
+            var print = false;
+            pedidos.forEach(pedido => {
+                lastId = pedido.id;
+                pedido.productos.forEach(producto => {
+                    if(producto.terminado != 1){
+                        print = true;
+                    }
+                    if(producto.pivot.created_at>lastDate){
+                        lastDate = producto.pivot.created_at;
+                    }
+                });
+                if(print){
+                    $('div.panel#'+pedido.id).remove();
+                    $("#container-pedidos").prepend(plantillaPedido(pedido));
+                }
+            });
+        }
+        function plantillaPedido(pedido){
+            var productosHtml = '';
+            pedido.productos.forEach(producto => {
+                productosHtml += plantillaProducto(producto);
+            });
+            var fecha = pedido.fecha;
+            try {
+                fecha = fecha.split(' ')[1];
+            } catch (error) {
+                
+            }
+            var html = `
+            <div class="panel panel-default pedido" id="${pedido.id}">
+                <div class="panel-heading">
+                    <h2 class="panel-title" style="color: grey">
+                        <div class="row">
+                            <div class="col-md-4">Pedido #${pedido.id}</div>
+                            <div class="col-md-3">Mesa: ${pedido.mesa_id}</div>
+                            <div class="col-md-5">${pedido.fecha}</div>
+                        </div>
+                    </h2>
+                </div>
+                <ul class="list-group">${productosHtml}</ul>
+            </div>
+            `;
+            return html;
+        }
+        function plantillaProducto(producto){
+            if(producto.terminado == 1){
+                return '';
+            }
+            var sin = '';
+            var extra = '';
+            var preparado = producto.pivot.preparado != null && producto.pivot.preparado != '';
+            var detalle = producto.tipo_producto.descripcion+" "+producto.descripcion != producto.detalle ? producto.detalle : '';
+            if(producto.pivot.obs){
+                producto.pivot.obs = JSON.parse(producto.pivot.obs);
+                sin = plantillaSin(producto.pivot.obs);
+                extra = plantillaExtra(producto.pivot.obs);
+            }
+            var html = `
+            <li class="list-group-item 
+                ${preparado?'list-group-item-success ':''}
+                producto"
+                date="${producto.pivot.created_at}"
+                id="${producto.pivot.id}">
+                <label class="" id="preparado-label">
+                    <input type="checkbox"
+                            id="preparado-checkbox"
+                            name="preparado-checkbox"
+                            ${preparado?'checked ':''}
+                            onchange="entregadoCheckbox($(this), ${producto.pivot.id})"/>
+                    ${producto.tipo_producto.descripcion} ${producto.descripcion} ${detalle}
+                </label>
+                <span class="sin">${sin}</span>
+                <span class="extra">${extra}</span>
+            </li>
+            `;
+            return html;
+        }
+
+        function plantillaSin(obs){
+            if(obs.sin_ingredientes.length){
+                var spanHtml = ' SIN ( ';
+                obs.sin_ingredientes.forEach(function(element) {
+                    spanHtml+=(element.descripcion+', ');
+                });
+                spanHtml+=('*');
+                spanHtml=spanHtml.replace(', *', '');
+                return spanHtml;
+            }
+            return '';
+        }
+        function plantillaExtra(obs){
+            if(obs.adicionales.length){
+                var spanHtml = ' EXTRA ( ';
+                obs.adicionales.forEach(function(element) {
+                    spanHtml+=(element.nombre+', ');
+                });
+                spanHtml+=('*');
+                spanHtml=spanHtml.replace(', *', '');
+                return spanHtml;
+            }
+            return '';
+        }
     </script>
 @endsection
