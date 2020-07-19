@@ -110,13 +110,13 @@
             </h2>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="/pedido/listar?ordenar_por=id&sentido=desc" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Pedidos Activos</a>
+                    <a href="/pedido/listar?ordenar_por=id&sentido=desc" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-file-powerpoint-o" aria-hidden="true"></i> Pedidos Activos</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/domicilios?ordenar_por=id&sentido=desc" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Domicilios Activos</a>
+                    <a href="/domicilios?ordenar_por=id&sentido=desc" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-motorcycle" aria-hidden="true"></i> Domicilios Activos</a>
                 </li>
                 <li class="nav-item">
-                    <li><a href="/pedido/archivados?ordenar_por=id&sentido=desc" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Archivados</a></li>
+                    <li><a href="/pedido/archivados?ordenar_por=id&sentido=desc" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-archive" aria-hidden="true"></i> Archivados</a></li>
                 </li>
             </ul>
             @if(Auth::user()->rol=='Administrador')
@@ -124,30 +124,30 @@
                 <span>Datos básicos</span>
             </h2>
             <ul class="nav flex-column">
-                <li class="nav-item"><a href="/producto/listar" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Productos</a></li>
-                <li class="nav-item"><a href="/ingrediente/listar" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Ingredientes</a></li>
-                <li class="nav-item"><a href="/tipo_producto/listar" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Tipos de Productos</a></li>
-                <li class="nav-item"><a href="/adicional/agregar" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Adicionales</a></li>
-                <li class="nav-item"><a href="/combo" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Combos</a></li>
-                <li class="nav-item"><a href="/tercero" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Terceros</a></li>
+                <li class="nav-item"><a href="/producto/listar" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-coffee" aria-hidden="true"></i> Productos</a></li>
+                <li class="nav-item"><a href="/ingrediente/listar" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-lemon-o" aria-hidden="true"></i> Ingredientes</a></li>
+                <li class="nav-item"><a href="/tipo_producto/listar" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags" aria-hidden="true"></i> Tipos de Productos</a></li>
+                <li class="nav-item"><a href="/adicional/agregar" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-glass" aria-hidden="true"></i> Adicionales</a></li>
+                <li class="nav-item"><a href="/combo" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-qrcode" aria-hidden="true"></i> Combos</a></li>
+                <li class="nav-item"><a href="/tercero" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-address-book-o" aria-hidden="true"></i> Terceros</a></li>
             </ul>
             <h2 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                 <span>Gestión</span>
             </h2>
             <ul class="nav flex-column">
-                <li class="nav-item"><a href="/documento/listar" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Documentos</a></li>
-                <li class="nav-item"><a href="/cocina" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Cocina</a></li>
-                <li class="nav-item"><a href="/caja/cuadre" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Cuadre de Caja</a></li>
-                <li class="nav-item"><a href="/config/editar" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Configuración</a></li>
-                <li class="nav-item"><a href="/config/orden" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Orden del menú</a></li>
+                <li class="nav-item"><a href="/documento/listar" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Documentos</a></li>
+                <li class="nav-item"><a href="/cocina" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-television" aria-hidden="true"></i> Cocina</a></li>
+                <li class="nav-item"><a href="/caja/cuadre" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-money" aria-hidden="true"></i> Cuadre de Caja</a></li>
+                <li class="nav-item"><a href="/config/editar" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cogs" aria-hidden="true"></i> Configuración</a></li>
+                <li class="nav-item"><a href="/config/orden" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-exchange" aria-hidden="true"></i> Orden del menú</a></li>
             </ul>
             <h2 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                 <span>Reportes</span>
             </h2>
             <ul class="nav flex-column">
-                <li class="nav-item"><a href="/mesero/informe" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Ventas por usuario</a></li>
-                <li class="nav-item"><a href="/saldos_producto" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Inventario</a></li>
-                <li class="nav-item"><a href="/informe" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Histórico</a></li>
+                <li class="nav-item"><a href="/mesero/informe" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-address-card" aria-hidden="true"></i> Ventas por usuario</a></li>
+                <li class="nav-item"><a href="/saldos_producto" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-file-text-o" aria-hidden="true"></i> Inventario</a></li>
+                <li class="nav-item"><a href="/informe" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-database" aria-hidden="true"></i> Histórico</a></li>
             </ul>
             @endif
             @if(Auth::user()->rol=='Cocinero')
@@ -163,10 +163,10 @@
                 <span>Gestión</span>
             </h2>
             <ul class="nav flex-column">
-                <li class="nav-item"><a href="/caja/cuadre" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Cuadre de Caja</a></li>
-                <li class="nav-item"><a href="/informe" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Informes</a></li>
-                <li class="nav-item"><a href="/tercero" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Terceros</a></li>
-                <li class="nav-item"><a href="/config/orden" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Orden del menú</a></li>
+                <li class="nav-item"><a href="/caja/cuadre" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-money" aria-hidden="true"></i> Cuadre de Caja</a></li>
+                <li class="nav-item"><a href="/informe" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bar-chart" aria-hidden="true"></i> Informes</a></li>
+                <li class="nav-item"><a href="/tercero" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-address-book-o" aria-hidden="true"></i> Terceros</a></li>
+                <li class="nav-item"><a href="/config/orden" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-exchange" aria-hidden="true"></i> Orden del menú</a></li>
             </ul>
             @endif
         </div>

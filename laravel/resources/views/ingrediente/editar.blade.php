@@ -4,20 +4,34 @@
 
 @section('lib')
 {{ Html::script('js/validator.min.js') }}
+{{ Html::style('css/bootstrap-datetimepicker.min.css') }}
+{{ Html::script('js/bootstrap-datetimepicker.min.js') }}
+{{ Html::script('js/bootstrap-datetimepicker.es.js') }}
+
 @endsection
 
 @section('contenido')
-
+<section class="borde-inferior fondo-blanco">
+    <div class="container">
+        <h1 class = "titulo">Editando Ingredientes 
+            <a style="font-size: 20px;" href="../crear" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Crear Nuevo</a>
+            <a style="font-size: 20px;" href="../listar" class="btn btn-default"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Ir a Lista</a>
+        </h1>
+        <br/>
+    </div>
+</section>
+<!--
 <section class="borde-inferior fondo-rojo">
     <div class="container">
         <h1 class = "titulo">EDITANDO Ingrediente</h1>
     </div>
 </section>
+-->
 <section class="borde-inferior form fondo-comun"  style="min-height: 80vh;">
     <div class="container">
-        <br/>
+        <!--<br/>
         <a href="../listar" class="btn btn-default"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Ir a Lista</a>
-        <br/>
+        <br/>-->
         <br/>
         @include('template.status', ['status' => session('status')])
     
@@ -29,7 +43,7 @@
 
 
                     
-            <div class = "col-md-6">
+            <div class = "col-md-12">
                 <div class = "form-group has-feedback {{ ($errors->first('descripcion')) ? 'has-error'  :''}}">
                     <label for = "descripcion" class = "control-label">Descripcion *</label>
                     <input type = "text" class = "form-control" id = "descripcion" name = "descripcion" required value = "{{ old('descripcion')?old('descripcion'):$ingrediente->descripcion }}">
@@ -45,7 +59,7 @@
                 <div class = "help-block with-errors">{{ $errors->first('grupo') }}</div>
             </div>
         </div>
-        <div class = "col-md-6">
+        <div class = "col-md-4">
             <div class = "form-group has-feedback {{ ($errors->first('unidad')) ? 'has-error'  :''}}">
                 <label for = "descripcion" class = "control-label">Unidad *</label>
                 <select class = "form-control" id = "unidad" name = "unidad" required>
@@ -74,7 +88,7 @@
             </div>
         </div>
 
-        <div class = "col-md-6" style="height: 91px">
+        <div class = "col-md-2" style="height: 91px">
             <div class = "form-group">
                 <label class="radio-inline control-label" style="font-weight: bold; padding-left: 0px;">
                     Visible <input {{ $ingrediente->visible=='1'?'checked':'' }} id="visible" type="checkbox" value="1" name="visible" style="width: 20px; margin-left: 10px;">
@@ -84,7 +98,7 @@
             </div>
         </div>
         
-            <div class = "col-md-6">
+        <div class = "col-md-12">
                 <div class = "form-group has-feedback {{ ($errors->first('_imagen')) ? 'has-error'  :''}}">
                     <img id="img_imagen" src="/images/ingrediente/ingrediente.jpg" height="200" onclick="$('#_imagen').trigger('click')" style="cursor: pointer"/><br/>
                     <label for = "_imagen" class = "control-label" >Imagen *</label>

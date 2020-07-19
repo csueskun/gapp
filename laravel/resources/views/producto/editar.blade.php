@@ -33,6 +33,7 @@
 
 <section class="borde-inferior fondo-comun z-index-100">
     <div class="container">
+    
     <form data-toggle = "validator" role = "form" action = "crear" id="form-tipo-producto">
         {{ csrf_field() }}
             <h3 class = "titulo">Tipo De Producto 
@@ -40,7 +41,7 @@
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuevo
                 </button>
             </h3>
-            <div class = "col-md-12">
+            <div class = "col-md-6">
                 <div class = "form-group has-feedback {{ ($errors->first('tipo_producto_id')) ? 'has-error'  :''}}">
                     <select class = "form-control has-feedback" required id = "tipo_producto_id" name = "tipo_producto_id" >
                         <option value="">---</option>
@@ -54,7 +55,7 @@
                     <select/>
                 </div>
             </div>
-            <div class = "col-md-12">
+            <div class = "col-md-6">
                 <div class = "form-group has-feedback">
                     <input type = "text"  class = "form-control" name = "tipo_producto_id_" id = "tipo_producto_id_" value="{{$producto->tipo_producto_id}}" required style="position: absolute; top: -2000px"/>
                     <div class = "help-block with-errors"></div>
@@ -65,13 +66,15 @@
 </section>
 <section class="borde-inferior form fondo-comun">
     <div class="container">
-    <br/>
+    <h3 class = "titulo">Datos</h3>
+    <!--<br/>-->
     @include('template.status', ['status' => session('status')])
         <br/>
     <form data-toggle = "validator" role = "form" action = "crear" method="POST" id="form-producto">
         {{ csrf_field() }}
+       
         <input type = "hidden"  class = "form-control" id = "id" name = "id" required value = "{{ $producto->id }}">
-        <div class = "col-md-12">
+        <div class = "col-md-6">
             <div class = "form-group">
                 <label for = "descripcion" class = "control-label">Tipo de Producto</label>
                 <select class = "form-control has-feedback" producto_id="{{$producto->id}}" required id = "tipo_producto_s" name = "tipo_producto_s" onchange="updateTipo({{$producto->id}},this,{{ $producto->tipo_producto->id }})">
@@ -88,7 +91,7 @@
                     <div class = "help-block with-errors"> </div>
             </div>
         </div>
-        <div class = "col-md-12">
+        <div class = "col-md-8">
             <div class = "form-group has-feedback {{ ($errors->first('descripcion')) ? 'has-error'  :''}}">
                 <label for = "descripcion" class = "control-label">Descripcion *</label>
                 <input type = "text"  class = "form-control" id = "descripcion" name = "descripcion" required value = "{{ $producto->descripcion }}">
@@ -96,7 +99,7 @@
                 <div class = "help-block with-errors">{{ $errors->first('descripcion') }}</div>
             </div>
         </div>
-        <div class = "col-md-12">
+        <div class = "col-md-4">
             <div class = "form-group has-feedback {{ ($errors->first('grupo')) ? 'has-error'  :''}}">
                 <label for = "grupo" class = "control-label">Grupo</label>
                 <input type = "text"  class = "form-control" id = "grupo" name = "grupo" value = "{{ $producto->grupo }}">
@@ -137,7 +140,7 @@
         <div class = "col-md-4">
             <div class = "form-group">
                 <label class="radio-inline control-label" style="font-weight: bold; padding-left: 0px;">
-                    Se Imprime En Comanda <input {{ $producto->impcomanda=='1'?'checked':'' }} id="imprime" type="checkbox" value="1" name="comanda" style="width: 20px; margin-left: 10px;">
+                    Imprime En Comanda ?<input {{ $producto->impcomanda=='1'?'checked':'' }} id="imprime" type="checkbox" value="1" name="comanda" style="width: 20px; margin-left: 10px;">
                 </label>
                 <span class = "form-control-feedback"></span>
                 <div class = "help-block"></div>
@@ -218,7 +221,7 @@
     <div class="container">
         <form data-toggle = "validator" id="form-tamanos" role = "form" action = "crear" method="POST">
         {{ csrf_field() }}
-            <h3 class = "titulo">Tamaños</h3>
+            <h3 class = "titulo">Precios / Tamaños</h3>
             <table id='tamanos'>
                 <thead>
                     <tr>
@@ -388,6 +391,7 @@
 <section class="borde-inferior form fondo-comun">
     <br>
     <div class="container">
+        <h3 class = "titulo">impuestos</h3>
         <div class = "col-md-3">
             <div class = "form-group has-feedback {{ ($errors->first('iva')) ? 'has-error'  :''}}">
                 <label for = "iva" class = "control-label">IVA</label>

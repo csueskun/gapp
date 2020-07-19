@@ -34,6 +34,7 @@
                     <th>Grupo</th>
                     <th>Unidad</th>
                     <th>Imagen</th>
+                    <th>Visible</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -43,9 +44,7 @@
                     <td style='max-width: 200px;'>
                         {{ $ingrediente->descripcion }}
                     </td>
-                    <td>
-                        {{ $ingrediente->grupo }}
-                    </td>
+                    <td> {{ $ingrediente->grupo }}</td>
                     <td class=''>
                         {{array(
                             'gr'=>'Gramos (gr)',
@@ -61,6 +60,7 @@
                         )[$ingrediente->unidad]}}
                     </td>
                     <td class='centrado min-width'><img src="/images/ingrediente/{{ $ingrediente->imagen }}" style="height: 60px"/></td>
+                    <td class="centrado"><input type="checkbox" class="manualDisabled checkbox-grande" {{ $ingrediente->visible == '1'?'checked':'' }}/> </td>
                     <td class="min-width text-align-center">
                         <a href="editar/{{ $ingrediente->id }}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></a>
                         <button onclick="(borrar({{ $ingrediente->id }}))" class="btn btn-danger"><span class = "glyphicon glyphicon-trash"></span></button>

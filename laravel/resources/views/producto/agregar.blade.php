@@ -42,7 +42,7 @@
 
 <section class="borde-inferior fondo-blanco">
     <div class="container">
-        <h1 class = "titulo">CREANDO Producto
+        <h1 class = "titulo">Nuevo Producto
             <a style="font-size: 20px;" href="listar" class="btn btn-default"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Ir a Lista</a>
         </h1>
         <br/>
@@ -61,7 +61,7 @@
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuevo
                 </button>
             </h3>
-            <div class = "col-md-12">
+            <div class = "col-md-6">
                 <div class = "form-group has-feedback {{ ($errors->first('tipo_producto_id')) ? 'has-error'  :''}}">
                     <select class = "form-control has-feedback" required id = "tipo_producto_id" name = "tipo_producto_id" >
                         <option value="">---</option>
@@ -71,12 +71,20 @@
                     <select/>
                 </div>
             </div>
-            <div class = "col-md-12">
+            <div class = "col-md-6">
                 <div class = "form-group has-feedback">
                     <input type = "text"  class = "form-control" name = "tipo_producto_id_" id = "tipo_producto_id_" required style="position: absolute; top: -2000px"/>
                     <div class = "help-block with-errors"></div>
                 </div>
             </div>
+            <!--<div class = "col-md-6">
+                <div class = "form-group has-feedback {{ ($errors->first('codigo')) ? 'has-error'  :''}}">
+                    <label for = "codigo" class = "control-label">Codigo *</label>
+                    <input type = "text"  class = "form-control" id = "codigo" name = "codigo" required value = "{{ old('codigo') }}">
+                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                    <div class = "help-block with-errors">{{ $errors->first('codigo') }}</div>
+                </div>
+            </div>-->
         </form>
     </div>
 </section>
@@ -86,7 +94,7 @@
     <form data-toggle = "validator" role = "form" action = "crear" method="POST" id="form-producto">
         {{ csrf_field() }}
         <input type="hidden" name="imagen" id="imagen"/>
-        <div class = "col-md-12">
+        <div class = "col-md-8">
             <div class = "form-group has-feedback {{ ($errors->first('descripcion')) ? 'has-error'  :''}}">
                 <label for = "descripcion" class = "control-label">Descripcion *</label>
                 <input type = "text"  class = "form-control" id = "descripcion" name = "descripcion" required value = "{{ old('descripcion') }}">
@@ -94,7 +102,7 @@
                 <div class = "help-block with-errors">{{ $errors->first('descripcion') }}</div>
             </div>
         </div>
-        <div class = "col-md-12">
+        <div class = "col-md-4">
             <div class = "form-group has-feedback {{ ($errors->first('grupo')) ? 'has-error'  :''}}">
                 <label for = "grupo" class = "control-label">Grupo</label>
                 <input type = "text"  class = "form-control" id = "grupo" name = "grupo" value = "{{ old('grupo') }}">

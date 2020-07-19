@@ -298,7 +298,7 @@ class PDF{
                 $linea .= '<tr><td colspan="2" class="overflow"><hr></td></tr>';
                 $linea.= "<tr><td class='al-izq letra-sans mediana'>EFECTIVO</td><td style='width: 180px;font-size: 1.3em;' class='al-der color-verde'>$ " . number_format($t->efectivo) . "</td></tr>";
                 $linea .= '<tr><td colspan="2" class="overflow"><hr></td></tr>';
-                $linea.= "<tr><td class='al-izq letra-sans mediana'>EFECTIVO</td><td style='width: 180px;font-size: 1.3em;' class='al-der color-verde'>$ " . number_format($t->debito) . "</td></tr>";
+                $linea.= "<tr><td class='al-izq letra-sans mediana'>DEBITO</td><td style='width: 180px;font-size: 1.3em;' class='al-der color-verde'>$ " . number_format($t->debito) . "</td></tr>";
                 $linea .= '<tr><td colspan="2" class="overflow"><hr></td></tr>';
                 $linea.= "<tr><td class='al-izq letra-sans mediana'>CRÉDITO</td><td style='width: 180px;font-size: 1.3em;' class='al-der color-verde'>$ " . number_format($t->tcredito) . "</td></tr>";
                 $linea .= '<tr><td colspan="2" class="overflow"><hr></td></tr>';
