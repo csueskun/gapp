@@ -15,7 +15,7 @@
                     <h2 class="panel-title" style="color: grey">
                         <div class="row">
                             <div class="col-md-4">Pedido #{{$pedido->id}}</div>
-                            <div class="col-md-3">Mesa: {{$pedido->mesa_id}}</div>
+                            <div class="col-md-3">{{$pedido->mesa_id == 0 ? 'Domicilio': 'Mesa '.$pedido->mesa_id}}</div>
                             <div class="col-md-5">{{ date_format(date_create($pedido->fecha), 'g:i:s A d/m/Y') }}</div>
                         </div>
                     </h2>
