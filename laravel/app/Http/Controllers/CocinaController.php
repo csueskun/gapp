@@ -15,7 +15,7 @@ class CocinaController extends Controller
         DB::setDefaultConnection(Auth::user()->conn);
     }*/
     public function vistaCocina() {
-        $pedidos = Pedido::with("productos")->where("mesa_id", "!=", 0)->where("estado", 1)->orderBy('created_at', 'desc')->get();
+        $pedidos = Pedido::with("productos")->where("estado", 1)->orderBy('created_at', 'desc')->get();
         return view('cocina.pedidos')->with('pedido_lista', $pedidos);
     }
     public function nuevosPedidos($date) {
@@ -25,7 +25,7 @@ class CocinaController extends Controller
         $date = str_replace('_', ' ', $date);
         $pedidos = Pedido::select('pedido.*')
         ->join('producto_pedido', 'producto_pedido.pedido_id', '=', 'pedido.id')
-        ->where("pedido.mesa_id", "!=", 0)->where("pedido.estado", 1)
+        ->where("pedido.estado", 1)
         ->where('producto_pedido.created_at', '>', $date)
         ->with("productos.tipo_producto")
         ->orderBy('pedido.created_at', 'asc')->get();
