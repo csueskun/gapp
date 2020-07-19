@@ -228,8 +228,11 @@ class POS{
         else{
             $texto.= "Cliente: VARIOS\n";
         }
+        if(isset($observaciones->domicilio)&&$observaciones->domicilio!=''){
+            $texto.= "Direc.: $observaciones->domicilio\n";
+        }
         if(isset($observaciones->tel)&&$observaciones->tel!=''){
-            $texto.= "Tel: $observaciones->tel\n";
+            $texto.= "Teléf.: $observaciones->tel\n";
         }
 
         $texto.= "Caja: PRINCIPAL\n";

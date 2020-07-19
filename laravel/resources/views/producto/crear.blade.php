@@ -27,7 +27,7 @@
         
     <form data-toggle = "validator" role = "form" action = "crear" method="POST">
         {{ csrf_field() }}
-        <h1 class = "titulo">CREANDO Producto</h1>
+        <h1 class = "titulo">Nuevo Producto</h1>
                     
             <div class = "col-md-6">
                 <div class = "form-group has-feedback {{ ($errors->first('codigo')) ? 'has-error'  :''}}">
@@ -102,7 +102,7 @@
                     
             <div class = "col-xs-12">
                 <div class = "form-group">
-                    <button type = "submit" class = "btn btn-primary">Crear</button>
+                    <button type = "submit" class = "btn btn-primary">Guardar Nuevo</button>
                 </div>
             </div>
     
