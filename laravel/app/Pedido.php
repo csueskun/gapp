@@ -20,5 +20,5 @@ class Pedido extends Model
     // 2 pagado
     // 3 facturado no pagado
     // 4
-    // 5 Reciclar
+    // 5 
 }
