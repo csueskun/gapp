@@ -56,10 +56,17 @@ class POS{
             $pp_aux[] = $producto_pedido;
         }
         $pedido->productos_pedido = $pp_aux;
-        $pedido->productos_pedido = self::reagruparProductosPedido($pedido->productos_pedido);
-        
 
+        
+        $combos = self::buildCombos($pedido->productos_pedido);
+        if(count($combos)>0){
+            $pedido->productos_pedido = array_merge($pedido->productos_pedido, $combos);
+        }
+        $pedido->productos_pedido = self::reagruparProductosPedido($pedido->productos_pedido);
         foreach ($pedido->productos_pedido as $producto_pedido) {
+            if(isset($producto_pedido->combo) && $producto_pedido->combo!=''){
+                continue;
+            }
             $impresora_dedicada = $producto_pedido->producto->tipo_producto->impresora != null?($producto_pedido->producto->tipo_producto->impresora):('');
             $x_cantidad = ' x'.$producto_pedido->cant;
             $subtotal = 0;
@@ -70,7 +77,7 @@ class POS{
             $texto.= (str_repeat("-", ($caracteres/2))."\n");
             //No mostrar tipo en la comanda
             // $tipoProducto = $producto_pedido->producto->tipo_producto->descripcion;
-            $texto.= ($producto_pedido->combo && $producto_pedido->combo != null)?"COMBO ": "";
+            // $texto.= (isset($producto_pedido->combo) && $producto_pedido->combo && $producto_pedido->combo != null)?"COMBO ": "";
             if ($obs->tipo == "MIXTA") {
                 $texto.= self::normalizeSizes($obs->tamano=='unico'?'':$obs->tamano).$x_cantidad;
                 foreach ($obs->mix as $fraccion) {
@@ -278,10 +285,10 @@ class POS{
         $cantidad_productos = 0;
         $iva_grupos = [];
         $ico_grupos = [];
-        //$combos = self::buildCombos($productos);
-        // if(count($combos)>0){
-        //     $productos = array_merge($productos, $combos);
-        // }
+        $combos = self::buildCombos($productos);
+        if(count($combos)>0){
+            $productos = array_merge($productos, $combos);
+        }
         $productos = self::reagruparProductosPedidoFactura($productos);
         $subtotales = $config->subtotales_factura;
         foreach ($productos as $producto) {
@@ -769,6 +776,8 @@ class POS{
     }
 
     public static function normalizeSizes($s){
+        $s = '*-*'.$s;
+        $s = str_replace('*-* ', '', $s);
         $conv = array(
             "\"grande\"" => "GRA.",
             "'grande'" => "GRA.",
@@ -805,7 +814,7 @@ class POS{
             $new[] = $p;
             $ordenado[] = $i;
             if(($i+1) < count($pp)){
-                for($j = $i+1; $j<count($pp); $j++){
+                for($j = $i+1; $j<(count($pp)-1); $j++){
                     $p2 = $pp[$j];
                     if(in_array($j, $ordenado)){
                         continue;
@@ -834,6 +843,7 @@ class POS{
             if($obs && $obs != ''){
                 $obs = json_decode($obs);
                 $obs = json_decode($obs);
+                $obs->producto = $p->producto;
                 if(in_array($obs->ref, $added_combos)){
                 }
                 else{
@@ -848,6 +858,7 @@ class POS{
         foreach ($combos as $combo){
             $combo->tipo_producto = 'COMBO';
             $combo->descripcion= strtoupper($combo->nombre_combo);
+            $combo->producto->descripcion= strtoupper($combo->nombre_combo);
             $combo->valor= $combo->precio;
             $combo->total= $combo->precio * $combo->cantidad;
             $combo->cant= $combo->cantidad;
