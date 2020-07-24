@@ -146,6 +146,19 @@ class POS{
                 }
             }
             $texto = str_replace('  x', ' x', $texto);
+            if(isset($obs->intercambios) && $obs->intercambios && $obs->intercambios != ''){
+                $text_intercambio = '';
+                foreach($obs->intercambios as $intercambio){
+
+                    $text_intercambio.=str_replace(' por ', '->', $intercambio).", ";
+                }
+                $text_intercambio.='*-*';
+                $text_intercambio = str_replace(', *-*', '', $text_intercambio);
+                $texto.= " [".$text_intercambio."]";
+            }
+            if(isset($obs->obs) && $obs->obs && $obs->obs != ''){
+                $texto.= " *".$obs->obs;
+            }
             $stack[] = ["i"=>"producto_pedido","v"=>$texto, "impresora"=>$impresora_dedicada];
             $texto = '';
         }
@@ -265,10 +278,10 @@ class POS{
         $cantidad_productos = 0;
         $iva_grupos = [];
         $ico_grupos = [];
-        $combos = self::buildCombos($productos);
-        if(count($combos)>0){
-            $productos = array_merge($productos, $combos);
-        }
+        //$combos = self::buildCombos($productos);
+        // if(count($combos)>0){
+        //     $productos = array_merge($productos, $combos);
+        // }
         $productos = self::reagruparProductosPedidoFactura($productos);
         $subtotales = $config->subtotales_factura;
         foreach ($productos as $producto) {
