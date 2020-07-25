@@ -150,6 +150,14 @@
                 <li class="nav-item"><a href="/informe" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-database" aria-hidden="true"></i> Histórico</a></li>
             </ul>
             @endif
+            @if(Auth::user()->rol=='Cocinero')
+            <h2 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Gestión</span>
+            </h2>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a href="/cocina" role="button" aria-haspopup="true" aria-expanded="false">&#8226; Cocina</a></li>
+            </ul>
+            @endif
             @if(Auth::user()->rol=='Cajero')
             <h2 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                 <span>Gestión</span>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Config;
 use App\Pedido;
+use App\ProductoPedido;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
@@ -15,21 +16,59 @@ class CocinaController extends Controller
         DB::setDefaultConnection(Auth::user()->conn);
     }*/
     public function vistaCocina() {
-        $pedidos = Pedido::with("productos")->where("mesa_id", "!=", 0)->where("estado", 1)->orderBy('created_at', 'desc')->get();
+        $hora = date("H");
+        if($hora < '06'){
+            $desde = date('Y-m-d 00:00:00',strtotime("-1 days"));
+        }
+        else{
+            $desde = date('Y-m-d 00:00:00');
+        }
+        $pedidos = Pedido::with("productos")
+        ->whereIn("estado", array(1,2,3))
+        ->orderBy('created_at', 'desc')
+        ->where('created_at', '>', $desde)
+        ->get();
+
         return view('cocina.pedidos')->with('pedido_lista', $pedidos);
     }
     public function nuevosPedidos($date) {
-        // $date = intval($date);
-        // $pedidos = Pedido::with("productos.tipo_producto")->where("id", ">", $date)->where("mesa_id", "!=", 0)->where("estado", 1)->orderBy('created_at', 'asc')->get();
 
         $date = str_replace('_', ' ', $date);
-        $pedidos = Pedido::select('pedido.*')
+        $pedidosQ = Pedido::select('pedido.*')
         ->join('producto_pedido', 'producto_pedido.pedido_id', '=', 'pedido.id')
-        ->where("pedido.mesa_id", "!=", 0)->where("pedido.estado", 1)
+        ->whereIn("pedido.estado", array(1,2,3))
         ->where('producto_pedido.created_at', '>', $date)
         ->with("productos.tipo_producto")
         ->orderBy('pedido.created_at', 'asc')->get();
 
-        return response()->json(array('code'=>200,'msg'=>'OK.','pedidos'=>$pedidos));
-    }    
+        $hora = date("H");
+        if($hora < '06'){
+            $desde = date('Y-m-d 00:00:00',strtotime("-1 days"));
+        }
+        else{
+            $desde = date('Y-m-d 00:00:00');
+        }
+        $productosPedidoQ = ProductoPedido::select('producto_pedido.id', 'pedido_id')
+        ->join('pedido', 'pedido.id', '=', 'producto_pedido.pedido_id')
+        ->whereIn("pedido.estado", array(1,2,3))
+        ->where('producto_pedido.created_at', '>', $desde)
+        ->get();
+
+        $pedidos = [];
+        $productosPedidos = [];
+        foreach($productosPedidoQ as $pp){
+            if(in_array($pp->pedido_id, $pedidos)){
+            }
+            else{
+                $pedidos[] = $pp->pedido_id;
+            }
+            if(in_array($pp->id, $productosPedidos)){
+            }
+            else{
+                $productosPedidos[] = $pp->id;
+            }
+        }
+
+        return response()->json(array('code'=>200,'msg'=>'OK.','novedades'=>$pedidosQ, 'pedidos'=>$pedidos, 'productos'=>$productosPedidos));
+    }
 }

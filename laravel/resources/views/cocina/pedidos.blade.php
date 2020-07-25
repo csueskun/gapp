@@ -15,7 +15,7 @@
                     <h2 class="panel-title" style="color: grey">
                         <div class="row">
                             <div class="col-md-4">Pedido #{{$pedido->id}}</div>
-                            <div class="col-md-3">Mesa: {{$pedido->mesa_id}}</div>
+                            <div class="col-md-3">{{$pedido->mesa_id == 0 ? 'Domicilio': 'Mesa '.$pedido->mesa_id}}</div>
                             <div class="col-md-5">{{ date_format(date_create($pedido->fecha), 'g:i:s A d/m/Y') }}</div>
                         </div>
                     </h2>
@@ -106,8 +106,11 @@
     </style>
     <section class="borde-inferior form fondo-comun"  style="min-height: 80vh;">
     </section>
+    <audio id="piano_chord" src="/audio/piano_chord.wav" preload="auto"></audio>
     <script>
         var lastId = '0';
+        var pedidosIds = [];
+        var productosPedidosIds = [];
         var lastDate = '2000-01-01 00:00:00';
         function entregadoCheckbox(checkbox, id){
             if(checkbox.attr("disabled") == "disabled"){
@@ -132,6 +135,7 @@
                 if($(this).find("li").length == 0){
                     $(this).hide();
                 }
+                pedidosIds.push(parseInt($(this).attr('id')));
             });
             $("li.producto").on("click", function(){
                 $(this).find('input').click();
@@ -144,30 +148,59 @@
                 if($(this).attr('date')>lastDate){
                     lastDate = $(this).attr('date');
                 }
+                productosPedidosIds.push(parseInt($(this).attr('id')));
             });
             // console.log(lastDate)
-            setInterval(buscarNuevos, 5000);
+            setInterval(buscarNuevos, 7000);
             // buscarNuevos();
         });
 
         function buscarNuevos(){
             $.get("/cocina/nuevos/"+lastDate.replace(" ", "_"), function (data) {
             // $.get("/cocina/nuevos/801", function (data) {
-                mostrarNuevos(data.pedidos);
+                mostrarNuevos(data.novedades);
+                borrarPedidos(data.pedidos);
+                borrarProductos(data.productos);
             });
+        }
+        function borrarPedidos(pedidos){
+            pedidosIds.forEach(id => {
+                if(pedidos.includes(id)){}
+                else{
+                    $('div.panel#'+id).remove();
+                }
+            });
+            pedidosIds = pedidos;
+        }
+        function borrarProductos(productos){
+            productosPedidosIds.forEach(id => {
+                if(productos.includes(id)){}
+                else{
+                    $('li.list-group-item#'+id).remove();
+                }
+            });
+            productosPedidosIds=productos;
         }
         function mostrarNuevos(pedidos){
             var print = false;
+            var play = false;
             pedidos.forEach(pedido => {
                 lastId = pedido.id;
                 pedido.productos.forEach(producto => {
                     if(producto.terminado != 1){
                         print = true;
+                        if(productosPedidosIds.includes(producto.pivot.id)){}
+                        else{
+                            play = true;
+                        }
                     }
                     if(producto.pivot.created_at>lastDate){
                         lastDate = producto.pivot.created_at;
                     }
                 });
+                if(play){
+                    play_piano_chord();
+                }
                 if(print){
                     $('div.panel#'+pedido.id).remove();
                     $("#container-pedidos").prepend(plantillaPedido(pedido));
@@ -185,13 +218,18 @@
             } catch (error) {
                 
             }
+            pedidosIds.push(pedido.id);
+            var mesa = `Mesa: ${pedido.mesa_id}`;
+            if(pedido.mesa_id==0){
+                mesa = 'Domicilio';
+            }
             var html = `
             <div class="panel panel-default pedido" id="${pedido.id}">
                 <div class="panel-heading">
                     <h2 class="panel-title" style="color: grey">
                         <div class="row">
                             <div class="col-md-4">Pedido #${pedido.id}</div>
-                            <div class="col-md-3">Mesa: ${pedido.mesa_id}</div>
+                            <div class="col-md-3">${mesa}</div>
                             <div class="col-md-5">${pedido.fecha}</div>
                         </div>
                     </h2>
@@ -205,6 +243,8 @@
             if(producto.terminado == 1){
                 return '';
             }
+
+            productosPedidosIds.push(producto.pivot.id);
             var sin = '';
             var extra = '';
             var preparado = producto.pivot.preparado != null && producto.pivot.preparado != '';
@@ -258,6 +298,9 @@
                 return spanHtml;
             }
             return '';
+        }
+        function play_piano_chord() {
+            document.getElementById('piano_chord').play();
         }
     </script>
 @endsection
