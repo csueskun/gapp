@@ -73,7 +73,7 @@
                             spanHtml=spanHtml.replace(', *', '');
                             span.append(spanHtml+' )');
                         }
-                        if(obs.obs.length){
+                        if(obs.obs && obs.obs != ''){
                             var span = $("li#{{$producto->pivot->id}} span.obs");
                             var spanHtml = ' **OBS ( ' + obs.obs;
                             //spanHtml+=('*');
@@ -309,16 +309,14 @@
                 });
                 spanHtml+=('*');
                 spanHtml=spanHtml.replace(', *', '');
-                return spanHtml;
+                return spanHtml+' )';
             }
             return '';
         }
 
         function plantillaObs(obs){
-            if(obs.obs.length){
-                var spanHtml = ' **OBS ( ' + obs.obs + ')';
-                //spanHtml+=('*');
-                //spanHtml=spanHtml.replace(', *', '');
+            if(obs.obs && obs.obs != ''){
+                var spanHtml = ' **OBS ( ' + obs.obs + ' )';
                 return spanHtml;
             }
             return '';
