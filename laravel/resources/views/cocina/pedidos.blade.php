@@ -14,9 +14,10 @@
                 <div class="panel-heading">
                     <h2 class="panel-title" style="color: grey">
                         <div class="row">
-                            <div class="col-md-4">Pedido #{{$pedido->id}}</div>
-                            <div class="col-md-3">{{$pedido->mesa_id == 0 ? 'Domicilio': 'Mesa '.$pedido->mesa_id}}</div>
-                            <div class="col-md-5">{{ date_format(date_create($pedido->fecha), 'g:i:s A d/m/Y') }}</div>
+                            <div class="col-md-3">Pedido: {{$pedido->id}}</div>
+                            <div class="col-md-3">{{$pedido->mesa_id == 0 ? 'Domicilio': 'Mesa: '.$pedido->mesa_id}}</div>
+                            <div class="col-md-3">Turno: {{$pedido->turno}}</div>
+                            <div class="col-md-3">{{ date_format(date_create($pedido->fecha), 'g:i:s A d/m/Y') }}</div>
                         </div>
                     </h2>
                 </div>
@@ -40,13 +41,14 @@
                                    checked
                                    @endif
                                    onchange="entregadoCheckbox($(this), {{$producto->pivot->id}})"/>
-                            {{$producto->tipo_producto->descripcion}} {{$producto->descripcion}}
+                                   {{$producto->pivot->cant}} X {{$producto->tipo_producto->descripcion}} - {{$producto->descripcion}}
                             @if($producto->tipo_producto->descripcion." ".$producto->descripcion != $producto->detalle)
                                 ({{$producto->detalle}})
                             @endif
                         </label>
                         <span class="sin"></span>
                         <span class="extra"></span>
+                        <span class="obs"></span>
                     </li>
                     <script>
                         var jsonString = "{{$producto->pivot->obs}}".replace(/&quot;/g, '"');
@@ -69,6 +71,13 @@
                             });
                             spanHtml+=('*');
                             spanHtml=spanHtml.replace(', *', '');
+                            span.append(spanHtml+' )');
+                        }
+                        if(obs.obs.length){
+                            var span = $("li#{{$producto->pivot->id}} span.obs");
+                            var spanHtml = ' **OBS ( ' + obs.obs;
+                            //spanHtml+=('*');
+                            //spanHtml=spanHtml.replace(', *', '');
                             span.append(spanHtml+' )');
                         }
                     </script>
@@ -228,9 +237,10 @@
                 <div class="panel-heading">
                     <h2 class="panel-title" style="color: grey">
                         <div class="row">
-                            <div class="col-md-4">Pedido #${pedido.id}</div>
+                            <div class="col-md-3">Pedido: ${pedido.id}</div>
                             <div class="col-md-3">${mesa}</div>
-                            <div class="col-md-5">${pedido.fecha}</div>
+                            <div class="col-md-3">Turno: ${pedido.turno}</div>
+                            <div class="col-md-3">${pedido.fecha}</div>
                         </div>
                     </h2>
                 </div>
@@ -247,12 +257,14 @@
             productosPedidosIds.push(producto.pivot.id);
             var sin = '';
             var extra = '';
+            var obs = '';
             var preparado = producto.pivot.preparado != null && producto.pivot.preparado != '';
             var detalle = producto.tipo_producto.descripcion+" "+producto.descripcion != producto.detalle ? producto.detalle : '';
             if(producto.pivot.obs){
                 producto.pivot.obs = JSON.parse(producto.pivot.obs);
                 sin = plantillaSin(producto.pivot.obs);
                 extra = plantillaExtra(producto.pivot.obs);
+                obs = plantillaObs(producto.pivot.obs);
             }
             var html = `
             <li class="list-group-item 
@@ -266,10 +278,12 @@
                             name="preparado-checkbox"
                             ${preparado?'checked ':''}
                             onchange="entregadoCheckbox($(this), ${producto.pivot.id})"/>
-                    ${producto.tipo_producto.descripcion} ${producto.descripcion} ${detalle}
+                    ${producto.pivot.cant} X ${producto.tipo_producto.descripcion} - ${producto.descripcion} ${detalle} 
                 </label>
                 <span class="sin">${sin}</span>
                 <span class="extra">${extra}</span>
+                <span class="extra">${obs}</span>
+                
             </li>
             `;
             return html;
@@ -299,6 +313,17 @@
             }
             return '';
         }
+
+        function plantillaObs(obs){
+            if(obs.obs.length){
+                var spanHtml = ' **OBS ( ' + obs.obs + ')';
+                //spanHtml+=('*');
+                //spanHtml=spanHtml.replace(', *', '');
+                return spanHtml;
+            }
+            return '';
+        }
+
         function play_piano_chord() {
             document.getElementById('piano_chord').play();
         }

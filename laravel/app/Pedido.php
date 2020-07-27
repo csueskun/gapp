@@ -9,7 +9,7 @@ class Pedido extends Model
     protected $table = "pedido";
                      
     public function productos(){
-        return $this->belongsToMany('App\Producto', 'producto_pedido')->withPivot("id", "obs", "preparado", "created_at");
+        return $this->belongsToMany('App\Producto', 'producto_pedido')->withPivot("id", "obs", "preparado", "created_at","cant");
     }
                  
     public function usuario(){
