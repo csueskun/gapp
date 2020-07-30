@@ -37,9 +37,9 @@ class CocinaController extends Controller
         $pedidosQ = Pedido::select('pedido.*')
         ->join('producto_pedido', 'producto_pedido.pedido_id', '=', 'pedido.id')
         ->whereIn("pedido.estado", array(1,2,3))
-        ->where('producto_pedido.created_at', '>', $date)
+        ->where('producto_pedido.updated_at', '>', $date)
         ->with("productos.tipo_producto")
-        ->orderBy('pedido.created_at', 'asc')->get();
+        ->orderBy('pedido.updated_at', 'asc')->get();
 
         $hora = date("H");
         if($hora < '06'){
