@@ -40,7 +40,7 @@
     <form data-toggle="validator" role="form" action="hacerlogin" class="form-login"  >
         @include('template.status', ['status' => session('status')])
         <div align="center">
-          <img class="mb-4" src="http://www.webgapp.net/logoinicio.png" alt="" width="80" height="80">
+          <img class="mb-4" src="http://www.webgapp.net/logoinicio.png" alt="" width="150" height="150">
         </div>
         <h1 class="fuente bebas" style="color: #777" align="center">Inicie Sesión</h1>
         <div class="form-group has-feedback no-margin">
