@@ -17,12 +17,12 @@
         padding-top: 90px !important;
     }
     input[type=text] {
-           border: 1px dotted #999;
+           
            border-radius:20px;
          -webkit-appearance: none;
     }
     input[type=password] {
-           border: 1px dotted #999;
+           
            border-radius:20px;
          -webkit-appearance: none;
     }
