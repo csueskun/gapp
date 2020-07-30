@@ -16,7 +16,18 @@
     form{
         padding-top: 90px !important;
     }
+    input[type=text] {
+           border: 1px dotted #999;
+           border-radius:20px;
+         -webkit-appearance: none;
+    }
+    input[type=password] {
+           border: 1px dotted #999;
+           border-radius:20px;
+         -webkit-appearance: none;
+    }
 </style>
+
 @endsection
 @section('titulo', 'Inicio de Sesión')
 @section('contenido')
@@ -26,16 +37,19 @@
     
     
     
-    <form data-toggle="validator" role="form" action="hacerlogin" class="form-login">
+    <form data-toggle="validator" role="form" action="hacerlogin" class="form-login"  >
         @include('template.status', ['status' => session('status')])
-        <h1 class="fuente bebas" style="color: #777">Inicie Sesión</h1>
+        <div align="center">
+          <img class="mb-4" src="http://www.webgapp.net/logoinicio.png" alt="" width="80" height="80">
+        </div>
+        <h1 class="fuente bebas" style="color: #777" align="center">Inicie Sesión</h1>
         <div class="form-group has-feedback no-margin">
-            <input type="text" class="form-control" id="nombre" name="usuario" required value="{{ old('usuario') }}" placeholder="nombre de usuario" style="color: #666">
+            <input type="text" class="form-control" id="nombre" name="usuario" required value="{{ old('usuario') }}" placeholder=" Nombre de usuario" style="color: #666">
             <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
             <div class="help-block with-errors"></div>
         </div>
         <div class="form-group has-feedback {{ ($errors->first('password')) ? 'has-error'  :''}}">
-            <input type="password" class="form-control" id="password" name="password" required placeholder="contraseña">
+            <input type="password" class="form-control" id="password" name="password" required placeholder=" Contraseña">
             <span class="glyphicon form-control-feedback {{ ($errors->first('password')) ? 'glyphicon-remove'  :''}}" aria-hidden="true"></span>
             <div class="help-block with-errors">{{ $errors->first('password') }}</div>
         </div>
@@ -47,7 +61,7 @@
         <div class="form-group">
             <button type="submit" class="btn btn-lg btn-primary btn-block">Enviar</button>
         </div>
-        
+       
         
     </form>
 </div>
