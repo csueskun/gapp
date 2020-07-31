@@ -28,9 +28,10 @@ class LoginController extends Controller
         );
         $validator = Validator::make($postData, $rules);
         if (!$validator->fails() && Auth::attempt($postData)) {
-            $sql = DB::select("
-            SELECT valor from hsoft where variable = 'dd'
-            ");
+            // $sql = DB::select("
+            // SELECT valor from hsoft where variable = 'dd'
+            // ");
+            $sql = [0];
             if(count($sql)>0){
 //                if(strcmp(str_replace(" ", "",$sql[0]->valor), str_replace(" ","",preg_replace( "/\r|\n/", "", trim($this->doAuthLogin())))) === 0){
                 if(true){
