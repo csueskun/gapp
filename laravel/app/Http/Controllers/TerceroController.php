@@ -47,6 +47,7 @@ class TerceroController extends Controller
             'identificacion' => 'required|unique:tercero',
             'tipoidenti' => '',
             'nombrecompleto' => '',
+            'fecha_nacimiento' => '',
             'direccion' => '',
             'telefono' => '',
             'tipoclie' => '',
@@ -78,6 +79,8 @@ class TerceroController extends Controller
             $tercero->identificacion = Input::get('identificacion');
             $tercero->tipoidenti = Input::get('tipoidenti');
             $tercero->nombrecompleto = Input::get('nombrecompleto');
+            $tercero->fecha_nacimiento = Input::get('fecha_nacimiento');
+            
             $tercero->direccion = Input::get('direccion');
             $tercero->telefono = Input::get('telefono');
             $tercero->tipoclie = Input::get('tipoclie');
@@ -102,6 +105,7 @@ class TerceroController extends Controller
             'identificacion' => 'required|unique:tercero,identificacion,'.Input::get('id'),
             'tipoidenti' => '',
             'nombrecompleto' => '',
+            'fecha_nacimiento' => '',
             'direccion' => '',
             'telefono' => '',
             'tipoclie' => '',
@@ -131,6 +135,7 @@ class TerceroController extends Controller
             $tercero->identificacion = Input::get('identificacion');
             $tercero->tipoidenti = Input::get('tipoidenti');
             $tercero->nombrecompleto = Input::get('nombrecompleto');
+            $tercero->fecha_nacimiento = Input::get('fecha_nacimiento');
             $tercero->direccion = Input::get('direccion');
             $tercero->telefono = Input::get('telefono');
             $tercero->tipoclie = Input::get('tipoclie');
@@ -198,6 +203,7 @@ class TerceroController extends Controller
             'identificacion' => 'required|unique:tercero',
             'tipoidenti' => '',
             'nombrecompleto' => '',
+            'fecha_nacimiento' => '',
             'direccion' => '',
             'telefono' => '',
             'tipoclie' => '',
@@ -232,6 +238,7 @@ class TerceroController extends Controller
             $tercero->identificacion = Input::get('identificacion');
             $tercero->tipoidenti = Input::get('tipoidenti');
             $tercero->nombrecompleto = Input::get('nombrecompleto');
+            $tercero->fecha_nacimiento = Input::get('fecha_nacimiento');
             $tercero->direccion = Input::get('direccion');
             $tercero->telefono = Input::get('telefono');
             $tercero->tipoclie = Input::get('tipoclie');
@@ -261,6 +268,7 @@ class TerceroController extends Controller
             'identificacion' => 'required|unique:tercero,identificacion,'.$tercero->id,
             'tipoidenti' => '',
             'nombrecompleto' => '',
+            'fecha_nacimiento' => '',
             'direccion' => '',
             'telefono' => '',
             'tipoclie' => '',
@@ -293,6 +301,7 @@ class TerceroController extends Controller
             $tercero->identificacion = Input::get('identificacion');
             $tercero->tipoidenti = Input::get('tipoidenti');
             $tercero->nombrecompleto = Input::get('nombrecompleto');
+            $tercero->fecha_nacimiento = Input::get('fecha_nacimiento');
             $tercero->direccion = Input::get('direccion');
             $tercero->telefono = Input::get('telefono');
             $tercero->tipoclie = Input::get('tipoclie');

@@ -697,7 +697,7 @@
                     {{ csrf_field() }}
                     <div class = "col-md-12">
                         <div class = "form-group">
-                            <label for = "descripcion" class = "control-label">Descripcion</label>
+                            <label for = "descripcion" class = "control-label">Descripción</label>
                             <input type = "text"  class = "form-control" id = "descripcion" name = "descripcion"  value = "{{ old('descripcion') }}">
                             <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
                             <div class = "help-block with-errors">{{ $errors->first('descripcion') }}</div>

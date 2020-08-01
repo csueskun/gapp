@@ -14,7 +14,7 @@
 <section class="borde-inferior fondo-blanco">
     <div class="container">
         <h1 class="titulo">Tipo Producto
-        <a href="crear" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuevo</a>
+          <a href="crear" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuevo</a>
         </h1>
         <br/>
     </div>

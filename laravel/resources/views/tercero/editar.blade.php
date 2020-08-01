@@ -7,7 +7,7 @@
 {{ Html::style('/css/bootstrap-datetimepicker.min.css') }}
 @endsection
 
-@section('breadcrumbs')
+<!--@section('breadcrumbs')
 <ul class="breadcrumb">
     <li>
         <a href='{{url("/")}}'><i class="fa fa-home" aria-hidden="true"></i></a> <span class="divider">/</span>
@@ -19,28 +19,33 @@
         Editando
     </li>
 </ul>
-@endsection
+@endsection-->
 
 @section('contenido')
-
-<div class='container'>
-    <br/>
-    <br/>
-    <div class="row alertas">
-    @include('template.status', ['status' => session('status')])
+<section class="borde-inferior fondo-blanco">
+    <div class="container">
+        <h1 class = "titulo">Editando Tercero
+            <a style="font-size: 20px;" href="../" class="btn btn-default"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Ir a Lista</a>
+        </h1>
+        <br/>
     </div>
-    
-    <div class="row" style="background-color: white; padding: 10px">
-        <div class="col-md-12"><h2>Editando Tercero </h2></div><br/><br/>
-        <div class="col-md-12">
-            <form id="editar-tercero" data-toggle = "validator" role = "form" action = '{{url("/tercero")}}' method="POST">
-                <br/>
-                {{ csrf_field() }}
-                <input type="hidden" name="id" value="{{ $tercero->id }}">
-                <input type="hidden" name="_method" value="put">
-                <div class = "row">
+</section>
+
+<section class="borde-inferior form fondo-comun"  style="min-height: 80vh;">
+    <div class="container">
+       <br/> 
+        @include('template.status', ['status' => session('status')])
+        
+        <form id="editar-tercero" data-toggle = "validator" role = "form" action = '{{url("/tercero")}}' method="POST"> 
+        <br/>
+        {{ csrf_field() }}
+        
+  
+        <input type="hidden" name="id" value="{{ $tercero->id }}">
+        <input type="hidden" name="_method" value="put">
+        <div class = "row">
                     
-                    <div class = "col-md-6">
+                    <div class = "col-md-4">
                         <div class = "campo tipo texto form-group has-feedback {{ ($errors->first('identificacion')) ? 'has-error' :'' }}">
                             <label for = "identificacion" class = "control-label">Identificación *</label>
                             <input type = "text" class = "form-control" id = "identificacion" name = "identificacion" value = "{{ old('identificacion')?old('identificacion'):$tercero->identificacion }}" required/>
@@ -48,24 +53,54 @@
                             <div class = "help-block with-errors">{{ $errors->first('identificacion') }}</div>
                         </div>
                     </div>
-                    <div class = "col-md-6">
+                    <div class = "col-md-4">
                         <div class = "campo tipo select form-group has-feedback {{ ($errors->first('tipoidenti')) ? 'has-error' :'' }}">
-                            <label for = "tipoidenti" class = "control-label">Tipo id </label>
+                            <label for = "tipoidenti" class = "control-label">Tipo Identificación </label>
                             <select class = "form-control" id = "tipoidenti" name = "tipoidenti" >
-                            
-                        <option value="1">CC</option>
-                        <option value="2">NIT</option>
+                               <option value="1">CC</option>
+                               <option value="2">NIT</option>
+                               <option value="3">CE</option>
+                               <option value="4">TI</option>
                             </select>
                             <div class = "help-block with-errors">{{ $errors->first('tipoidenti') }}</div>
                             <script>$("select#tipoidenti").val({{ old('tipoidenti')?old('tipoidenti'):$tercero->tipoidenti }});</script>
                         </div>
                     </div>
-                    <div class = "col-md-6">
+                    <div class = "col-md-4">
+                        <!--<div class = "campo tipo texto form-group has-feedback {{ ($errors->first('tipoclie')) ? 'has-error' :'' }}">
+                            <label for = "tipoclie" class = "control-label">Tipo Cliente </label>
+                            <input type = "text" class = "form-control" id = "tipoclie" name = "tipoclie" value = "{{ old('tipoclie')?old('tipoclie'):$tercero->tipoclie }}" />
+                            <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                            <div class = "help-block with-errors">{{ $errors->first('tipoclie') }}</div>
+                        </div>-->
+                        <div class = "campo tipo select form-group has-feedback {{ ($errors->first('tipoclie')) ? 'has-error' :'' }}">
+                            <label for = "tipoclie" class = "control-label">Tipo Cliente </label>
+                            <select class = "form-control" id = "tipoclie" name = "tipoclie" >
+                               <option value="C">Cliente</option>
+                               <option value="P">Proveedor</option>
+                               <option value="E">Empleado</option>
+                               <option value="O">Otro</option>
+                            </select>
+                            <div class = "help-block with-errors">{{ $errors->first('tipoclie') }}</div>
+                            <script>$("select#tipoclie").val({{ old('tipoclie')?old('tipoclie'):$tercero->tipoclie }});</script>
+                        </div>
+                    </div>
+                </div>    
+                <div class = "row">
+                    <div class = "col-md-8">
                         <div class = "campo tipo select form-group has-feedback {{ ($errors->first('nombrecompleto')) ? 'has-error' :'' }}">
                             <label for = "nombrecompleto" class = "control-label">Nombre Completo *</label>
                             <input type = "text" class = "form-control" id = "nombrecompleto" name = "nombrecompleto" value = "{{ old('nombrecompleto')?old('nombrecompleto'):$tercero->nombrecompleto }}" required/>
                             <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
                             <div class = "help-block with-errors">{{ $errors->first('nombrecompleto') }}</div>
+                        </div>
+                    </div>
+                    <div class = "col-md-4">
+                        <div class = "campo tipo texto form-group has-feedback {{ ($errors->first('fecha_nacimiento')) ? 'has-error' :'' }}">
+                            <label for = "fecha_nacimiento" class = "control-label">Fecha Nacimiento </label>
+                            <input type = "text" class = "form-control" id = "fecha_nacimiento" name = "fecha_nacimiento" value = "{{ old('fecha_nacimiento')?old('fecha_nacimiento'):$tercero->fecha_nacimiento }}" />
+                            <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                            <div class = "help-block with-errors">{{ $errors->first('fecha_nacimiento') }}</div>
                         </div>
                     </div>
                     <div class = "col-md-6">
@@ -85,19 +120,11 @@
                         </div>
                     </div>
                     <div class = "col-md-6">
-                        <div class = "campo tipo texto form-group has-feedback {{ ($errors->first('tipoclie')) ? 'has-error' :'' }}">
-                            <label for = "tipoclie" class = "control-label">Tipo Cliente </label>
-                            <input type = "text" class = "form-control" id = "tipoclie" name = "tipoclie" value = "{{ old('tipoclie')?old('tipoclie'):$tercero->tipoclie }}" />
+                        <div class = "campo tipo texto form-group has-feedback {{ ($errors->first('celular')) ? 'has-error' :'' }}">
+                            <label for = "celular" class = "control-label">Celular </label>
+                            <input type = "text" class = "form-control" id = "celular" name = "celular" value = "{{ old('celular')?old('celular'):$tercero->celular }}" />
                             <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                            <div class = "help-block with-errors">{{ $errors->first('tipoclie') }}</div>
-                        </div>
-                    </div>
-                    <div class = "col-md-12">
-                        <div class = "campo tipo texto form-group has-feedback {{ ($errors->first('observacion')) ? 'has-error' :'' }}">
-                            <label for = "observacion" class = "control-label">Observación </label>
-                            <input type = "text" class = "form-control" id = "observacion" name = "observacion" value = "{{ old('observacion')?old('observacion'):$tercero->observacion }}" />
-                            <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                            <div class = "help-block with-errors">{{ $errors->first('observacion') }}</div>
+                            <div class = "help-block with-errors">{{ $errors->first('celular') }}</div>
                         </div>
                     </div>
                     <div class = "col-md-6">
@@ -108,30 +135,7 @@
                             <div class = "help-block with-errors">{{ $errors->first('email') }}</div>
                         </div>
                     </div>
-                    <div class = "col-md-6">
-                        <div class = "campo tipo texto form-group has-feedback {{ ($errors->first('celular')) ? 'has-error' :'' }}">
-                            <label for = "celular" class = "control-label">Celular </label>
-                            <input type = "text" class = "form-control" id = "celular" name = "celular" value = "{{ old('celular')?old('celular'):$tercero->celular }}" />
-                            <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                            <div class = "help-block with-errors">{{ $errors->first('celular') }}</div>
-                        </div>
-                    </div>
-                    <div class = "col-md-6">
-                        <div class = "campo tipo texto form-group has-feedback {{ ($errors->first('nrotarjetapuntos')) ? 'has-error' :'' }}">
-                            <label for = "nrotarjetapuntos" class = "control-label">Tarjeta Puntos </label>
-                            <input type = "text" class = "form-control" id = "nrotarjetapuntos" name = "nrotarjetapuntos" value = "{{ old('nrotarjetapuntos')?old('nrotarjetapuntos'):$tercero->nrotarjetapuntos }}" />
-                            <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                            <div class = "help-block with-errors">{{ $errors->first('nrotarjetapuntos') }}</div>
-                        </div>
-                    </div>
-                    <div class = "col-md-6">
-                        <div class = "campo tipo texto form-group has-feedback {{ ($errors->first('puntosacumulados')) ? 'has-error' :'' }}">
-                            <label for = "puntosacumulados" class = "control-label">Puntos Acumulados </label>
-                            <input type = "text" class = "form-control" id = "puntosacumulados" name = "puntosacumulados" value = "{{ old('puntosacumulados')?old('puntosacumulados'):$tercero->puntosacumulados }}" />
-                            <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                            <div class = "help-block with-errors">{{ $errors->first('puntosacumulados') }}</div>
-                        </div>
-                    </div>
+                    
                     <div class = "col-md-6">
                         <div class = "campo tipo texto form-group has-feedback {{ ($errors->first('nombre1')) ? 'has-error' :'' }}">
                             <label for = "nombre1" class = "control-label">Primer Nombre </label>
@@ -164,14 +168,42 @@
                             <div class = "help-block with-errors">{{ $errors->first('apellido2') }}</div>
                         </div>
                     </div>
+
+                    <div class = "col-md-12">
+                        <div class = "key- tipo- form-group has-feedback {{ ($errors->first('observacion')) ? 'has-error'  :''}}">
+                           <label for = "observacion" class = "control-label">Observación</label>
+                           <textarea  class = "form-control" id = "observacion" name = "observacion">{{ old('observacion') }}</textarea>
+                           <!-- <input type = "text" class = "form-control" id = "observacion" name = "observacion" value = "{{ old('observacion') }}" />-->
+                           <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                           <div class = "help-block with-errors">{{ $errors->first('observacion') }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class = "col-md-6">
+                        <div class = "campo tipo texto form-group has-feedback {{ ($errors->first('nrotarjetapuntos')) ? 'has-error' :'' }}">
+                            <label for = "nrotarjetapuntos" class = "control-label">Tarjeta Puntos </label>
+                            <input type = "text" class = "form-control" id = "nrotarjetapuntos" name = "nrotarjetapuntos" value = "{{ old('nrotarjetapuntos')?old('nrotarjetapuntos'):$tercero->nrotarjetapuntos }}" />
+                            <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                            <div class = "help-block with-errors">{{ $errors->first('nrotarjetapuntos') }}</div>
+                        </div>
+                    </div>
+                    <div class = "col-md-6">
+                        <div class = "campo tipo texto form-group has-feedback {{ ($errors->first('puntosacumulados')) ? 'has-error' :'' }}">
+                            <label for = "puntosacumulados" class = "control-label">Puntos Acumulados </label>
+                            <input type = "text" class = "form-control" id = "puntosacumulados" name = "puntosacumulados" value = "{{ old('puntosacumulados')?old('puntosacumulados'):$tercero->puntosacumulados }}" />
+                            <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                            <div class = "help-block with-errors">{{ $errors->first('puntosacumulados') }}</div>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="container">
                     <div class = "col-xs-12">
                         <div class = "form-group centrado">
-                            <h1 class="titulo">
-                                <button type = "submit" class = "btn btn-sm btn-success"><span class="fa fa-save" aria-hidden="true"></span> Guardar</button>
-                                <a href='../' class="btn btn-sm btn-primary"><span class="fa fa-th-list" aria-hidden="true"></span> Volver a la Lista</a>
-                            </h1>
+                            <!--<h1 class="titulo">-->
+                                <button type = "submit" class = "btn btn-sm btn-success" ><span class="fa fa-save" aria-hidden="true"> Guardar </span></button>
+                                <!--<a href='../' class="btn btn-sm btn-primary"><span class="fa fa-th-list" aria-hidden="true"></span> Volver a la Lista</a>-->
+                            <!--</h1>-->
                         </div>
                     </div>
                 </div>

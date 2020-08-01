@@ -12,14 +12,20 @@
 
 @section('contenido')
 
-<div class="container">
-    <br/>
-    <br/>
-    <div class="row alertas">
-    @include('template.status', ['status' => session('status')])
+<section class="borde-inferior fondo-blanco">
+    <div class="container">
+        <h1 class = "titulo">Terceros
+            <a href='{{url("tercero/crear")}}' class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuevo</a>
+        </h1>
+        <br/>
     </div>
-    <div class="row" style="background-color: white; padding: 10px">
-        <div class="col-md-12"><h2>Terceros <a class="btn btn-sm btn-success" href='{{url("tercero/crear")}}'><i class="fa fa-plus-circle"></i> Crear</a></h2></div><br/><br/><br/>
+</section>
+
+<section class="borde-inferior lista fondo-comun"  style="min-height: 80vh;">
+    <div class="container">
+        <br/>
+        @include('template.status', ['status' => session('status')])
+        <br/>
         <div class="col-md-5">
             <div class="dataTables_length" id="example_length">
                 <label>Mostrar 
@@ -31,9 +37,6 @@
                 </label>
             </div>
         </div>
-        <div class="col-md-2">
-            <br/>
-        </div>
         <div class="col-md-5">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Buscar..." id="buscar">
@@ -43,7 +46,7 @@
             </div><!-- /input-group -->
         </div>
 
-        <table class="table normal table-hover table-condensed" cellspacing="0" width="100%" style="margin-left: 10px; margin-right: 10px">
+        <table id="example" class="display datatable" cellspacing="0" width="100%">
             <thead>
                 <tr>
                     <th class="agregar_ordenar_por" campo="identificacion">Identificación</th>
@@ -91,6 +94,7 @@
                     </td>
                 </tr>
                 @endforeach
+            
             </tbody>
         </table>
         <table class="" cellspacing="0" width="100%">
@@ -101,8 +105,6 @@
             </tr>
         </table>
     </div>
-</div>
-
 
 
 <script>
