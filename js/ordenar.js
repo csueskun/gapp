@@ -690,10 +690,13 @@ function impItemPedido(productos_pedido){
             $("textarea#observacion-mesa").val(obs_pedido.observacion);
         }
         if(obs_pedido.entregar_en != null){
-            $("input#entregar_en_").val(obs_pedido.entregar_en);
             $("textarea#observacion-domicilio").val(obs_pedido.entregar_obs);
             if(obs_pedido.entregar_en == 'CAJA'){
-                $("label>input[value=CAJA]").prop('checked', true);
+                $('input[value=CAJA]').prop('checked', true);
+            }
+            else{
+                $("label>input[value=DOMICILIO]").prop('checked', true);
+                $('#observacionesModal #domicilio').val(obs_pedido.domicilio);
             }
         }
 
@@ -1444,7 +1447,8 @@ function preEnviarFormPagar(){
     if(esDomicilio){
         var domicilio = 'CAJA';
         var pedido_id = $('meta[name=pedido_id]').attr('content');
-        if($('input#entregar_en_').val()=='DOMICILIO'){
+        var entregar_en = $('input#entregar_en_').val();
+        if(entregar_en=='DOMICILIO'){
             domicilio = $('#observacionesModal #domicilio').val();
             if(domicilio==null||domicilio==''){
                 $.alert({
