@@ -490,7 +490,7 @@ class POS{
         }
         $texto.= ("Fecha IMP: $fecha");
         $texto.= ("\n");
-        $texto.= ("www.h-software.co 3209349233");
+        $texto.= ("Impreso por www.h-software.co");
         $stack[] = ["i"=>"texto","v"=>$texto];
 
         return $stack;
@@ -625,9 +625,10 @@ class POS{
         
         $linea = '';
         foreach ($totalq as $t){
+            $linea = self::impLinea('**Resumen Impuestos**','',$caracteres);
             $linea = self::impLinea('IVA','$'.number_format($t->impiva,0),$caracteres);
             $linea.= self::impLinea('IMP.CONSUMO','$'.number_format($t->impcon,0),$caracteres);
-            //$linea.= self::impLinea('Descuento','$'.number_format($t->dcto,0),$caracteres);
+            $linea = self::impLinea('**Formas de Pago**','',$caracteres);
             $linea.= self::impLinea('EFECTIVO','$'.number_format($t->efectivo,0),$caracteres);
             $linea.= self::impLinea('DÉBITO','$'.number_format($t->debito,0),$caracteres);
             $linea.= self::impLinea('CRÉDITO','$'.number_format($t->tcredito,0),$caracteres);
@@ -758,8 +759,10 @@ class POS{
 
     public static function nameDocument($tipo){
         $docs = array(
-            "FV"=>"Factura de Venta", "FC"=>"Factura de Compra", "PN"=>"Pago de Nómina",
-            "BI"=>"Base Inicial", "NI"=>"Nota de Inventario", "CO"=>"Consumo"
+            "FV"=>"Factura Venta", "FC"=>"Factura Compra", "PN"=>"Pago Nómina",
+            "BI"=>"Base Inicial", "NI"=>"Nota Inventario", "CO"=>"Consumo",
+            "CI"=>"Comprob. Ingreso", "RC"=>"Recibo Cartera",
+            "CE"=>"Comprob. Egreso", "RT"=>"Recibo Tesorería"
         );
         if(isset($docs[$tipo])){
             return $docs[$tipo];

@@ -26,52 +26,50 @@
         {{ csrf_field() }}
         <input type="hidden" id="productos" name="productos"/>          
         <input type="hidden" id="tipoie" name="tipoie" value="{{old('tipoie')}}"/>          
-            <div class = "col-md-6">
-                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('tipodoc')) ? 'has-error'  :''}}">
-                    <label for = "tipodoc" class = "control-label">Tipo de Documento *</label>
-                    <select class = "form-control actualiza-tipoie" id = "tipodoc" name = "tipodoc">
+            <div class = "row">
+                <div class = "col-md-6">
+                    <div class = "key- tipo- form-group has-feedback {{ ($errors->first('tipodoc')) ? 'has-error'  :''}}">
+                      <label for = "tipodoc" class = "control-label">Tipo de Documento *</label>
+                      <select class = "form-control actualiza-tipoie" id = "tipodoc" name = "tipodoc">
                         <option value="FV">Factura de Venta</option>
                         <option value="FC">Factura de Compra</option>
                         <option value="BI">Base Inicial</option>
                         <option value="PN">Pago de Nómina</option>
                         <option value="NI">Nota Inventario</option>
                         <option value="CO">Consumo</option>
-                    </select>
-                    @if(old('tipodoc'))
-                    <script>$("select#tipodoc").val('{{old('tipodoc')}}');</script>
-                    @endif
-                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                    <div class = "help-block with-errors">{{ $errors->first('tipodoc') }}</div>
-                </div>
-            </div>   
-            <div class = "col-md-6">
-                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('mesa_id')) ? 'has-error'  :''}}">
-                    <label for = "mesa_id" class = "control-label">Mesa *</label>
-                    <select class = "form-control" id = "mesa_id" name = "mesa_id">
-                        <option value="999">---</option>
-                    </select>
-                    @if(old('mesa_id'))
-                    <script>$("select#mesa_id").val({{old('mesa_id')}});</script>
-                    @endif
-                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                    <div class = "help-block with-errors">{{ $errors->first('mesa_id') }}</div>
-                </div>
-            </div>
-
-
-            
-            <div class = "col-md-6">
-                <div class = "campo tipo fecha form-group has-feedback {{ ($errors->first('created_at')) ? 'has-error' :'' }}">
-                    <label for = "created_at" class = "control-label">Fecha </label>
-                    <div class="input-group">
-                        <input type = "text" redquired readonly class = "form-control datepicker" name = "_created_at" id = "_created_at"  value = "{{ old('created_at') }}"  data-date-format="MM dd, yyyy hh:ii" data-link-field="created_at" data-link-format="yyyy-mm-dd hh:ii"/>
-                        <div class="input-group-btn">
-                            <button onclick="$('#_created_at').datetimepicker('show');" class="cal btn btn-secondary" type="button"><span class="glyphicon glyphicon-calendar"/></button>
-                        </div>
+                        <option value="RC">Recibo Cartera</option>
+                        <option value="RT">Recibo Tesorería</option>
+                        <option value="CI">Comprobante de Ingreso</option>
+                        <option value="CE">Comprobante de Egreso</option>
+                      </select>
+                      @if(old('tipodoc'))
+                      <script>$("select#tipodoc").val('{{old('tipodoc')}}');</script>
+                      @endif
+                      <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                      <div class = "help-block with-errors">{{ $errors->first('tipodoc') }}</div>
                     </div>
-                    <input class = "form-control z-index-100" id = "created_at" name = "created_at" value="{{ old('created_at') }}"/>
-                    <script type='text/javascript'>
-                        $('#_created_at').datetimepicker({
+                </div>   
+                <div class = "col-md-3">
+                    <div class = "key- tipo- form-group">
+                       <label for = "numdoc" class = "control-label">Número Documento</label>
+                       <input readonly type = "text"  class = "form-control" id = "numdoc" name = "numdoc"  value = "{{ old('numdoc') }}">
+                       <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                       <div class = "help-block with-errors">{{ $errors->first('numdoc') }}</div>
+                    </div>
+                </div>
+            
+                <div class = "col-md-3">
+                    <div class = "campo tipo fecha form-group has-feedback {{ ($errors->first('created_at')) ? 'has-error' :'' }}">
+                       <label for = "created_at" class = "control-label">Fecha Documento</label>
+                       <div class="input-group">
+                          <input type = "text" redquired readonly class = "form-control datepicker" name = "_created_at" id = "_created_at"  value = "{{ old('created_at') }}"  data-date-format="MM dd, yyyy hh:ii" data-link-field="created_at" data-link-format="yyyy-mm-dd hh:ii"/>
+                          <div class="input-group-btn">
+                            <button onclick="$('#_created_at').datetimepicker('show');" class="cal btn btn-secondary" type="button"><span class="glyphicon glyphicon-calendar"/></button>
+                          </div>
+                       </div>
+                       <input class = "form-control z-index-100" id = "created_at" name = "created_at" value="{{ old('created_at') }}"/>
+                       <script type='text/javascript'>
+                         $('#_created_at').datetimepicker({
                             endDate: new Date(),
                             language:  'es',
                             todayBtn:  1,
@@ -91,37 +89,126 @@
                             dateToInputValue(fecha, "yyyy-mm-dd hh:ii", $("input#created_at"));
                             dateToInputValue(fecha, "MM dd, yyyy hh:ii", $("input#_created_at"));
                         }
-                    </script>                        
-                    <div class = "help-block with-errors">{{ $errors->first('created_at') }}</div>
+                        </script>                        
+                        <div class = "help-block with-errors">{{ $errors->first('created_at') }}</div>
+                    </div>
                 </div>
-            </div>
-        
             
-                    
-            <div class = "col-md-6">
-                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('tercero_id')) ? 'has-error'  :''}}">
-                    <label for = "tercero_id" class = "control-label">Tercero</label>
-                    <select class = "form-control" id = "tercero_id" name = "tercero_id"  >
-                        <option value=""></option>
-                        @foreach($tercero_lista as $tercero)
+                <div class = "col-md-8">
+                    <div class = "key- tipo- form-group has-feedback {{ ($errors->first('tercero_id')) ? 'has-error'  :''}}">
+                       <label for = "tercero_id" class = "control-label">Tercero</label>
+                       <select class = "form-control" id = "tercero_id" name = "tercero_id"  >
+                           <option value=""></option>
+                            @foreach($tercero_lista as $tercero)
                             @if(old('tercero_id')==$tercero->id)
                                 <option value="{{ $tercero->id}}" selected>{{ $tercero->nombrecompleto }}</option>
                             @else
                                 <option value="{{ $tercero->id}}">{{ $tercero->nombrecompleto }}</option>
                             @endif
                         @endforeach
-                    <select/>
-                    <div class = "help-block with-errors">{{ $errors->first('tercero_id') }}</div>
+                       <select/>
+                       <div class = "help-block with-errors">{{ $errors->first('tercero_id') }}</div>
+                    </div>
                 </div>
-            </div>
-            <div class = "col-md-12">
-                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('observacion')) ? 'has-error'  :''}}">
-                    <label for = "numdoc" class = "control-label">Observación</label>
-                    <textarea  class = "form-control" id = "observacion" name = "observacion">{{ old('observacion') }}</textarea>
-                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                    <div class = "help-block with-errors">{{ $errors->first('observacion') }}</div>
+
+                <div class = "col-md-4">
+                    <div class = "key- tipo- form-group has-feedback {{ ($errors->first('mesa_id')) ? 'has-error'  :''}}">
+                       <label for = "mesa_id" class = "control-label">Mesa *</label>
+                       <select class = "form-control" id = "mesa_id" name = "mesa_id">
+                          <option value="999">No Aplica</option>
+                       </select>
+                       @if(old('mesa_id'))
+                       <script>$("select#mesa_id").val({{old('mesa_id')}});</script>
+                       @endif
+                       <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                       <div class = "help-block with-errors">{{ $errors->first('mesa_id') }}</div>
+                    </div>
                 </div>
-            </div>
+
+                <div class = "col-md-8">
+                    <div class = "key- tipo- form-group has-feedback {{ ($errors->first('banco')) ? 'has-error'  :''}}">
+                    <label for = "banco" class = "control-label">Banco</label>
+                    <select name="banco" id="banco" class="form-control font bebas">
+                        <option value="0">CAJA GENERAL</option>
+                        <option value="1">BANCOLOMBIA</option>
+                        <option value="2">BANCO BOGOTÁ</option>
+                        <option value="3">DAVIVIENDA</option>
+                        <option value="4">BANCO CAJA SOCIAL</option>
+                        <option value="5">BANCO AVVILLAS</option>
+                        <option value="6">BANCO BBVA</option>
+                        <option value="7">BANCO FALLABELA</option>
+                        <option value="8">BANCO POPULAR</option>
+                        <option value="9">BANCO DE OCCIDENTE</option>
+                        <option value="10">BANCO COLPATRIA</option>
+                        <option value="11">CITIBANK</option>
+                        <option value="12">BANCO SANTANDER</option>
+                    </select>
+                    @if(old('banco'))
+                      <script>$("select#banco").val('{{old('banco')}}');</script>
+                    @endif
+                      <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                      <div class = "help-block with-errors">{{ $errors->first('banco') }}</div>
+                   </div>
+                </div>
+
+                <div class = "col-md-4">
+                    <div class = "key- tipo- form-group">
+                       <label for = "numero_documento" class = "control-label">Número Doc. Relacionado</label>
+                       <input type = "text"  class = "form-control" id = "numero_documento" name = "numero_documento"  value = "{{ old('numero_documento') }}">
+                       <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                       <div class = "help-block with-errors">{{ $errors->first('numero_documento') }}</div>
+                    </div>
+                </div>
+                
+                <div class = "col-md-3">
+                        <div class = "key- tipo- form-group ">
+                            <label for = "paga_efectivo" class = "control-label">Efectivo</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="text" class="form-control" value="{{ old('paga_efectivo')}}"/>
+                            </div>
+                            <div class = "help-block with-errors">{{ $errors->first('paga_efectivo') }}</div>
+                        </div>
+                </div>
+                <div class = "col-md-3">
+                        <div class = "key- tipo- form-group ">
+                            <label for = "paga_debito" class = "control-label">Débito</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="text" class="form-control" value="{{ old('paga_debito') }}"/>
+                            </div>
+                            <div class = "help-block with-errors">{{ $errors->first('paga_debito') }}</div>
+                        </div>
+                </div>
+                <div class = "col-md-3">
+                        <div class = "key- tipo- form-group ">
+                            <label for = "paga_credito" class = "control-label">Crédito</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="text" class="form-control" value="{{ old('paga_credito') }}"/>
+                            </div>
+                            <div class = "help-block with-errors">{{ $errors->first('paga_credito') }}</div>
+                        </div>
+                </div>
+
+                <div class = "col-md-3">
+                    <div class = "key- tipo- form-group ">
+                       <label for = "total" class = "control-label">Total *</label>
+                       <input  type = "text"  class = "form-control" id = "total" name = "total" required value = "{{ old('total') }}">
+                       <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                       <div class = "help-block with-errors">{{ $errors->first('total') }}</div>
+                    </div>
+                </div>  
+     
+        
+                <div class = "col-md-12">
+                    <div class = "key- tipo- form-group has-feedback {{ ($errors->first('observacion')) ? 'has-error'  :''}}">
+                       <label for = "observacion" class = "control-label">Observación</label>
+                       <textarea  class = "form-control" id = "observacion" name = "observacion">{{ old('observacion') }}</textarea>
+                       <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                       <div class = "help-block with-errors">{{ $errors->first('observacion') }}</div>
+                    </div>
+                </div>
                  
                     
 <!--            <div class = "col-md-6">
@@ -133,22 +220,17 @@
                 </div>
             </div>-->
                     
-<!--            <div class = "col-md-6">
-                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('total')) ? 'has-error'  :''}}">
-                    <label for = "total" class = "control-label">Total *</label>
-                    <input type = "text"  class = "form-control" id = "total" name = "total" required value = "{{ old('total') }}">
-                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                    <div class = "help-block with-errors">{{ $errors->first('total') }}</div>
-                </div>
-            </div>-->
+<!--           -->
         <!--<div class = "col-md-6"></div>-->
-        <div class = "col-md-12">
+            </div>
+            <div class = "row">
+                <div class = "col-md-12">
             
-            <table id="table_productos" class="table">
+                <table id="table_productos" class="table">
                 <thead>
                     <tr>
                         <th colspan="5" class="centrado" style="font-size: 24px;">
-                            Productos  
+                            Productos/Servicios 
                             <button  data-toggle="modal" data-target="#modal-producto_id"  class="btn btn-success" type="button">
                                 <span class="fa fa-plus"/>
                             </button>
@@ -160,24 +242,27 @@
                         </th>
                     </tr>
                     <tr class="azul">
-                        <th>Producto</th>
+                        <th>Descripción Producto / Servicio / Ingrediente</th>
                         <th class="align-right">Cantidad</th>
                         <th class="align-right">Valor</th>
                         <th class="align-right">Total</th>
                         <th></th>
                     </tr>
+                    
                 </thead>
                 <tbody style="border: thin solid #d8d8d8; background-color: white;">
+                   
                 </tbody>
-            </table>
-        </div>
+                    
+                </table>
+            </div>
                     
             <div class = "col-xs-12">
                 <div class = "form-group">
-                    <button type = "submit" class = "btn btn-primary pd">Crear</button>
+                    <button type = "submit" class = "btn btn-primary pd">Guardar Documento</button>
                 </div>
             </div>
-    
+        </div>
         </form>
     </div>
 </section>
@@ -463,7 +548,7 @@
             }
         }
         else{
-            $("select#mesa_id").html('<option value="999">---</option>');
+            $("select#mesa_id").html('<option value="999">No Aplica</option>');
         }
     }
 </script>

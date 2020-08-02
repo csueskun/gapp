@@ -58,6 +58,11 @@
                 <option value="PN">Pago de Nómina</option>
                 <option value="NI">Nota Inventario</option>
                 <option value="CO">Consumo</option>
+                <option value="RC">Recibo de Cartera</option>
+                <option value="RT">Recibo de Tesorería</option>
+                <option value="CI">Comprobante de Ingreso</option>
+                <option value="CE">Comprobante de Egreso</option>
+
             </select>
         </div>
         <div class="col-md-4">
@@ -96,7 +101,7 @@
             <tbody>
                 @foreach($documento_lista as $documento)
                 <tr id='{{ $documento->id }}'>
-                    <td>{{ array("FV"=>"Factura de Venta", "NI"=>"Nota Inventario", "FC"=>"Factura de Compra", "PN"=>"Pago de Nómina", "BI"=>"Base Inicial", "NI"=>"Nota de inventario", "CO"=>"Consumo")[$documento->tipodoc] }}</td>
+                    <td>{{ array("FV"=>"Factura de Venta", "NI"=>"Nota Inventario", "FC"=>"Factura de Compra", "PN"=>"Pago de Nómina", "BI"=>"Base Inicial", "NI"=>"Nota de inventario", "CO"=>"Consumo","RC"=>"Recibo de Cartera","RT"=>"Recibo de Tesorería","CI"=>"Comprobante de Ingreso","CE"=>"Comprobante de Egreso")[$documento->tipodoc] }}</td>
                     <td>{{ $documento->numdoc }}</td>
                     <td>{{ $documento->tercero?$documento->tercero->nombrecompleto:'VARIOS' }}</td>
                     <td>{{ $documento->mesa_id==999?'':$documento->mesa_id }}</td>
@@ -146,6 +151,10 @@
                                 <option value="PN">Pago de Nómina</option>
                                 <option value="NI">Nota Inventario</option>
                                 <option value="CO">Consumo</option>
+                                <option value="RC">Recibo de Cartera</option>
+                                <option value="RT">Recibo de Tesorería</option>
+                                <option value="CI">Comprobante de Ingreso</option>
+                                <option value="CE">Comprobante de Egreso</option>
                             </select>
                         </div>
                     </div>

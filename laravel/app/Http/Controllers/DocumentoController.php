@@ -22,7 +22,7 @@ class DocumentoController extends Controller
         return Documento::orderBy("id","desc")->get();
     }
     public function push() {
-        $data['message'] = 'hello world desde piza';
+        $data['message'] = 'Hello world desde H-Software.co';
         \App\Util\PushService::push("my-channel","my-event", $data);
     }
     
@@ -45,8 +45,8 @@ class DocumentoController extends Controller
             and {$this->conn}_documento.created_at <= $fecha_fin
             
             UNION ALL
-            Select 'I' as ie, 'FV' as tipo, COALESCE(sum(total),0) as total 
-            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'FV' 
+            Select 'E' as ie, 'PN' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'PN' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
             and {$this->conn}_documento.created_at <= $fecha_fin
             
@@ -63,26 +63,52 @@ class DocumentoController extends Controller
             and {$this->conn}_pedido.created_at <= $fecha_fin and {$this->conn}_pedido.estado = 2
             
             UNION ALL
+            Select 'I' as ie, 'FV' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'FV' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
             Select 'E' as ie, 'FC' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'FC' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
             and {$this->conn}_documento.created_at <= $fecha_fin
             
             UNION ALL
-            Select 'E' as ie, 'PN' as tipo, COALESCE(sum(total),0) as total 
-            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'PN' 
+            Select 'I' as ie, 'CI' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'CI' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
             and {$this->conn}_documento.created_at <= $fecha_fin
             
             UNION ALL
+            Select 'E' as ie, 'CE' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'CE' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select 'I' as ie, 'RC' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'RC' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select 'E' as ie, 'RT' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'RT' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            
+            UNION ALL
             Select '0' AS ie, '00' AS tipo, sum(
-            case when tipodoc in ('FV', 'BI', 'CO') then (total - COALESCE(descuento,0)) else (total*-1) end) as total 
+            case when tipodoc in ('FV', 'BI','CI','RC') then (total - COALESCE(descuento,0)) else (total*-1) end) as total 
             from {$this->conn}_documento 
             where {$this->conn}_documento.created_at >= $fecha_inicio 
             and {$this->conn}_documento.created_at <= $fecha_fin
-            and ( pizza_documento.tipodoc = 'BI' or pizza_documento.tipodoc = 'FV'
-            or pizza_documento.tipodoc = 'FC' or pizza_documento.tipodoc = 'PN' 
-            or pizza_documento.tipodoc = 'CO')
+            and ( pizza_documento.tipodoc = 'BI' or pizza_documento.tipodoc = 'PN'
+            or pizza_documento.tipodoc = 'FV'    or pizza_documento.tipodoc = 'CI' 
+            or pizza_documento.tipodoc = 'RC'    or pizza_documento.tipodoc = 'FC'
+            or pizza_documento.tipodoc = 'CE'    or pizza_documento.tipodoc = 'RT')
             ");
         
         $fv = DB::select("
@@ -260,6 +286,12 @@ class DocumentoController extends Controller
             and {$this->conn}_documento.created_at <= $fecha_fin
             
             UNION ALL
+            Select 'E' as ie, 'PN' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'PN' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
             Select 'I' as ie, 'FV' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'FV' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
@@ -272,19 +304,39 @@ class DocumentoController extends Controller
             and {$this->conn}_documento.created_at <= $fecha_fin
             
             UNION ALL
-            Select 'E' as ie, 'PN' as tipo, COALESCE(sum(total),0) as total 
-            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'PN' 
+            Select 'I' as ie, 'RC' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'RC' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select 'E' as ie, 'RT' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'RT' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select 'I' as ie, 'CI' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'CI' 
+            and {$this->conn}_documento.created_at >= $fecha_inicio 
+            and {$this->conn}_documento.created_at <= $fecha_fin
+            
+            UNION ALL
+            Select 'E' as ie, 'CE' as tipo, COALESCE(sum(total),0) as total 
+            from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'CE' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
             and {$this->conn}_documento.created_at <= $fecha_fin
             
             UNION ALL
             Select '0' AS ie, '00' AS tipo, sum(
-            case when tipodoc in ('FV', 'BI') then total else (total*-1) end) as total 
+            case when tipodoc in ('FV','BI','RC','CI') then total else (total*-1) end) as total 
             from {$this->conn}_documento 
             where {$this->conn}_documento.created_at >= $fecha_inicio 
             and {$this->conn}_documento.created_at <= $fecha_fin
-            and ( pizza_documento.tipodoc = 'BI' or pizza_documento.tipodoc = 'FV'
-            or pizza_documento.tipodoc = 'FC' or pizza_documento.tipodoc = 'PN')
+            and ( pizza_documento.tipodoc = 'BI' or pizza_documento.tipodoc = 'PN'
+            or pizza_documento.tipodoc = 'FV'    or pizza_documento.tipodoc = 'FC'
+            or pizza_documento.tipodoc = 'RC'    or pizza_documento.tipodoc = 'RT'
+            or pizza_documento.tipodoc = 'CI'    or pizza_documento.tipodoc = 'CE' )
             ");
 
         $fv = DB::select("
@@ -347,7 +399,12 @@ class DocumentoController extends Controller
         $rules = array(
                 'tipodoc' => 'required',
                 'mesa_id' => 'required',
-                'pedido_id' => ''
+                'pedido_id' => '',
+                'num_documento' => '',
+                'banco' => '',
+                'paga_efectivo' => '',
+                'paga_debito' => '',
+                'paga_credito' => '',
                 );
         $validator = Validator::make($postData, $rules);
         if ($validator->fails()) {
@@ -369,6 +426,11 @@ class DocumentoController extends Controller
             $documento->tipoie = Input::get('tipoie');
             $documento->mesa_id = Input::get('mesa_id');
             $documento->tercero_id = Input::get('tercero_id');
+            $documento->banco = Input::get('banco');
+            $documento->num_documento = Input::get('num_documento');
+            $documento->paga_efectivo = Input::get('paga_efectivo');
+            $documento->paga_debito = Input::get('paga_debito');
+            $documento->paga_credito = Input::get('paga_credito');
             $documento->observacion = Input::get('observacion');
             $documento->created_at = Input::get('created_at').':00';
             $documento->pedido_id = 0;
@@ -435,6 +497,11 @@ class DocumentoController extends Controller
                 'numdoc' => 'required',
                 'mesa_id' => 'required',
                 'pedido_id' => '',
+                'num_documento' => '',
+                'banco' => '',
+                'paga_efectivo' => '',
+                'paga_debito' => '',
+                'paga_credito' => '',
                 'total' => 'required'
                 );
         $validator = Validator::make($postData, $rules);
@@ -450,6 +517,12 @@ class DocumentoController extends Controller
             $documento->numdoc = Input::get('numdoc');
             $documento->mesa_id = Input::get('mesa_id');
             $documento->pedido_id = Input::get('pedido_id');
+            $documento->num_documento = Input::get('num_documento');
+            $documento->banco = Input::get('banco');
+            $documento->paga_efectivo = Input::get('paga_efectivo');
+            $documento->paga_debito = Input::get('paga_debito');
+            $documento->paga_credito = Input::get('paga_credito');
+            
             $documento->total = Input::get('total');
             $documento->tercero_id = Input::get('tercero_id');
             $documento->save();
@@ -466,6 +539,12 @@ class DocumentoController extends Controller
         $documento->observacion = Input::get('observacion');
         $documento->created_at = Input::get('created_at').':00';
         $documento->tercero_id = Input::get('tercero_id');
+        $documento->num_documento = Input::get('num_documento');
+        $documento->banco = Input::get('banco');
+        $documento->paga_efectivo = Input::get('paga_efectivo');
+        $documento->paga_debito = Input::get('paga_debito');
+        $documento->paga_credito = Input::get('paga_credito');
+            
         $documento->save();
         return response($documento, 200)->header('Content-Type', 'application/json');
     }

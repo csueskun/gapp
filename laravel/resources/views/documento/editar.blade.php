@@ -38,30 +38,18 @@
             <div class = "col-md-6">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('tipodoc')) ? 'has-error'  :''}}">
                     <label for = "tipodoc" class = "control-label">Tipo de Documento *</label>
-                    <input type="text" class="form-control" value='{{ array("FV"=>"Factura de Venta", "NI"=>"Nota Inventario", "FC"=>"Factura de Compra", "PN"=>"Pago de Nómina", "BI"=>"Base Inicial", "CO"=>"Consumo")[$documento->tipodoc] }}' readonly/>
+                    <input type="text" class="form-control" value='{{ array("FV"=>"Factura de Venta", "NI"=>"Nota Inventario", "FC"=>"Factura de Compra", "PN"=>"Pago de Nómina", "BI"=>"Base Inicial", "CO"=>"Consumo","RC"=>"Recibo de Cartera","RT"=>"Recibo de Tesorería","CI"=>"Comprobante de Ingreso","CE"=>"Comprobante de Egreso")[$documento->tipodoc] }}' readonly/>
                 </div>
-            </div>   
-            <div class = "col-md-6">
-                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('mesa_id')) ? 'has-error'  :''}}">
-                    <label for = "mesa_id" class = "control-label">Mesa *</label>
-                    <select class = "form-control" id = "mesa_id" name = "mesa_id">
-                        <option value="999">---</option>
-                    </select>
-                    <script>
-                        for(var i=1;i<21;i++){
-                            if(i=={{old('mesa_id')?old('mesa_id'):$documento->mesa_id}}){
-                                $("select#mesa_id").append("<option selected value='%i'>Mesa %i</option>".replace(/%i/g, i));
-                            }
-                            else{
-                                $("select#mesa_id").append("<option value='%i'>Mesa %i</option>".replace(/%i/g, i));
-                            }
-                        }
-                    </script>
-                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                    <div class = "help-block with-errors">{{ $errors->first('mesa_id') }}</div>
+            </div> 
+
+            <div class = "col-md-3">
+                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('numodoc')) ? 'has-error'  :''}}">
+                    <label for = "numdoc" class = "control-label">Número Documento</label>
+                    <input type="text" class="form-control" value="{{ $documento->numdoc==0?'':$documento->numdoc }}" readonly/>
                 </div>
             </div>
-            <div class = "col-md-6">
+
+            <div class = "col-md-3">
                 <div class = "campo tipo fecha form-group has-feedback {{ ($errors->first('created_at')) ? 'has-error' :'' }}">
                     <label for = "created_at" class = "control-label">Fecha </label>
                     <div class="input-group">
@@ -101,14 +89,36 @@
                     <div class = "help-block with-errors">{{ $errors->first('created_at') }}</div>
                 </div>
             </div>
-            <div class = "col-md-6">
+            
+
+
+            <div class = "col-md-3">
+                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('mesa_id')) ? 'has-error'  :''}}">
+                    <label for = "mesa_id" class = "control-label">Mesa *</label>
+                    <select class = "form-control" id = "mesa_id" name = "mesa_id">
+                        <option value="999">No Aplica</option>
+                    </select>
+                    <script>
+                        for(var i=1;i<21;i++){
+                            if(i=={{old('mesa_id')?old('mesa_id'):$documento->mesa_id}}){
+                                $("select#mesa_id").append("<option selected value='%i'>Mesa %i</option>".replace(/%i/g, i));
+                            }
+                            else{
+                                $("select#mesa_id").append("<option value='%i'>Mesa %i</option>".replace(/%i/g, i));
+                            }
+                        }
+                    </script>
+                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                    <div class = "help-block with-errors">{{ $errors->first('mesa_id') }}</div>
+                </div>
+            </div>
+            <div class = "col-md-3">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('tipodoc')) ? 'has-error'  :''}}">
                     <label for = "tipodoc" class = "control-label">Número de Pedido</label>
                     <input type="text" class="form-control" value="{{ $documento->pedido_id==0?'':$documento->pedido_id }}" readonly/>
                 </div>
             </div>
-            <div class = "col-md-12">
-            </div>
+            
             <div class = "col-md-6">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('tercero_id')) ? 'has-error'  :''}}">
                     <label for = "tercero_id" class = "control-label">Tercero</label>
@@ -155,13 +165,33 @@
                     <div class = "help-block with-errors">{{ $errors->first('paga_credito') }}</div>
                 </div>
             </div>
+            <div class = "col-md-3">
+                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('total')) ? 'has-error'  :''}}">
+                    <label for = "total" class = "control-label">Total Documento</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        <input readonly type="text" class="form-control" value="{{ number_format(old('total')?old('total'):$documento->total, 0) }}"/>
+                    </div>
+                    <div class = "help-block with-errors">{{ $errors->first('total') }}</div>
+                </div>
+            </div>
             <div class = "col-md-6">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('banco')) ? 'has-error'  :''}}">
                     <label for = "banco" class = "control-label">Banco</label>
                     <select name="banco" id="banco" class="form-control font bebas">
-                        <option value="">--</option>
-                        <option value="1">Bancolombia</option>
-                        <option value="2">Banco Bogotá</option>
+                        <option value="0">CAJA GENERAL</option>
+                        <option value="1">BANCOLOMBIA</option>
+                        <option value="2">BANCO BOGOTÁ</option>
+                        <option value="3">DAVIVIENDA</option>
+                        <option value="4">BANCO CAJA SOCIAL</option>
+                        <option value="5">BANCO AVVILLAS</option>
+                        <option value="6">BANCO BBVA</option>
+                        <option value="7">BANCO FALLABELA</option>
+                        <option value="8">BANCO POPULAR</option>
+                        <option value="9">BANCO DE OCCIDENTE</option>
+                        <option value="10">BANCO COLPATRIA</option>
+                        <option value="11">CITIBANK</option>
+                        <option value="12">BANCO SANTANDER</option>
                     </select>
                     <script>$("#banco").val("{{$documento->banco}}")</script>
                     <div class = "help-block with-errors">{{ $errors->first('banco') }}</div>
@@ -169,7 +199,7 @@
             </div>
             <div class = "col-md-3">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('num_documento')) ? 'has-error'  :''}}">
-                    <label for = "num_documento" class = "control-label">Número de documento</label>
+                    <label for = "num_documento" class = "control-label">Número doc. relacionado</label>
                     <input readonly type="text" class="form-control" value="{{ old('num_documento')?old('num_documento'):$documento->num_documento }}"/>
                     <div class = "help-block with-errors">{{ $errors->first('num_documento') }}</div>
                 </div>
@@ -189,7 +219,7 @@
             <table id="table_productos" class="table">
                 <thead>
                     <tr class="azul">
-                        <th>Producto</th>
+                        <th>Descripción Producto / Servicio / Ingrediente</th>
                         <th class="align-right">Cantidad</th>
                         <th class="align-right">Valor Base</th>
                         <th class="align-right">Total</th>

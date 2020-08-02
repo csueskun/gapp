@@ -218,15 +218,15 @@ class PDF{
                     <h3 class="centrado letra-sans grande">CUADRE DE CAJA</h3>
                     <table>
                         <tr>
-                            <td class="letra-sans">Fecha y Hora de Realización:</td>
+                            <td class="letra-sans">Fecha Realización:</td>
                             <td class="al-der">'.$fecha.'</td>
                         </tr>
                         <tr>
-                            <td class="letra-sans">Fecha de Inicio del Cuadre:</td>
+                            <td class="letra-sans">Fecha Inicio:</td>
                             <td class="al-der">'.$inicio.'</td>
                         </tr>
                         <tr>
-                            <td class="letra-sans">Fecha de Finalización del Cuadre:</td>
+                            <td class="letra-sans">Fecha Fin:</td>
                             <td class="al-der">'.$fin.'</td>
                         </tr>
                     </table>
@@ -292,9 +292,13 @@ class PDF{
             $linea = $lb;
             foreach ($totalq as $t){
                 $linea .= '<table>';
+                $linea .= '<tr><td colspan="2" class="overflow">*** RESUMEN IMPUESTOS ***</td></tr>';
+                $linea .= '<tr><td colspan="2" class="overflow"><hr></td></tr>';
                 $linea.= "<tr><td class='al-izq letra-sans mediana'>IVA</td><td style='width: 180px;font-size: 1.3em;' class='al-der color-verde'>$ " . number_format($t->impiva) . "</td></tr>";
                 $linea .= '<tr><td colspan="2" class="overflow"><hr></td></tr>';
                 $linea.= "<tr><td class='al-izq letra-sans mediana'>IMP.CONSUMO</td><td style='width: 180px;font-size: 1.3em;' class='al-der color-verde'>$ " . number_format($t->impcon) . "</td></tr>";
+                $linea .= '<tr><td colspan="2" class="overflow"><hr></td></tr>';
+                $linea .= '<tr><td colspan="2" class="overflow">*** FORMAS DE PAGO ***</td></tr>';
                 $linea .= '<tr><td colspan="2" class="overflow"><hr></td></tr>';
                 $linea.= "<tr><td class='al-izq letra-sans mediana'>EFECTIVO</td><td style='width: 180px;font-size: 1.3em;' class='al-der color-verde'>$ " . number_format($t->efectivo) . "</td></tr>";
                 $linea .= '<tr><td colspan="2" class="overflow"><hr></td></tr>';
@@ -1220,8 +1224,9 @@ class PDF{
     }
     
     public static function nombreTipoDocumento($tipo){
-        $docs = array("FV"=>"Factura de Venta", "FC"=>"Factura de Compra", "PN"=>"Pago de Nómina",
-            "BI"=>"Base Inicial", "NI"=>"Nota de Inventario", "CO"=>"Consumo", "DES"=>"Descuento", "PRO"=>"Propina");
+        $docs = array("FV"=>"Factura Venta", "FC"=>"Factura Compra", "PN"=>"Pago Nómina",
+            "BI"=>"Base Inicial", "NI"=>"Nota Inventario", "CO"=>"Consumo", "DES"=>"Descuento", "PRO"=>"Propina",
+            "CI"=>"Comprob. Ingreso", "RC"=>"Recibo Cartera","CE"=>"Comprob. Egreso", "RT"=>"Recibo Tesorería");
         return $docs[$tipo];
     }
 }
