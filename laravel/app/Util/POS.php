@@ -504,7 +504,7 @@ class POS{
         return $stack;
     }
 
-    public static function reporteTipodoc($nombre, $config, $reporte, $fecha_inicio, $fecha_fin, $descuento)
+    public static function reporteTipodoc($nombre, $config, $reporte, $fecha_inicio, $fecha_fin, $descuento=[])
     {
         $max_c = $config->num_impresora;
         $stack = [];
