@@ -103,7 +103,7 @@ class PedidoController extends Controller
         $pedido->user_id = $datos->user_id;
         $pedido->obs = $datos->obs;
         $pedido->turno = $datos->turno;
-        $pedido->caja = $datos->caja;
+        $pedido->caja_id = $datos->caja_id;
         $pedido->save();
         return $pedido;
     }
@@ -179,7 +179,7 @@ class PedidoController extends Controller
         $documento->pedido_id = $pedido->id;
         $documento->total = $pedido->total;
         $documento->usuario_id = $pedido->user_id;
-        $documento->caja = $pedido->caja;
+        $documento->caja_id = $pedido->caja_id;
         $documento->tercero_id = isset($pedidoObs->clienteId)?$pedidoObs->clienteId:null;
         if($documento->tercero_id == ""){
             $documento->tercero_id = null;
@@ -550,8 +550,9 @@ class PedidoController extends Controller
             $documento = new Documento;
             $documento->pedido = Pedido::find($id);
         }
-            
-        return (App\Util\POS::facturaPosStack($documento,$sql,app('App\Http\Controllers\ConfigController')->first(),$pre, floatval($propina), floatval($descuento)));
+
+        $config = app('App\Http\Controllers\ConfigController')->first();            
+        return (App\Util\POS::facturaPosStack($documento,$sql,$config,$pre, floatval($propina), floatval($descuento)));
     }
     
     public function calcularValor($id){
@@ -947,7 +948,7 @@ class PedidoController extends Controller
             $pedido->mesa_id = $mesa;
             $pedido->obs = '{"mesa_alias":"'.$producto_pedido_json->alias.'"}';
             $pedido->user_id = Auth::user()->id;
-            $pedido->caja = Auth::user()->caja;
+            $pedido->caja_id = Auth::user()->caja_id;
             if($mesa==0){
                 $pedido->estado = 3;
             }

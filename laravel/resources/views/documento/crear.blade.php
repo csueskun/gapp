@@ -112,20 +112,17 @@
                 </div>
 
                 <div class = "col-md-3">
-                    <div class = "key- tipo- form-group has-feedback {{ ($errors->first('caja')) ? 'has-error'  :''}}">
-                    <label for = "caja" class = "control-label">Caja *</label>
-                    <select name="caja" id="caja" class="form-control font bebas">
-                        <option value="0">CAJA PRINCIPAL</option>
-                        <option value="1">CAJA 1</option>
+                    <div class = "key- tipo- form-group has-feedback {{ ($errors->first('caja_id')) ? 'has-error'  :''}}">
+                    <label for = "caja_id" class = "control-label">Caja *</label>
+                    <select name="caja_id" id="caja_id" class="form-control font bebas">
+                        <option value="1">CAJA PRINCIPAL</option>
                         <option value="2">CAJA 2</option>
-                        <option value="3">CAJA 3</option>
-                        <option value="4">CAJA 4</option>
                     </select>
-                    @if(old('caja'))
-                      <script>$("select#caja").val('{{old('caja')}}');</script>
+                    @if(old('caja_id'))
+                      <script>$("select#caja_id").val('{{old('caja_id')}}');</script>
                     @endif
                       <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                      <div class = "help-block with-errors">{{ $errors->first('caja') }}</div>
+                      <div class = "help-block with-errors">{{ $errors->first('caja_id') }}</div>
                    </div>
                 </div>
                 
@@ -222,7 +219,7 @@
                 <div class = "col-md-12">
                     <div class = "key- tipo- form-group has-feedback {{ ($errors->first('observacion')) ? 'has-error'  :''}}">
                        <label for = "observacion" class = "control-label">Observación</label>
-                       <textarea  class = "form-control" id = "observacion" name = "observacion">{{ old('observacion') }}</textarea>
+                       <textarea  class = "form-control" id = "observacion" style='font-size: 16px' name = "observacion">{{ old('observacion') }}</textarea>
                        <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
                        <div class = "help-block with-errors">{{ $errors->first('observacion') }}</div>
                     </div>

@@ -159,9 +159,11 @@ class POS{
 
                     $text_intercambio.=str_replace(' por ', '->', $intercambio).", ";
                 }
-                $text_intercambio.='*-*';
-                $text_intercambio = str_replace(', *-*', '', $text_intercambio);
-                $texto.= " [".$text_intercambio."]";
+                if(count($obs->intercambios)>0){
+                    $text_intercambio.='$=$';
+                    $text_intercambio = str_replace(', $=$', '', $text_intercambio);
+                    $texto.= " [".$text_intercambio."]";
+                }
             }
             if(isset($obs->obs) && $obs->obs && $obs->obs != ''){
                 $texto.= " *".$obs->obs;
@@ -213,16 +215,21 @@ class POS{
     public static function facturaPosStack($documento,$productos,$config,$pre=false,$propina=10,$descuento=10){
         $post = !$pre;
         $stack = [];
+
         $texto = '';
-
-        $caracteres = $config->num_impresora;
-
-        $stack[] = ["i"=> "impresora", "v"=> $config->impresora];
+        $pedido = $documento->pedido;
+        if($pedido->caja_id == 2){
+            $caracteres = $config->num_impresora2;
+            $stack[] = ["i"=> "impresora", "v"=> $config->impresora2];
+        }
+        else{
+            $caracteres = $config->num_impresora;
+            $stack[] = ["i"=> "impresora", "v"=> $config->impresora];
+        }
         if($post){
             $stack[] = ["i"=> "logo", "v"=> 0];
         }
 
-        $pedido = $documento->pedido;
         $observaciones = self::getObservationArray($pedido->obs);
         $fecha = date("d/m/Y h:ia");
         $fechaPedido = date_create($pedido->created_at);
@@ -255,7 +262,12 @@ class POS{
             $texto.= "Teléf.: $observaciones->tel\n";
         }
 
-        $texto.= "Caja: PRINCIPAL\n";
+        if($pedido->caja_id == 2){
+            $texto.= "Caja: Nro 2\n";
+        }
+        else{
+            $texto.= "Caja: Nro 1\n";
+        }
 
         if($pedido->mesa_id==0){
             $texto.= "Domicilio\n";
@@ -504,12 +516,18 @@ class POS{
         return $stack;
     }
 
-    public static function reporteTipodoc($nombre, $config, $reporte, $fecha_inicio, $fecha_fin, $descuento=[])
+    public static function reporteTipodoc($nombre, $config, $reporte, $fecha_inicio, $fecha_fin, $descuento=[], $caja_id)
     {
         $max_c = $config->num_impresora;
         $stack = [];
         $stack[] = self::impresoraI($config->impresora);
         $stack[] = self::textoD("Reporte: ",$nombre,$max_c);
+        if($caja_id == '0'){
+            $stack[] = self::textoD("Caja nro: ",'Todas',$max_c);
+        }
+        else{
+            $stack[] = self::textoD("Caja nro: ",$caja_id,$max_c);
+        }
         if($fecha_fin == $fecha_inicio){
             $stack[] = self::textoD("Fecha: ",$fecha_fin,$max_c);
         }
@@ -533,9 +551,12 @@ class POS{
             $total-=$d->v;
             $stack[] = self::textoD("DESCUENTOS: "."", "-".number_format($d->v,0),$max_c);
         }
-        $stack[] = self::textoD("",str_repeat("-",floor($max_c/2)),$max_c);
-        $stack[] = self::dobleI();
-        $stack[] = self::textoD("","$".number_format($total,0),floor($max_c/2));
+        $stack[] = ["i"=>"doble","v"=>2];
+        // $stack[] = self::textoD("","$".number_format($total,0),floor($max_c/2));
+        $stack[] = self::textoD('', "$".number_format($total,0), floor($max_c/1.5));
+        // $stack[] = ["i"=>"texto","v"=>$linea];
+        $stack[] = ["i"=>"sencilla","v"=>1];
+        $stack[] = self::textoI("\n");
         $stack[] = self::sencillaI();
         $stack[] = self::textoI(str_repeat('-',$max_c));
         $stack[] = self::textoD('Impreso: ',date("d/m/Y h:ia"),$max_c);
@@ -543,13 +564,20 @@ class POS{
         return $stack;
     }
 
-    public static function cuadrePos($config, $cuadre, $fvs, $fecha_inicio, $fecha_fin, $descuento, $propina, $totalq){
+    public static function cuadrePos($config, $cuadre, $fvs, $fecha_inicio, $fecha_fin, $descuento, $propina, $totalq, $caja){
         $stack = [];
 
         $caracteres = $config->num_impresora;
 
         $stack[] = ["i"=>"impresora","v"=>$config->impresora];
         $stack[] = ["i"=>"logo","v"=>0];
+
+        
+        if($caja == '0'){
+            $caja='Todas';
+        }
+        $linea = self::impLinea('Caja Número', $caja, $caracteres);
+        $stack[] = ["i"=>"texto","v"=>$linea];
 
         $linea = self::impLinea('Fecha', date("d/m/Y h:ia"), $caracteres);
         $stack[] = ["i"=>"texto","v"=>$linea];
@@ -779,8 +807,9 @@ class POS{
     }
 
     public static function normalizeSizes($s){
-        $s = '*-*'.$s;
-        $s = str_replace('*-* ', '', $s);
+        $s = '#-#'.$s;
+        $s = str_replace('#-# ', '', $s);
+        $s = str_replace('#-#', '', $s);
         $conv = array(
             "\"grande\"" => "GRA.",
             "'grande'" => "GRA.",

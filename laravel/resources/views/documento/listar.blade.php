@@ -106,7 +106,7 @@
                     <td>{{ $documento->tipodoc }}</td>
                     <td>{{ $documento->numdoc }}</td>
                     <td>{{ $documento->tercero?$documento->tercero->nombrecompleto:'VARIOS' }}</td>
-                    <td>{{ $documento->caja }}</td>  
+                    <td>{{ $documento->caja_id }}</td>  
                     <td>{{ $documento->mesa_id==999?'':$documento->mesa_id }}</td>
                     <td class="align-right">{{ $documento->pedido_id==0?'':$documento->pedido_id }}</td>
                     <td class="align-right">${{ number_format($documento->total,0) }}</td>
@@ -144,6 +144,16 @@
             </div>
             <div class="modal-body">
                 <div class="row">
+                    <div class = "col-md-12">
+                        <div class = "key- tipo- form-group has-feedback">
+                            <label for = "tipodoc" class = "control-label">Seleccione la caja</label>
+                            <select class = "form-control" id = "caja_id" name = "caja_id">
+                                <option selected value="0">Todas</option>
+                                <option value="1">Caja nro. 1</option>
+                                <option value="2">Caja nro. 2</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class = "col-md-12">
                         <div class = "key- tipo- form-group has-feedback">
                             <label for = "tipodoc" class = "control-label">Tipo de Documento</label>
@@ -337,6 +347,7 @@ $('#example')
             tipo: $("#tipo_doc").val(),
             inicio: $('div#fecha_inicio').datetimepicker('getFormattedDate'),
             fin: $('div#fecha_fin').datetimepicker('getFormattedDate'),
+            caja_id: $('#caja_id').val(),
         };
         impPos(data);
     }
