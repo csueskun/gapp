@@ -35,7 +35,7 @@
         <form data-toggle = "validator" id="form-documento">
             {{ csrf_field() }}
             <input type="hidden" name="imagen" id="imagen"/>
-            <div class = "col-md-6">
+            <div class = "col-md-3">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('tipodoc')) ? 'has-error'  :''}}">
                     <label for = "tipodoc" class = "control-label">Tipo de Documento *</label>
                     <input type="text" class="form-control" value='{{ array("FV"=>"Factura de Venta", "NI"=>"Nota Inventario", "FC"=>"Factura de Compra", "PN"=>"Pago de Nómina", "BI"=>"Base Inicial", "CO"=>"Consumo","RC"=>"Recibo de Cartera","RT"=>"Recibo de Tesorería","CI"=>"Comprobante de Ingreso","CE"=>"Comprobante de Egreso")[$documento->tipodoc] }}' readonly/>
@@ -89,29 +89,7 @@
                     <div class = "help-block with-errors">{{ $errors->first('created_at') }}</div>
                 </div>
             </div>
-            
 
-
-            <div class = "col-md-3">
-                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('mesa_id')) ? 'has-error'  :''}}">
-                    <label for = "mesa_id" class = "control-label">Mesa *</label>
-                    <select class = "form-control" id = "mesa_id" name = "mesa_id">
-                        <option value="999">No Aplica</option>
-                    </select>
-                    <script>
-                        for(var i=1;i<21;i++){
-                            if(i=={{old('mesa_id')?old('mesa_id'):$documento->mesa_id}}){
-                                $("select#mesa_id").append("<option selected value='%i'>Mesa %i</option>".replace(/%i/g, i));
-                            }
-                            else{
-                                $("select#mesa_id").append("<option value='%i'>Mesa %i</option>".replace(/%i/g, i));
-                            }
-                        }
-                    </script>
-                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                    <div class = "help-block with-errors">{{ $errors->first('mesa_id') }}</div>
-                </div>
-            </div>
             <div class = "col-md-3">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('tipodoc')) ? 'has-error'  :''}}">
                     <label for = "tipodoc" class = "control-label">Número de Pedido</label>
@@ -135,6 +113,49 @@
                     <div class = "help-block with-errors">{{ $errors->first('tercero_id') }}</div>
                 </div>
             </div>
+            
+            
+            <div class = "col-md-3">
+                    <div class = "key- tipo- form-group has-feedback {{ ($errors->first('caja')) ? 'has-error'  :''}}">
+                    <label for = "caja" class = "control-label">Caja *</label>
+                    <select name="caja" id="caja" class="form-control font bebas">
+                        <option value="0">CAJA PRINCIPAL</option>
+                        <option value="1">CAJA 1</option>
+                        <option value="2">CAJA 2</option>
+                        <option value="3">CAJA 3</option>
+                        <option value="4">CAJA 4</option>
+                    </select>
+                    @if(old('caja'))
+                      <script>$("select#caja").val('{{old('caja')}}');</script>
+                    @endif
+                      <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                      <div class = "help-block with-errors">{{ $errors->first('caja') }}</div>
+                </div>
+            </div>
+                
+
+            <div class = "col-md-3">
+                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('mesa_id')) ? 'has-error'  :''}}">
+                    <label for = "mesa_id" class = "control-label">Mesa *</label>
+                    <select class = "form-control" id = "mesa_id" name = "mesa_id">
+                        <option value="999">No Aplica</option>
+                    </select>
+                    <script>
+                        for(var i=1;i<21;i++){
+                            if(i=={{old('mesa_id')?old('mesa_id'):$documento->mesa_id}}){
+                                $("select#mesa_id").append("<option selected value='%i'>Mesa %i</option>".replace(/%i/g, i));
+                            }
+                            else{
+                                $("select#mesa_id").append("<option value='%i'>Mesa %i</option>".replace(/%i/g, i));
+                            }
+                        }
+                    </script>
+                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                    <div class = "help-block with-errors">{{ $errors->first('mesa_id') }}</div>
+                </div>
+            </div>
+            
+            
             <div class = "col-md-3">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('paga_efectivo')) ? 'has-error'  :''}}">
                     <label for = "paga_efectivo" class = "control-label">Efectivo</label>

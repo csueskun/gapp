@@ -94,7 +94,7 @@
                     </div>
                 </div>
             
-                <div class = "col-md-8">
+                <div class = "col-md-6">
                     <div class = "key- tipo- form-group has-feedback {{ ($errors->first('tercero_id')) ? 'has-error'  :''}}">
                        <label for = "tercero_id" class = "control-label">Tercero</label>
                        <select class = "form-control" id = "tercero_id" name = "tercero_id"  >
@@ -111,7 +111,25 @@
                     </div>
                 </div>
 
-                <div class = "col-md-4">
+                <div class = "col-md-3">
+                    <div class = "key- tipo- form-group has-feedback {{ ($errors->first('caja')) ? 'has-error'  :''}}">
+                    <label for = "caja" class = "control-label">Caja *</label>
+                    <select name="caja" id="caja" class="form-control font bebas">
+                        <option value="0">CAJA PRINCIPAL</option>
+                        <option value="1">CAJA 1</option>
+                        <option value="2">CAJA 2</option>
+                        <option value="3">CAJA 3</option>
+                        <option value="4">CAJA 4</option>
+                    </select>
+                    @if(old('caja'))
+                      <script>$("select#caja").val('{{old('caja')}}');</script>
+                    @endif
+                      <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                      <div class = "help-block with-errors">{{ $errors->first('caja') }}</div>
+                   </div>
+                </div>
+                
+                <div class = "col-md-3">
                     <div class = "key- tipo- form-group has-feedback {{ ($errors->first('mesa_id')) ? 'has-error'  :''}}">
                        <label for = "mesa_id" class = "control-label">Mesa *</label>
                        <select class = "form-control" id = "mesa_id" name = "mesa_id">

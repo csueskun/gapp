@@ -30,6 +30,8 @@
                     <th>Nombres</th>
                     <th>Apellidos</th>
                     <th>Rol</th>
+                    <th>Caja</th>
+                    
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -39,7 +41,10 @@
                     <td>{{ $users->usuario }}</td>
                     <td>{{ $users->nombres }}</td>
                     <td>{{ $users->apellidos }}</td>
+
                     <td>{{ $users->rol }}</td>
+                    <td>{{ $users->caja }}</td>
+                    
                     <td class="min-width text-align-center">
                     <form action="borrar" style="display: inline-block" method="POST">
                         {{ csrf_field() }}

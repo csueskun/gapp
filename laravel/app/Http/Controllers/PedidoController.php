@@ -103,6 +103,7 @@ class PedidoController extends Controller
         $pedido->user_id = $datos->user_id;
         $pedido->obs = $datos->obs;
         $pedido->turno = $datos->turno;
+        $pedido->caja = $datos->caja;
         $pedido->save();
         return $pedido;
     }
@@ -178,6 +179,7 @@ class PedidoController extends Controller
         $documento->pedido_id = $pedido->id;
         $documento->total = $pedido->total;
         $documento->usuario_id = $pedido->user_id;
+        $documento->caja = $pedido->caja;
         $documento->tercero_id = isset($pedidoObs->clienteId)?$pedidoObs->clienteId:null;
         if($documento->tercero_id == ""){
             $documento->tercero_id = null;
@@ -945,6 +947,7 @@ class PedidoController extends Controller
             $pedido->mesa_id = $mesa;
             $pedido->obs = '{"mesa_alias":"'.$producto_pedido_json->alias.'"}';
             $pedido->user_id = Auth::user()->id;
+            $pedido->caja = Auth::user()->caja;
             if($mesa==0){
                 $pedido->estado = 3;
             }

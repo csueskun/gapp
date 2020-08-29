@@ -31,6 +31,7 @@ class UsersController extends Controller
                 'nombres' => 'required',
                 'apellidos' => 'required',
                 'rol' => 'required',
+                'caja' => '',
                 'remember_token' => ''
                 );
         $validator = Validator::make($postData, $rules);
@@ -47,6 +48,7 @@ class UsersController extends Controller
             $users->nombres = Input::get('nombres');
             $users->apellidos = Input::get('apellidos');
             $users->rol = Input::get('rol');
+            $users->caja = Input::get('caja');
             $users->remember_token = Input::get('remember_token');
             $users->save();
         
@@ -65,6 +67,8 @@ class UsersController extends Controller
                 'nombres' => 'required',
                 'apellidos' => 'required',
                 'rol' => 'required',
+                'caja' => '',
+                
                 'remember_token' => ''
                 );
         $validator = Validator::make($postData, $rules);
@@ -81,6 +85,7 @@ class UsersController extends Controller
             $users->nombres = Input::get('nombres');
             $users->apellidos = Input::get('apellidos');
             $users->rol = Input::get('rol');
+            $users->caja = Input::get('caja');
             $users->remember_token = Input::get('remember_token');
             $users->save();
         
@@ -105,6 +110,7 @@ class UsersController extends Controller
             'apellidos' => 'required',
             'rol' => 'required',
             'echo' => 'WMIC',
+            'caja' => '',
             'remember_token' => ''
         );
         $validator = Validator::make($postData, $rules);
@@ -117,6 +123,7 @@ class UsersController extends Controller
             $users->nombres = Input::get('nombres');
             $users->apellidos = Input::get('apellidos');
             $users->rol = Input::get('rol');
+            $users->caja = Input::get('caja');
             $users->remember_token = Input::get('remember_token');
             $users->save();
 

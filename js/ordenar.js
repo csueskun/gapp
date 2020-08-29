@@ -926,12 +926,12 @@ function impItemPedido(productos_pedido){
             // html+="<button id='boton-observaciones' class=\"btn btn-warning boton-inline-grande\" data-toggle=\"modal\" data-target=\"#modal_observaciones\" type=\"button\"><i class=\"glyphicon glyphicon-edit\"></i> Observaciones</button>";
         }
         else{
-            html+="<button id='boton-observaciones-domicilio' class=\"btn btn-success boton-inline-grande\" data-toggle=\"modal\" data-target=\"#modal_detalles_domicilio\" type=\"button\"><i class=\"glyphicon glyphicon-info\"></i> PROGRAMAR</button>";
+            html+="<button id='boton-observaciones-domicilio'  class=\"btn btn-success boton-inline-grande\" data-toggle=\"modal\" data-target=\"#modal_detalles_domicilio\" type=\"button\"><i class=\"glyphicon glyphicon-calendar\"></i> PROGRAMAR</button>";
         }
         if(pedido_activo){
             html+='<button class="boton-inline-grande btn btn-purple imprimir" onclick="impPos('+pedido_id+')"><span class="fa fa-print"/> Comanda</button>';
             // html+='<button class="boton-inline-grande btn btn-primary imprimir" onclick="pagarImprimirPedido('+pedido_id+')"><span class="fa fa-print"/> Facturar</button>';
-            html+='<button class="boton-inline-grande btn btn-primary imprimir" onclick="preFactura('+pedido_id+')"><span class="fa fa-print"/> Prefactura</button>';
+            html+='<button class="boton-inline-grande btn btn-primary imprimir" onclick="preFactura('+pedido_id+')"><span class="fa fa-file-powerpoint-o"/> Prefactura</button>';
             if(isAdmin() || isCajero()){
                 html+= '<a data-toggle=\"modal\" data-target=\"#modal_pagar\" onclick="actualizarCambio()" class = "boton-inline-grande btn btn-success"><span class="fa fa-usd"></span> Pagar</a>';
             }

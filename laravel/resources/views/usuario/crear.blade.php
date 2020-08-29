@@ -40,6 +40,7 @@
                     <select type = "text" class = "form-control" id = "rol" name = "rol"  value = "{{ old('rol') }}">
                         <option>Administrador</option>
                         <option>Mesero</option>
+                        <option>Cajero</option>
                         <option>Cocinero</option>
                     </select>
                     <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
@@ -83,7 +84,22 @@
                     <div class = "help-block with-errors">{{ $errors->first('apellidos') }}</div>
                 </div>
             </div>
-                    
+
+            <div class = "col-md-6">
+                <div class = "form-group has-feedback {{ ($errors->first('caja')) ? 'has-error'  :''}}">
+                    <label for = "rol" class = "control-label">Caja *</label>
+                    <select type = "text" class = "form-control" id = "caja" name = "caja"  value = "{{ old('caja') }}">
+                        <option>0</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                    </select>
+                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                    <div class = "help-block with-errors">{{ $errors->first('caja') }}</div>
+                </div>
+            </div>
+                              
+
             <div class = "col-xs-12">
                 <div class = "form-group">
                     <button type = "submit" class = "btn btn-primary">Crear</button>

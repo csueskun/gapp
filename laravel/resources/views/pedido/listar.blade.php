@@ -45,8 +45,9 @@
                     <th class="agregar_ordenar_por" campo="fecha">Fecha y Hora</th>
                     <th class="agregar_ordenar_por" campo="mesa_id">Mesa</th>
                     <th class="agregar_ordenar_por" campo="turno">Turno</th>
+                    <th class="agregar_ordenar_por" campo="caja">Caja</th>
                     <th class="" campo="">Observación</th>
-                    <th>Cantidad Productos</th>
+                    <th>Cant. Prod.</th>
                     <th class="agregar_ordenar_por" campo="total">Saldo</th>
                     <th class="" campo="">Mesero</th>
                     <th class="w1"></th>
@@ -60,6 +61,7 @@
                     <td class="centrado">{{ $pedido->mesa_id == 0?'Domicilio':$pedido->mesa_id }}
                         </td>
                     <td>{{ $pedido->turno }}</td>
+                    <td>{{ $pedido->caja }}</td>
                     <td class="">
                     @if(($pedido->obs != null && $pedido->obs != ''))
                     {{isset(json_decode($pedido->obs)->para_llevar)?(" ".json_decode($pedido->obs)->para_llevar.". "):""}}

@@ -3,45 +3,61 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="row restaurante">
+                    <div class= "col-md-12">
                     <label ><input type="checkbox" id="para-llevar" value="LLEVAR"> Para llevar</label>
-                </div>
-                <div class="row">
-                    <label >Observaciones</label>
-                </div>
-                <div class="row">
-                    <textarea class="w100 form-control" name="observacion" id="observacion" rows="4"></textarea>
+                    </div>
                 </div>
                 <div class="row domicilio">
+                    <div class= "col-md-6">
                     <label><input type="radio" name="entregar-en" value="DOMICILIO" checked> Enviar a domicilio</label>
-                </div>
-                <div class="row">
-                    <label >Cliente</label>
-                </div>
-                <div class="row">
-                    <input type="hidden" id="cliente_id">
-                    <input type="text" name="cliente" placeholder="Nombres" id="cliente" class="w100 form-control" value="VARIOS" autocomplete="off">
-                </div>
-                <div class="row">
-                    <label >Identificación</label>
-                </div>
-                <div class="row">
-                    <input type="text" name="identificacion" id="identificacion" class="w100 form-control" autocomplete="off">
-                </div>
-                <div class="row">
-                    <label >Teléfono</label>
-                </div>
-                <div class="row">
-                    <input type="text" name="telefono" id="telefono" class="w100 form-control" autocomplete="off">
-                </div>
-                <div class="row">
-                    <label >Dirección</label>
-                </div>
-                <div class="row">
-                    <input type="text" name="domicilio" placeholder="Dirección" id="domicilio" class="w100 form-control">
-                </div>
-                <div class="row domicilio">
+                    </div>
+                    <div class= "col-md-6">
                     <label><input type="radio" name="entregar-en" value="CAJA"> Recojer en caja</label>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class= "col-md-12">
+                    <label >Observaciones</label>
+                    </div>
+                    <div class= "col-md-12">
+                    <textarea class="w100 form-control" name="observacion" id="observacion" rows="4"></textarea>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class= "col-md-12">
+                      <label >Cliente</label>    
+                      <input type="hidden" id="cliente_id">
+                    </div>
+                    <div class= "col-md-12">
+                      <input type="text" name="cliente" placeholder="Nombres" id="cliente" class="w100 form-control" value="VARIOS" autocomplete="off">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class= "col-md-6">
+                    <label >Identificación</label>
+                    </div>
+                    <div class= "col-md-6">
+                    <label >Teléfono</label>
+                    </div>   
+                </div>
+                <div class="row">
+                    <div class= "col-md-6">
+                    <input type="text" name="identificacion" id="identificacion" class="w100 form-control" autocomplete="off">
+                    </div>
+                    <div class= "col-md-6">
+                    <input type="text" name="telefono" id="telefono" class="w100 form-control" autocomplete="off">                
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class= "col-md-12">
+                    <label >Dirección</label>
+                    </div>
+                    <div class= "col-md-12">
+                    <input type="text" name="domicilio" placeholder="Dirección" id="domicilio" class="w100 form-control">
+                    </div>
+                </div>       
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>

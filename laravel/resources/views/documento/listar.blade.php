@@ -87,9 +87,10 @@
         <table class="table normal table-hover table-condensed display datatable" cellspacing="0" width="100%" style="margin-left: 10px; margin-right: 10px; background-color: white">
             <thead>
                 <tr>
-                    <th class="agregar_ordenar_por" campo="tipodoc">Tipo de Documento</th>
+                    <th class="agregar_ordenar_por" campo="tipodoc">Tipo Doc.</th>
                     <th class="agregar_ordenar_por" campo="numdoc">Número</th>
                     <th class="">Tercero</th>
+                    <th class="agregar_ordenar_por" campo="caja">Caja</th>
                     <th class="agregar_ordenar_por" campo="mesa_id">Mesa</th>
                     <th class="agregar_ordenar_por" campo="pedido_id">Pedido</th>
                     <th class="agregar_ordenar_por" campo="total">Total</th>
@@ -101,9 +102,11 @@
             <tbody>
                 @foreach($documento_lista as $documento)
                 <tr id='{{ $documento->id }}'>
-                    <td>{{ array("FV"=>"Factura de Venta", "NI"=>"Nota Inventario", "FC"=>"Factura de Compra", "PN"=>"Pago de Nómina", "BI"=>"Base Inicial", "NI"=>"Nota de inventario", "CO"=>"Consumo","RC"=>"Recibo de Cartera","RT"=>"Recibo de Tesorería","CI"=>"Comprobante de Ingreso","CE"=>"Comprobante de Egreso")[$documento->tipodoc] }}</td>
+                    <!--<td>{{ array("FV"=>"Factura de Venta", "NI"=>"Nota Inventario", "FC"=>"Factura de Compra", "PN"=>"Pago de Nómina", "BI"=>"Base Inicial", "NI"=>"Nota de inventario", "CO"=>"Consumo","RC"=>"Recibo de Cartera","RT"=>"Recibo de Tesorería","CI"=>"Comprobante de Ingreso","CE"=>"Comprobante de Egreso")[$documento->tipodoc] }}</td>-->
+                    <td>{{ $documento->tipodoc }}</td>
                     <td>{{ $documento->numdoc }}</td>
                     <td>{{ $documento->tercero?$documento->tercero->nombrecompleto:'VARIOS' }}</td>
+                    <td>{{ $documento->caja }}</td>  
                     <td>{{ $documento->mesa_id==999?'':$documento->mesa_id }}</td>
                     <td class="align-right">{{ $documento->pedido_id==0?'':$documento->pedido_id }}</td>
                     <td class="align-right">${{ number_format($documento->total,0) }}</td>
@@ -143,7 +146,7 @@
                 <div class="row">
                     <div class = "col-md-12">
                         <div class = "key- tipo- form-group has-feedback">
-                            <label for = "tipodoc" class = "control-label">Tipo de Documento *</label>
+                            <label for = "tipodoc" class = "control-label">Tipo de Documento</label>
                             <select class = "form-control actualiza-tipoie" id = "tipo_doc" name = "tipodoc">
                                 <option selected value="FV">Factura de Venta</option>
                                 <option value="FC">Factura de Compra</option>
