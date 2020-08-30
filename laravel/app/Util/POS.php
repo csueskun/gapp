@@ -205,7 +205,7 @@ class POS{
         $stack[] = ["i"=>"texto","v"=>$texto];
         $stack[] = ["i"=>"sencilla","v"=>1];
         $texto = $cliente;
-        $texto.= "Fecha IMP: $fecha";
+        $texto.= "Fecha Imp: $fecha";
         $stack[] = ["i"=>"texto","v"=>$texto];
         return $stack;
     }
@@ -488,7 +488,7 @@ class POS{
             $texto.= ($config->pie_pos);
             $texto.= ("\n");
         }
-        $texto.= ("Fecha IMP: $fecha");
+        $texto.= ("Fecha Imp: $fecha");
         $texto.= ("\n");
         $texto.= ("Impreso por www.h-software.co");
         $stack[] = ["i"=>"texto","v"=>$texto];

@@ -116,7 +116,7 @@ if(isset($config->pie_pos) && $config->pie_pos != ''){
     $printer->text ($config->pie_pos);
     $printer->text ("\n");
 }
-$printer->text ("Fecha IMP: $fecha");
+$printer->text ("Fecha Imp: $fecha");
 $printer->text ("\n");
 $printer->text ("www.h-software.co");
 $printer->text ("\n");
