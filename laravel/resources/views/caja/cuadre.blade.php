@@ -20,6 +20,23 @@
 
 <section class="borde-inferior form fondo-comun">
     <div class="container">
+        <h2 class="titulo">Seleccione la caja
+            <br/>
+            <div class = "col-md-6" style='padding: 0'>
+                <div class = "key- tipo- form-group has-feedback">
+                    <select name="_caja_id" id="_caja_id" class="form-control font bebas">
+                        <option value="0">Todas</option>
+                        <option value="1">Caja 1</option>
+                        <option value="2">Caja 2</option>
+                    </select>
+                </div>
+            </div>
+        </h2>
+    </div>
+</section>
+
+<section class="borde-inferior form fondo-comun">
+    <div class="container">
         <h2 class="titulo">Cuadre de Caja Diario
             <br/>
             <button class="btn btn-success" id="diario" href="diario" onclick="cuadreDiario()">
@@ -94,6 +111,7 @@
     <input type="hidden" name="fecha_inicio"/>
     <input type="hidden" name="fecha_fin"/>
     <input type="hidden" name="mail"/>
+    <input type="hidden" name="caja_id" value='0'/>
 </form>
 <form id="mail" action="http://h-software.co/mail-service/mail.php" method="POST" target="_blank">
     {{ csrf_field() }}
@@ -166,6 +184,10 @@
             todayHighlight: 1,
             minView: 2,
             forceParse: 0
+        });
+        
+        $('#_caja_id').on('change', function() {
+            $("form#cuadre_ input[name=caja_id]").val($(this).val());
         });
         
         $('div#fecha_inicio').on('changeDate', function() {
@@ -260,14 +282,15 @@
             // $.post("/caja/cuadre-post", {fecha_inicio: fechaI, fecha_fin: fechaF}, function (data) {
             //     enviarAServicioImpresion('http://localhost:8000/HtmlPrint?stack='+JSON.stringify(data))
             // });
-            impPos({fecha_inicio: fechaI, fecha_fin: fechaF});
+
+            impPos({fecha_inicio: fechaI, fecha_fin: fechaF, caja_id:$("form#cuadre_ input[name=caja_id]").val()});
         }
         function posMensual(){
             var fechaI = formatearFecha(fecha, "yyyy-mm-01 00:00:00");
             var fechaF = new Date(fecha.getFullYear(),fecha.getMonth()+1,0);
             fechaF = formatearFecha(fechaF, "yyyy-mm-dd 23:59:59");
 
-            impPos({fecha_inicio: fechaI, fecha_fin: fechaF});
+            impPos({fecha_inicio: fechaI, fecha_fin: fechaF, caja_id:$("form#cuadre_ input[name=caja_id]").val()});
             // $.post("/caja/cuadre-post", {fecha_inicio: fechaI, fecha_fin: fechaF}, function (data) {
             //     enviarAServicioImpresion('http://localhost:8000/HtmlPrint?stack='+JSON.stringify(data))
             // });
@@ -281,7 +304,7 @@
             // $.post("/caja/cuadre-post", {fecha_inicio: fechaI, fecha_fin: fechaF}, function (data) {
             //     enviarAServicioImpresion('http://localhost:8000/HtmlPrint?stack='+JSON.stringify(data))
             // });
-            impPos({fecha_inicio: fechaI, fecha_fin: fechaF});
+            impPos({fecha_inicio: fechaI, fecha_fin: fechaF, caja_id:$("form#cuadre_ input[name=caja_id]").val()});
         }
 
         function impPos(params){

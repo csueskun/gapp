@@ -69,9 +69,25 @@
             </div>
             <div class = "col-md-6">
                 <div class = "form-group has-feedback {{ ($errors->first('num_impresora')) ? 'has-error'  :''}}">
-                    <label for = "impresora_comanda" class = "control-label">Número de Caractéres Impresora POS Comandas </label>
+                    <label for = "impresora_comanda" class = "control-label">Número de Caractéres Impresora POS Facturas </label>
                     <input type = "number" class = "form-control" id = "num_impresora" name = "num_impresora" value = "{{ old('num_impresora')?old('num_impresora'):$config->num_impresora }}">
                     <div class = "help-block with-errors">{{ $errors->first('num_impresora') }}</div>
+                </div>
+            </div>
+            </div>
+            <div class = "col-md-12" style="padding: 0">
+            <div class = "col-md-6">
+                <div class = "form-group has-feedback {{ ($errors->first('impresora2')) ? 'has-error'  :''}}">
+                    <label for = "impresora2" class = "control-label">Impresora POS Facturas Caja 2</label>
+                    <input type = "text" class = "form-control" id = "impresora2" name = "impresora2" value = "{{ old('impresora2')?old('impresora2'):str_replace('\\\\', '\\', $config->impresora2) }}">
+                    <div class = "help-block with-errors">{{ $errors->first('impresora2') }}</div>
+                </div>
+            </div>
+            <div class = "col-md-6">
+                <div class = "form-group has-feedback {{ ($errors->first('num_impresora2')) ? 'has-error'  :''}}">
+                    <label for = "impresora_comanda" class = "control-label">Número de Caractéres Impresora POS Caja 2 </label>
+                    <input type = "number" class = "form-control" id = "num_impresora2" name = "num_impresora2" value = "{{ old('num_impresora2')?old('num_impresora2'):$config->num_impresora2 }}">
+                    <div class = "help-block with-errors">{{ $errors->first('num_impresora2') }}</div>
                 </div>
             </div>
             </div>

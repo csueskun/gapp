@@ -43,7 +43,7 @@
                     <td>{{ $users->apellidos }}</td>
 
                     <td>{{ $users->rol }}</td>
-                    <td>{{ $users->caja }}</td>
+                    <td>{{ $users->caja_id }}</td>
                     
                     <td class="min-width text-align-center">
                     <form action="borrar" style="display: inline-block" method="POST">

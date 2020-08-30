@@ -140,7 +140,7 @@ class PDF{
         return $html;
     }
     
-    public static function impCuadre($cuadre, $fvs, $inicio, $fin, $descuento, $propina, $totalq){
+    public static function impCuadre($cuadre, $fvs, $inicio, $fin, $descuento, $propina, $totalq, $caja_id){
         
         $fecha = date("d/m/Y h:ia");
         $inicio = date_create($inicio);
@@ -149,7 +149,9 @@ class PDF{
         $fin = date_format($fin, "d/m/Y");
 
 
-
+        if($caja_id == '0'){
+            $caja_id = 'Todas';
+        }
 
         
         $html = '
@@ -217,6 +219,10 @@ class PDF{
                     
                     <h3 class="centrado letra-sans grande">CUADRE DE CAJA</h3>
                     <table>
+                        <tr>
+                            <td class="letra-sans">Caja Número:</td>
+                            <td class="al-der">'.$caja_id.'</td>
+                        </tr>
                         <tr>
                             <td class="letra-sans">Fecha Realización:</td>
                             <td class="al-der">'.$fecha.'</td>
@@ -502,13 +508,14 @@ class PDF{
         $html.="
         <table class='bordered'>
         <tr>
-        <th width='1'>Item</th>
+        <th width='1'>#</th>
         <th width='50'>Fecha</th>
         <th width='60'>Documento</th>
         <th>Cliente</th>
-        <th width='60'>Iva</th>
+        <th width='1'>Caja</th>
+        <th width='55'>Iva</th>
         <th width='65'>Imp.Consumo</th>
-        <th width='65'>Descuento</th>
+        <th width='60'>Descuento</th>
         <th width='70'>Total</th>
         </tr>
         ";
@@ -544,6 +551,9 @@ class PDF{
                                 '.strtoupper($tercero).'
                             </td>
                             <td class="al-der">
+                                '.$factura->caja_id.'
+                            </td>
+                            <td class="al-der">
                                 $ '.number_format(($factura->iva?:0), 2).'
                             </td>
                             <td class="al-der">
@@ -569,7 +579,7 @@ class PDF{
                             <td>
                                 
                             </td>
-                            <td>
+                            <td colspan="2">
                                 <strong style="font-size: 1.5em">Total</strong>
                             </td>
                             <td class="al-der">

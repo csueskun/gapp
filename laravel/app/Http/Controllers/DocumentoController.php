@@ -38,65 +38,93 @@ class DocumentoController extends Controller
         $fecha_fin = Input::get("fecha_fin");
         $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
         $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
+
+        $caja_id = Input::get("caja_id");
+        $caja_condicion = '';
+        $caja_condicion_d = '';
+        $caja_condicion_f = '';
+        $caja_condicion_p = '';
+        $caja_condicion_fp = '';
+        
+        if($caja_id == '0'){
+        }
+        else{
+            $caja_condicion = "and {$this->conn}_documento.caja_id = $caja_id";
+            $caja_condicion_d = "and d.caja_id = $caja_id";
+            $caja_condicion_p = "and p.caja_id = $caja_id";
+            $caja_condicion_f = "and caja_id = $caja_id";
+            $caja_condicion_fp = "and {$this->conn}_pedido.caja_id = $caja_id";
+        }
+
         $cuadre = DB::select("
             Select 'I' as ie, 'BI' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'BI' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'E' as ie, 'PN' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'PN' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'E' as ie, 'DES' as tipo, sum(COALESCE(descuento, 0)) as total 
             from {$this->conn}_documento
             where {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'I' as ie, 'PRO' as tipo, sum(COALESCE(propina, 0)) as total 
             from {$this->conn}_pedido
             where {$this->conn}_pedido.created_at >= $fecha_inicio 
-            and {$this->conn}_pedido.created_at <= $fecha_fin and {$this->conn}_pedido.estado = 2
+            and {$this->conn}_pedido.created_at <= $fecha_fin and {$this->conn}_pedido.estado = 2 
+            $caja_condicion_fp
             
             UNION ALL
             Select 'I' as ie, 'FV' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'FV' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'E' as ie, 'FC' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'FC' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'I' as ie, 'CI' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'CI' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'E' as ie, 'CE' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'CE' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'I' as ie, 'RC' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'RC' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'E' as ie, 'RT' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'RT' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             
             UNION ALL
@@ -104,7 +132,8 @@ class DocumentoController extends Controller
             case when tipodoc in ('FV', 'BI','CI','RC') then (total - COALESCE(descuento,0)) else (total*-1) end) as total 
             from {$this->conn}_documento 
             where {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion 
             and ( pizza_documento.tipodoc = 'BI' or pizza_documento.tipodoc = 'PN'
             or pizza_documento.tipodoc = 'FV'    or pizza_documento.tipodoc = 'CI' 
             or pizza_documento.tipodoc = 'RC'    or pizza_documento.tipodoc = 'FC'
@@ -127,13 +156,15 @@ class DocumentoController extends Controller
             join {$this->conn}_tipo_producto as tp
             on pr.tipo_producto_id = tp.id
 
-            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV'
+            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
+            $caja_condicion_d 
             group by 1
             
             UNION ALL
             Select 'Otros' as descripcion, 1 as cantidad, sum(total) as total
             from pizza_documento where tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
-            and created_at >= $fecha_inicio and created_at <= $fecha_fin
+            and created_at >= $fecha_inicio and created_at <= $fecha_fin 
+            $caja_condicion_f
             ");
 
             $descuentos = DB::select("
@@ -141,7 +172,8 @@ class DocumentoController extends Controller
             from pizza_documento d
             where d.tipodoc = 'FV'
             and d.created_at >= $fecha_inicio
-            and d.created_at <= $fecha_fin
+            and d.created_at <= $fecha_fin 
+            $caja_condicion_d
             ");
     
             $propinas = DB::select("
@@ -149,19 +181,21 @@ class DocumentoController extends Controller
             from pizza_pedido p
             where p.estado = 2
             and p.created_at >= $fecha_inicio
-            and p.created_at <= $fecha_fin
+            and p.created_at <= $fecha_fin 
+            $caja_condicion_p
             ");
     
             $total = DB::select("
             SELECT sum(iva) impiva, sum(impco) impcon, sum(descuento) dcto, sum(paga_efectivo) efectivo, SUM(paga_debito) debito, SUM(paga_credito) tcredito
             FROM pizza_documento
             WHERE created_at >= $fecha_inicio
-            AND created_at <= $fecha_fin
+            AND created_at <= $fecha_fin 
+            $caja_condicion_f
             ");
         
             $fecha_inicio = Input::get("fecha_inicio");
             $fecha_fin = Input::get("fecha_fin");
-            $html = \App\Util\PDF::ImpCuadre($cuadre, $fv, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total);
+            $html = \App\Util\PDF::ImpCuadre($cuadre, $fv, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id);
         if($mail){
             return response()->json(array('code'=>200,'msg'=>$html));
         }
@@ -193,13 +227,14 @@ class DocumentoController extends Controller
         $fecha_inicio = Input::get("inicio");
         $fecha_fin = Input::get("fin");
         $tipo = Input::get("tipo");
+        $caja_id = Input::get("caja_id");
         $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
         $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
         $nombre = Input::get("nombre");
         if($tipo == 'FV'){
-            return $this->reporteFv($nombre, $fecha_inicio, $fecha_fin);
+            return $this->reporteFv($nombre, $fecha_inicio, $fecha_fin, $caja_id);
         }
-        return $this->reporteTipodocPos($nombre, $tipo, $fecha_inicio, $fecha_fin);
+        return $this->reporteTipodocPos($nombre, $tipo, $fecha_inicio, $fecha_fin, $caja_id);
     }
 
     public function preReporteVentas(){
@@ -210,13 +245,20 @@ class DocumentoController extends Controller
         return $this->reporteVentas($fecha_inicio, $fecha_fin);
     }
 
-    public function reporteTipodocPos($nombre, $tipo, $fecha_inicio, $fecha_fin){
+    public function reporteTipodocPos($nombre, $tipo, $fecha_inicio, $fecha_fin, $caja_id){
+        $caja_sql = '';
+        if($caja_id == '0'){
+        }
+        else{
+            $caja_sql = "and d.caja_id = $caja_id";
+        }
         $reporte = DB::select("
         select 0, dd.detalle as des, sum(dd.cantidad) as x, sum(dd.total) as v
         from pizza_detalle_documento dd
         join pizza_documento d
         on dd.documento_id = d.id
-        where d.tipodoc = '$tipo'
+        where d.tipodoc = '$tipo' 
+        $caja_sql 
         and dd.created_at >= $fecha_inicio
         and dd.created_at <= $fecha_fin
         group by 2
@@ -225,10 +267,16 @@ class DocumentoController extends Controller
         $fecha_inicio = substr($fecha_inicio,-38,-28);
         $fecha_fin = substr($fecha_fin,-38,-28);
         $config = app('App\Http\Controllers\ConfigController')->first();
-        return (\App\Util\POS::reporteTipodoc($nombre, $config, $reporte, $fecha_inicio, $fecha_fin));
+        return (\App\Util\POS::reporteTipodoc($nombre, $config, $reporte, $fecha_inicio, $fecha_fin, [], $caja_id));
     }
 
-    public function reporteFv($nombre, $fecha_inicio, $fecha_fin){
+    public function reporteFv($nombre, $fecha_inicio, $fecha_fin, $caja_id){
+        $caja_sql = '';
+        if($caja_id == '0'){
+        }
+        else{
+            $caja_sql = "and d.caja_id = $caja_id";
+        }
         $reporte = DB::select("
         select dd.producto_id, coalesce(dd.detalle,p.descripcion,'OTRO') as des, sum(dd.cantidad) as x, sum(dd.total) as v 
         from pizza_detalle_documento dd
@@ -238,14 +286,16 @@ class DocumentoController extends Controller
         on dd.documento_id = d.id
         where dd.producto_id is not null and d.tipodoc = 'FV'
         and dd.created_at >= $fecha_inicio
-        and dd.created_at <= $fecha_fin
+        and dd.created_at <= $fecha_fin 
+        $caja_sql 
         group by 1
         union all
         select 0, dd.detalle as des, sum(dd.cantidad), sum(dd.total)
         from pizza_detalle_documento dd
         join pizza_documento d
         on dd.documento_id = d.id
-        where dd.producto_id is null and d.tipodoc = 'FV'
+        where dd.producto_id is null and d.tipodoc = 'FV' 
+        $caja_sql
         and dd.created_at >= $fecha_inicio
         and dd.created_at <= $fecha_fin
         group by 2
@@ -254,14 +304,15 @@ class DocumentoController extends Controller
         $descuentos = DB::select("
         select sum(COALESCE(d.descuento, 0)) as v
         from pizza_documento d
-        where d.tipodoc = 'FV'
+        where d.tipodoc = 'FV' 
+        $caja_sql
         and d.created_at >= $fecha_inicio
         and d.created_at <= $fecha_fin
         ");
         $fecha_inicio = substr($fecha_inicio,-38,-28);
         $fecha_fin = substr($fecha_fin,-38,-28);
         $config = app('App\Http\Controllers\ConfigController')->first();
-        return (\App\Util\POS::reporteTipodoc($nombre, $config, $reporte, $fecha_inicio, $fecha_fin, $descuentos));
+        return (\App\Util\POS::reporteTipodoc($nombre, $config, $reporte, $fecha_inicio, $fecha_fin, $descuentos, $caja_id));
     }
     public function reporteVentas($fecha_inicio, $fecha_fin){
 //        $reporte = DB::select("select * from `pizza_documento` where `created_at` >= $fecha_inicio and `created_at` <= $fecha_fin");
@@ -279,60 +330,87 @@ class DocumentoController extends Controller
         $fecha_fin = Input::get("fecha_fin");
         $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
         $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
+
+        $caja_id = Input::get("caja_id");
+        $caja_condicion = '';
+        $caja_condicion_d = '';
+        $caja_condicion_f = '';
+        $caja_condicion_p = '';
+        $caja_condicion_fp = '';
+        
+        if($caja_id == '0'){
+        }
+        else{
+            $caja_condicion = "and {$this->conn}_documento.caja_id = $caja_id";
+            $caja_condicion_d = "and d.caja_id = $caja_id";
+            $caja_condicion_p = "and p.caja_id = $caja_id";
+            $caja_condicion_f = "and caja_id = $caja_id";
+            $caja_condicion_fp = "and {$this->conn}_pedido.caja_id = $caja_id";
+        }
+
         $cuadre = DB::select("
             Select 'I' as ie, 'BI' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'BI' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
-            
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
+
             UNION ALL
             Select 'E' as ie, 'PN' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'PN' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'I' as ie, 'FV' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'FV' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'E' as ie, 'FC' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'FC' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'I' as ie, 'RC' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'RC' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'E' as ie, 'RT' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'RT' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'I' as ie, 'CI' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'CI' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select 'E' as ie, 'CE' as tipo, COALESCE(sum(total),0) as total 
             from {$this->conn}_documento where {$this->conn}_documento.tipodoc = 'CE' 
             and {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             
             UNION ALL
             Select '0' AS ie, '00' AS tipo, sum(
             case when tipodoc in ('FV','BI','RC','CI') then total else (total*-1) end) as total 
             from {$this->conn}_documento 
             where {$this->conn}_documento.created_at >= $fecha_inicio 
-            and {$this->conn}_documento.created_at <= $fecha_fin
+            and {$this->conn}_documento.created_at <= $fecha_fin 
+            $caja_condicion
             and ( pizza_documento.tipodoc = 'BI' or pizza_documento.tipodoc = 'PN'
             or pizza_documento.tipodoc = 'FV'    or pizza_documento.tipodoc = 'FC'
             or pizza_documento.tipodoc = 'RC'    or pizza_documento.tipodoc = 'RT'
@@ -355,13 +433,15 @@ class DocumentoController extends Controller
             join {$this->conn}_tipo_producto as tp
             on pr.tipo_producto_id = tp.id
 
-            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV'
+            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
+            $caja_condicion_d
             group by 1
             
             UNION ALL
             Select 'Otros' as descripcion, 1 as cantidad, sum(total) as total
             from pizza_documento where tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
-            and created_at >= $fecha_inicio and created_at <= $fecha_fin
+            and created_at >= $fecha_inicio and created_at <= $fecha_fin  
+            $caja_condicion_f
             ");
 
 
@@ -370,7 +450,8 @@ class DocumentoController extends Controller
         from pizza_documento d
         where d.tipodoc = 'FV'
         and d.created_at >= $fecha_inicio
-        and d.created_at <= $fecha_fin
+        and d.created_at <= $fecha_fin 
+        $caja_condicion_d
         ");
 
         $propinas = DB::select("
@@ -378,19 +459,21 @@ class DocumentoController extends Controller
         from pizza_pedido p
         where p.estado = 2
         and p.created_at >= $fecha_inicio
-        and p.created_at <= $fecha_fin
+        and p.created_at <= $fecha_fin 
+        $caja_condicion_p
         ");
 
         $total = DB::select("
         SELECT sum(iva) impiva, sum(impco) impcon, sum(descuento) dcto, sum(paga_efectivo) efectivo, SUM(paga_debito) debito, SUM(paga_credito) tcredito
         FROM pizza_documento
         WHERE created_at >= $fecha_inicio
-        AND created_at <= $fecha_fin
+        AND created_at <= $fecha_fin 
+        $caja_condicion_f
         ");
 
             $fecha_inicio = Input::get("fecha_inicio");
             $fecha_fin = Input::get("fecha_fin");
-        return (\App\Util\POS::cuadrePos(app('App\Http\Controllers\ConfigController')->first(),$cuadre, $fv, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total));
+        return (\App\Util\POS::cuadrePos(app('App\Http\Controllers\ConfigController')->first(),$cuadre, $fv, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id));
     }
 
     public function crear(){
@@ -422,7 +505,6 @@ class DocumentoController extends Controller
             }
             $documento = new Documento;
             $documento->tipodoc = Input::get('tipodoc');
-
             $documento->tipoie = Input::get('tipoie');
             $documento->mesa_id = Input::get('mesa_id');
             $documento->tercero_id = Input::get('tercero_id');
@@ -432,10 +514,11 @@ class DocumentoController extends Controller
             $documento->paga_debito = Input::get('paga_debito');
             $documento->paga_credito = Input::get('paga_credito');
             $documento->observacion = Input::get('observacion');
+            $documento->caja_id = Input::get('caja_id');
             $documento->created_at = Input::get('created_at').':00';
-            $documento->pedido_id = 0;
             $documento->usuario_id = Auth::user()->id;
             $documento->total = $total;
+            $documento->pedido_id = 0;
 
             $tipo_documento_ = app('App\Http\Controllers\TipoDocumentoController')->siguienteTipo($documento->tipodoc);
             $documento->numdoc = str_pad($tipo_documento_->consecutivo, 8, "0", STR_PAD_LEFT);
@@ -522,9 +605,9 @@ class DocumentoController extends Controller
             $documento->paga_efectivo = Input::get('paga_efectivo');
             $documento->paga_debito = Input::get('paga_debito');
             $documento->paga_credito = Input::get('paga_credito');
-            
             $documento->total = Input::get('total');
             $documento->tercero_id = Input::get('tercero_id');
+            $documento->caja_id = Input::get('caja_id');
             $documento->save();
         
             return Redirect::to('documento/editar/'.$documento->id)

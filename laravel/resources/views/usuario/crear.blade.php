@@ -86,16 +86,16 @@
             </div>
 
             <div class = "col-md-6">
-                <div class = "form-group has-feedback {{ ($errors->first('caja')) ? 'has-error'  :''}}">
+                <div class = "form-group has-feedback {{ ($errors->first('cajacaja_id')) ? 'has-error'  :''}}">
                     <label for = "rol" class = "control-label">Caja *</label>
-                    <select type = "text" class = "form-control" id = "caja" name = "caja"  value = "{{ old('caja') }}">
+                    <select type = "text" class = "form-control" id = "caja_id" name = "caja_id"  value = "{{ old('caja_id') }}">
                         <option>0</option>
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
                     </select>
                     <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                    <div class = "help-block with-errors">{{ $errors->first('caja') }}</div>
+                    <div class = "help-block with-errors">{{ $errors->first('caja_id') }}</div>
                 </div>
             </div>
                               

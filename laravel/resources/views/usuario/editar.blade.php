@@ -58,11 +58,11 @@
             </div>
 
             <div class = "col-md-6">
-               <div class = "form-group has-feedback {{ ($errors->first('caja')) ? 'has-error'  :''}}">
+               <div class = "form-group has-feedback {{ ($errors->first('caja_id')) ? 'has-error'  :''}}">
                 <label for = "rol" class = "control-label">Caja *</label>
-                <input readonly type = "text" class = "form-control" id = "caja" name = "caja" required value = "{{ old('caja')?old('caja'):$users->caja }}">
+                <input readonly type = "text" class = "form-control" id = "caja_id" name = "caja_id" value = "{{ old('caja_id')?old('caja_id'):$users->caja_id }}">
                 <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                <div class = "help-block with-errors">{{ $errors->first('caja') }}</div>
+                <div class = "help-block with-errors">{{ $errors->first('caja_id') }}</div>
                </div>
             </div>
 
