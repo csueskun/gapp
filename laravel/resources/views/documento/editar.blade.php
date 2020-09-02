@@ -121,6 +121,7 @@
                     <select name="caja_id" id="caja_id" class="form-control font bebas">
                         <option value="1">CAJA PRINCIPAL</option>
                         <option value="2">CAJA 2</option>
+                        <option value="3">CAJA 3</option>
                     </select>
                     <script>$("#caja_id").val("{{$documento->caja_id}}")</script>
                     @if(old('caja_id'))

@@ -222,6 +222,10 @@ class POS{
             $caracteres = $config->num_impresora2;
             $stack[] = ["i"=> "impresora", "v"=> $config->impresora2];
         }
+        elseif($pedido->caja_id == 3){
+            $caracteres = $config->num_impresora3;
+            $stack[] = ["i"=> "impresora", "v"=> $config->impresora3];
+        }
         else{
             $caracteres = $config->num_impresora;
             $stack[] = ["i"=> "impresora", "v"=> $config->impresora];

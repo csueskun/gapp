@@ -188,8 +188,10 @@ class ConfigController extends Controller
             $config->valor_alf = Input::get('valor_alf');
             $config->impresora = str_replace("\\", "\\\\", Input::get('impresora'));
             $config->impresora2 = str_replace("\\", "\\\\", Input::get('impresora2'));
+            $config->impresora3 = str_replace("\\", "\\\\", Input::get('impresora3'));
             $config->num_impresora = Input::get('num_impresora');
             $config->num_impresora2 = Input::get('num_impresora2');
+            $config->num_impresora3 = Input::get('num_impresora3');
             
             $config->impresora_comanda = str_replace("\\", "\\\\", Input::get('impresora_comanda'));
             $config->num_impresora_comanda = Input::get('num_impresora_comanda');
