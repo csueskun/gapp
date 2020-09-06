@@ -572,12 +572,21 @@ class POS{
         return $stack;
     }
 
-    public static function cuadrePos($config, $cuadre, $fvs, $fecha_inicio, $fecha_fin, $descuento, $propina, $totalq, $caja){
+    public static function cuadrePos($config, $cuadre, $fvs, $fecha_inicio, $fecha_fin, $descuento, $propina, $totalq, $caja, $printer){
         $stack = [];
+        if($printer == 2){
+            $caracteres = $config->num_impresora2;
+            $stack[] = ["i"=> "impresora", "v"=> $config->impresora2];
+        }
+        elseif($printer == 3){
+            $caracteres = $config->num_impresora3;
+            $stack[] = ["i"=> "impresora", "v"=> $config->impresora3];
+        }
+        else{
+            $caracteres = $config->num_impresora;
+            $stack[] = ["i"=> "impresora", "v"=> $config->impresora];
+        }
 
-        $caracteres = $config->num_impresora;
-
-        $stack[] = ["i"=>"impresora","v"=>$config->impresora];
         $stack[] = ["i"=>"logo","v"=>0];
 
         
@@ -859,10 +868,13 @@ class POS{
                     if(in_array($j, $ordenado)){
                         continue;
                     }
-                    if($p->producto_id == $p2->producto_id && $p->obs == $p2->obs){
-                        $p->cant += $p2->cant;
-                        $ordenado[] = $j;
-                        continue;
+                    try {
+                        if($p->producto_id == $p2->producto_id && $p->obs == $p2->obs){
+                            $p->cant += $p2->cant;
+                            $ordenado[] = $j;
+                            continue;
+                        }
+                    } catch (\Throwable $th) {
                     }
                     if($tipo != $p2->tipo_producto){
                         $new[] = $p2;
