@@ -67,7 +67,11 @@ class POS{
             if(isset($producto_pedido->combo) && $producto_pedido->combo!=''){
                 continue;
             }
-            $impresora_dedicada = $producto_pedido->producto->tipo_producto->impresora != null?($producto_pedido->producto->tipo_producto->impresora):('');
+            try {
+                $impresora_dedicada = $producto_pedido->producto->tipo_producto->impresora != null?($producto_pedido->producto->tipo_producto->impresora):('');
+            } catch (\Throwable $th) {
+                $impresora_dedicada = '';
+            }
             $x_cantidad = ' x'.$producto_pedido->cant;
             $subtotal = 0;
             $subtotal += $producto_pedido->producto->valor;
@@ -879,7 +883,7 @@ class POS{
             if($obs && $obs != ''){
                 $obs = json_decode($obs);
                 $obs = json_decode($obs);
-                $obs->producto = $p->producto;
+                $obs->producto = $p;
                 if(in_array($obs->ref, $added_combos)){
                 }
                 else{
