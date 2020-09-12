@@ -70,7 +70,7 @@
                     </td>
                     <td class="align-right min-width centrado">{{ count($pedido->productos) }}</td>
                     <td class="align-right">${{ number_format($pedido->total, 0) }}</td>
-                    <td class="">{{ $pedido->usuario['nombres']}} {{$pedido->usuario['apellidos'] }}</td>
+                    <td class="">{{ $pedido->usuario['nombres'] }} </td>
                     <td class="acciones">
                     <!-- <a href="/pedido/ver/{{ $pedido->id }}"><span class="fa fa-eye"></span></a> -->
                     <button data-toggle = "confirmation" data-placement="left" data-singleton="true" id="{{$pedido->id}}" class="btn btn-default"><span class="glyphicon glyphicon-menu-hamburger"></span></button>

@@ -42,10 +42,12 @@
             <thead>
                 <tr>
                     <th class="agregar_ordenar_por" campo="id">Pedido #</th>
-                    <th class="agregar_ordenar_por" campo="created_at" style='width:190px'>Creado</th>
+                    <th class="agregar_ordenar_por" campo="created_at" style='width:190px'>Fecha</th>
                     <th class="" campo="">Observación</th>
                     <th class="agregar_ordenar_por" campo="mesa_id">Mesa</th>
-                    <th>Cantidad de Productos</th>
+                    <th class="agregar_ordenar_por" campo="turno">Turno</th>
+                    <th class="agregar_ordenar_por" campo="caja">Caja</th>
+                    <th>Cant. Productos</th>
                     <th class="agregar_ordenar_por" campo="total">Saldo</th>
                     <th>Mesero</th>
                     <th class="w1"></th>
@@ -67,9 +69,11 @@
                     @endif
                     </td>
                     <td class="centrado">{{ $pedido->mesa_id == 0?'Domicilio':$pedido->mesa_id }}</td>
+                    <td>{{ $pedido->turno }}</td>
+                    <td>{{ $pedido->caja }}</td>
                     <td class="align-right min-width centrado">{{ count($pedido->productos) }}</td>
                     <td class="align-right">${{ number_format($pedido->total, 0) }}</td>
-                    <td class="">{{ $pedido->usuario['nombres']}} {{$pedido->usuario['apellidos'] }}</td>
+                    <td class="">{{ $pedido->usuario['nombres'] }} </td>
                     <td>
                         <button data-toggle = "confirmation" data-placement="left" data-singleton="true" id="{{$pedido->id}}" class="btn btn-default"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
                     </td>
