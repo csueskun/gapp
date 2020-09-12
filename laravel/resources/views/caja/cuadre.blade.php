@@ -28,6 +28,7 @@
                         <option value="0">Todas</option>
                         <option value="1">Caja 1</option>
                         <option value="2">Caja 2</option>
+                        <option value="3">Caja 3</option>
                     </select>
                 </div>
             </div>

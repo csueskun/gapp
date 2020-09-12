@@ -85,9 +85,25 @@
             </div>
             <div class = "col-md-6">
                 <div class = "form-group has-feedback {{ ($errors->first('num_impresora2')) ? 'has-error'  :''}}">
-                    <label for = "impresora_comanda" class = "control-label">Número de Caractéres Impresora POS Caja 2 </label>
+                    <label for = "num_impresora2" class = "control-label">Número de Caractéres Impresora POS Caja 2 </label>
                     <input type = "number" class = "form-control" id = "num_impresora2" name = "num_impresora2" value = "{{ old('num_impresora2')?old('num_impresora2'):$config->num_impresora2 }}">
                     <div class = "help-block with-errors">{{ $errors->first('num_impresora2') }}</div>
+                </div>
+            </div>
+            </div>
+            <div class = "col-md-12" style="padding: 0">
+            <div class = "col-md-6">
+                <div class = "form-group has-feedback {{ ($errors->first('impresora3')) ? 'has-error'  :''}}">
+                    <label for = "impresora3" class = "control-label">Impresora POS Facturas Caja 3</label>
+                    <input type = "text" class = "form-control" id = "impresora3" name = "impresora3" value = "{{ old('impresora3')?old('impresora3'):str_replace('\\\\', '\\', $config->impresora3) }}">
+                    <div class = "help-block with-errors">{{ $errors->first('impresora3') }}</div>
+                </div>
+            </div>
+            <div class = "col-md-6">
+                <div class = "form-group has-feedback {{ ($errors->first('num_impresora3')) ? 'has-error'  :''}}">
+                    <label for = "num_impresora3" class = "control-label">Número de Caractéres Impresora POS Caja 3 </label>
+                    <input type = "number" class = "form-control" id = "num_impresora3" name = "num_impresora3" value = "{{ old('num_impresora3')?old('num_impresora3'):$config->num_impresora3 }}">
+                    <div class = "help-block with-errors">{{ $errors->first('num_impresora3') }}</div>
                 </div>
             </div>
             </div>

@@ -958,7 +958,7 @@ function impItemPedido(productos_pedido){
     }
     if(!vacio){
         if(propina == null){
-            propina = parseFloat(valorTotal) / 10;
+            propina = parseFloat(valorTotal) * 0.07;
         }
         $('input[name=old_propina]').val(propina);
         $('input[name=propina2]').val(propina);
@@ -1550,8 +1550,10 @@ function calcularCambio(){
     var pagaC = parseFloat($("td#paga_credito>input").inputmask('unmaskedvalue'));
     var total = parseFloat($("td#cambio_total>input").inputmask('unmaskedvalue'));
     var descuento = parseFloat($("td#descuento table input.curr").inputmask('unmaskedvalue'));
+    var propina = parseFloat($("td#propina table input.curr").inputmask('unmaskedvalue'));
     descuento = !isNaN(descuento)?descuento:0;
-    var cambio = (!isNaN(pagaE)?pagaE:0)+(!isNaN(pagaD)?pagaD:0)+(!isNaN(pagaC)?pagaC:0)-total + descuento;
+    propina = !isNaN(propina)?propina:0;
+    var cambio = (!isNaN(pagaE)?pagaE:0)+(!isNaN(pagaD)?pagaD:0)+(!isNaN(pagaC)?pagaC:0)-total + descuento - propina;
     if(cambio<0){
         cambio = -cambio;
         $("td#debiendo").show();
@@ -1618,6 +1620,7 @@ function calcularPropina2(){
     var d2 = $("td#propina input[name=propina2]").inputmask('unmaskedvalue');
     d2 = parseFloat(d2);
     $('td#propina .percent').val(d2 * 100 / total);
+    calcularCambio();
 }
 function abrirObservaciones(){
     if(!esDomicilio){

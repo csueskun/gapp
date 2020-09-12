@@ -471,9 +471,12 @@ class DocumentoController extends Controller
         $caja_condicion_f
         ");
 
-            $fecha_inicio = Input::get("fecha_inicio");
-            $fecha_fin = Input::get("fecha_fin");
-        return (\App\Util\POS::cuadrePos(app('App\Http\Controllers\ConfigController')->first(),$cuadre, $fv, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id));
+        $fecha_inicio = Input::get("fecha_inicio");
+        $fecha_fin = Input::get("fecha_fin");
+
+
+        
+        return (\App\Util\POS::cuadrePos(app('App\Http\Controllers\ConfigController')->first(),$cuadre, $fv, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id, Auth::user()->caja_id));
     }
 
     public function crear(){

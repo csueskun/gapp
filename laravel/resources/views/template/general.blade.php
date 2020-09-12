@@ -184,7 +184,7 @@
                 @if((Auth::check()))
                 <a href="/login" class='usuario' class="nav-link dropdown-toggle" href='#' id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                     <img src='/images/avatar_blank.png' height='25' style='margin-right:4px'/>
-                    <span class="hidden-xs"> {{Auth::user()->nombres}} {{Auth::user()->apellidos}} : {{Auth::user()->rol}} : {{ Auth::user()->caja? 'Caja '.Auth::user()->caja:'' }}</span>
+                    <span class="hidden-xs"> {{Auth::user()->nombres}} {{Auth::user()->apellidos}} : {{Auth::user()->rol}} : {{ Auth::user()->caja_id? 'Caja '.Auth::user()->caja_id:'' }}</span>
                     <span class="fa fa-caret-down"></span>
                     <span class="visible-xs-inline">&nbsp;&nbsp;</span>
                 </a>
