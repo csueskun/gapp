@@ -1165,13 +1165,15 @@ function preFactura(id=false){
         $.get('/config/servicio-impresion', function (data) {
             servicio_impresion = data;
             $.get("/pedido/preFactura/"+id+"?propina="+propina+"&descuento="+descuento, function (data) {
-                enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
+                enviarAServicioImpresionPost(servicio_impresion, data);
+                // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
             });
         });
     }
     else{
         $.get("/pedido/preFactura/"+id+"?propina="+propina+"&descuento="+descuento, function (data) {
-            enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
+            enviarAServicioImpresionPost(servicio_impresion, data);
+            // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
         });
     }
 }
@@ -1284,13 +1286,15 @@ function impPos(id){
         $.get('/config/servicio-impresion', function (data) {
             servicio_impresion = data;
             $.get("/pedido/comanda/"+id+"/pos-stack", function (data) {
-                enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
+                enviarAServicioImpresionPost(servicio_impresion, data);
+                // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
             });
         });
     }
     else{
         $.get("/pedido/comanda/"+id+"/pos-stack", function (data) {
-            enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
+            // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
+            enviarAServicioImpresionPost(servicio_impresion, data);
         });
     }
 }
@@ -1300,13 +1304,15 @@ function reImprimirComanda (id){
         $.get('/config/servicio-impresion', function (data) {
             servicio_impresion = data;
             $.get("/pedido/re-comanda/"+id+"/pos-stack", function (data) {
-                enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
+                enviarAServicioImpresionPost(servicio_impresion, data);
+                // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
             });
         });
     }
     else{
         $.get("/pedido/re-comanda/"+id+"/pos-stack", function (data) {
-            enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
+            enviarAServicioImpresionPost(servicio_impresion, data);
+            // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
         });
     }
 }
@@ -1316,13 +1322,15 @@ function impPosFactura(id){
         $.get('/config/servicio-impresion', function (data) {
             servicio_impresion = data;
             $.get("/pedido/factura/"+id+"/pos-stack", function (data) {
-                enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
+                enviarAServicioImpresionPost(servicio_impresion, data);
+                // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
             });
         });
     }
     else{
         $.get("/pedido/factura/"+id+"/pos-stack", function (data) {
-            enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
+            enviarAServicioImpresionPost(servicio_impresion, data);
+            // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
         });
     }
 }
@@ -1336,14 +1344,14 @@ function gaveta(){
         $.get('/config/servicio-impresion', function (data) {
             servicio_impresion = data;
             $.get("/gaveta", function (data) {
-                enviarAServicioImpresion(servicio_impresion+"?drawer=1&stack="+JSON.stringify(data));
+                enviarAServicioImpresionPost(servicio_impresion, data, 1);
                 // enviarAServicioImpresion(servicio_impresion+"?drawer=1&stack="+JSON.stringify(data));
             });
         });
     }
     else{
         $.get("/gaveta", function (data) {
-            enviarAServicioImpresion(servicio_impresion+"?drawer=1&stack="+JSON.stringify(data));
+            enviarAServicioImpresionPost(servicio_impresion, data, 1);
             // enviarAServicioImpresion(servicio_impresion+"?drawer=1&stack="+JSON.stringify(data));
         });
 
@@ -1382,13 +1390,13 @@ function enviarAServicioImpresion(url){
         }
     });
 }
-function enviarAServicioImpresionPost(url,data){
+function enviarAServicioImpresionPost(url,data, drawer=0){
     $.ajax({
-        url: url,
+        url: url+'/post.php?drawer='+drawer,
         headers: {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Credentials":"true"},
         type: 'POST',
         crossDomain: true,
-        dataType: "jsonp",
+        dataType: "json",
         data: {stack: data},
         xhrFields: {
             withCredentials: true,

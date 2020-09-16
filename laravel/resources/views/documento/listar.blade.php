@@ -363,7 +363,8 @@ $('#example')
         $.get('/config/servicio-impresion', function (data) {
             servicio_impresion = data;
             $.post(reporte, params, function (data) {
-                enviarAServicioImpresion(servicio_impresion+'?stack='+JSON.stringify(data))
+                enviarAServicioImpresionPost(servicio_impresion, data);
+                // enviarAServicioImpresion(servicio_impresion+'?stack='+JSON.stringify(data));
             });
         });
     }

@@ -221,7 +221,8 @@
             servicio_impresion = data;
             $.post("/inventario/pos", {}, function (data) {
                 //console.log(data);
-                enviarAServicioImpresion(servicio_impresion+'?stack='+JSON.stringify(data))
+                // enviarAServicioImpresion(servicio_impresion+'?stack='+JSON.stringify(data));
+                enviarAServicioImpresionPost(servicio_impresion, data);
                 $('button.busy').attr('disabled', false);
                 $('button.busy span').removeClass('fa-spin');
             });

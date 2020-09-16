@@ -312,32 +312,33 @@
             $.get('/config/servicio-impresion', function (data) {
                 servicio_impresion = data;
                 $.post("/caja/cuadre-post", params, function (data) {
-                    enviarAServicioImpresion(servicio_impresion+'?stack='+JSON.stringify(data))
+                    enviarAServicioImpresionPost(servicio_impresion, data);;
+                    // enviarAServicioImpresion(servicio_impresion+'?stack='+JSON.stringify(data))
                 });
             });
 
         }
 
-        function enviarAServicioImpresion(url){
-            $.ajax({
-                url: url,
-                headers: {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Credentials":"true"},
-                type: 'GET',
-                // This is the important part
-                crossDomain: true,
-                dataType: "jsonp",
-                xhrFields: {
-                    withCredentials: true,
+        // function enviarAServicioImpresion(url){
+        //     $.ajax({
+        //         url: url,
+        //         headers: {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Credentials":"true"},
+        //         type: 'GET',
+        //         // This is the important part
+        //         crossDomain: true,
+        //         dataType: "jsonp",
+        //         xhrFields: {
+        //             withCredentials: true,
 
-                },
-                // This is the important part
-                success: function (response) {
-                    // handle the response
-                },
-                error: function (xhr, status) {
-                    // handle errors
-                }
-            });
-        }
+        //         },
+        //         // This is the important part
+        //         success: function (response) {
+        //             // handle the response
+        //         },
+        //         error: function (xhr, status) {
+        //             // handle errors
+        //         }
+        //     });
+        // }
     </script>
 @endsection
