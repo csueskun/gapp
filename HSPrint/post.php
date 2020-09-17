@@ -3,8 +3,6 @@ $drawer = $_GET['drawer']?:0;
 $stack = $_POST['stack'];
 $dedicadas = array();
 $stack = json_decode(json_encode($stack), FALSE);
-echo json_encode($stack);
-die();
 require 'escpos-php/autoload.php';
 
 use Mike42\Escpos\Printer;
