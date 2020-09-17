@@ -1402,8 +1402,11 @@ function enviarAServicioImpresionPost(url,data, drawer=0){
             withCredentials: true,
         },
         success: function (response) {
+            mostrarSuccess('Comanda enviada');
+            doneImprimiendo();
         },
         error: function (xhr, status) {
+            doneImprimiendo();
         }
     });
 }

@@ -257,6 +257,26 @@
             $("form#cuadre_ input[name=mail]").val(0);
         });
     }
+
+    function enviarAServicioImpresionPost(url,data, drawer=0){
+    $.ajax({
+        url: url+'/post.php?drawer='+drawer,
+        headers: {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Credentials":"true"},
+        type: 'POST',
+        crossDomain: true,
+        dataType: "json",
+        data: {stack: data},
+        xhrFields: {
+            withCredentials: true,
+        },
+        success: function (response) {
+           
+        },
+        error: function (xhr, status) {
+           
+        }
+    });
+}
 </script>
 <style>
     .table-condensed{
