@@ -1148,6 +1148,7 @@ function pagarImprimirPedido(id){
     
 }
 function preFactura(id=false){
+    savePropina();
     if(!id){
         var id = $('meta[name=pedido_id]').attr('content');
     }
@@ -1404,6 +1405,7 @@ function enviarAServicioImpresionPost(url,data, drawer=0){
 }
 
 function preEnviarFormPagar(){
+    savePropina();
     var pagaE = parseFloat($("td#paga_efectivo>input").inputmask('unmaskedvalue'));
     var pagaD = parseFloat($("td#paga_debito>input").inputmask('unmaskedvalue'));
     var pagaC = parseFloat($("td#paga_credito>input").inputmask('unmaskedvalue'));
