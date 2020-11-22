@@ -11,6 +11,7 @@
     <meta name="csrf-token" content="{{ Session::token() }}"> 
     <meta name="mesa" content="{{$mesa}}"> 
     <meta name="valida_inventario" content="{{$valida_inventario}}">
+    <meta name="propina" content="{{$propina}}">
     <meta name="pedido_id" content="{{isset($pedido_id)?($pedido_id?$pedido_id:0):0}}">
     <meta name="mesa_alias" content="{{$mesa_alias}}">
     <meta name="rol" content="{{Auth::user()->rol}}">
@@ -711,7 +712,7 @@
                                         <table>
                                             <tr>
                                                 <td width="150">
-                                                    <input onClick="this.select();" value="0" onkeyup="calcularPropina()" typeof="number" max="100" min="0" class="form-control percent"/>
+                                                    <input disabled nonClick="this.select();" value="0" onkeyup="calcularPropina()" typeof="number" max="100" min="0" class="form-control percent"/>
                                                 </td>
                                                 <td>
                                                     <input name="propina2" onkeyup="calcularPropina2()" class="form-control curr"/>

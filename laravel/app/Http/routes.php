@@ -64,6 +64,7 @@ Route::get('/mesa/{id}', function ($id = 0) {
                             ->with('tipos_producto', app('App\Http\Controllers\TipoProductoController')->mostrarMenu())
                             ->with('mesa_alias', app('App\Http\Controllers\ConfigController')->getMesaAlias($id))
                             ->with('valida_inventario', app('App\Http\Controllers\ConfigController')->getValidaInventario())
+                            ->with('propina', app('App\Http\Controllers\ConfigController')->getPropina())
                             ->with('conn', app('App\Http\Controllers\TipoProductoController')->mesaMenu())
                             ->with('combos', app('App\Http\Controllers\ComboController')->menu());
 })->middleware('auth')->middleware('tiene.roles:Mesero.Administrador.Cajero');

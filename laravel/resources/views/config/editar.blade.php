@@ -160,6 +160,13 @@
                         </div>
                     </div>
                     <div class="col-md-3">
+                        <div class = "form-group has-feedback {{ ($errors->first('propina')) ? 'has-error'  :''}}">
+                            <label for = "propina" class = "control-label">Propina por defecto (%)</label><br/>
+                            <input type = "number" step="0.1" class = "form-control" id = "propina" name = "propina" value = "{{ old('propina')?old('propina'):$config->propina }}">
+                            <div class = "help-block with-errors">{{ $errors->first('propina') }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <div class = "form-group has-feedback">
                             <label for = "valida_inventario" class = "control-label">&nbsp;</label><br/>
                             <label class="radio-inline" style="margin-bottom: 10px">

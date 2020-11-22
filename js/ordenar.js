@@ -2,6 +2,7 @@ var servicio_impresion = "";
 var observaciones = JSON.parse("{}");
 var role = $('meta[name=rol]').attr('content');
 var esDomicilio = $('meta[name=mesa]').attr('content');
+var propinaDefault = $('meta[name=propina]').attr('content');
 var validaInventario = $('meta[name=valida_inventario]').attr('content') == '1';
 esDomicilio = (esDomicilio==""||esDomicilio==null||esDomicilio==0||esDomicilio=="0");
 var altDown = false;
@@ -670,6 +671,7 @@ function sumarTotalPedido(suma){
 
 function impItemPedido(productos_pedido){
     mostrarFullLoading();
+    $('#propina input.percent').val(propinaDefault);
     var descuento = productos_pedido.descuento;
     var propina = productos_pedido.propina;
     var turno = productos_pedido.turno;
@@ -956,15 +958,6 @@ function impItemPedido(productos_pedido){
         }
         html+=html2+'</div>';
     }
-    if(!vacio){
-        if(propina == null){
-            propina = parseFloat(valorTotal) * 0.07;
-        }
-        $('input[name=old_propina]').val(propina);
-        $('input[name=propina2]').val(propina);
-        $('td#propina .percent').val(propina * 100 / parseFloat(valorTotal));
-    }
-
     ocultarFullLoading();
     return html;
 }
@@ -1155,7 +1148,6 @@ function pagarImprimirPedido(id){
     
 }
 function preFactura(id=false){
-    savePropina();
     if(!id){
         var id = $('meta[name=pedido_id]').attr('content');
     }
@@ -1412,7 +1404,6 @@ function enviarAServicioImpresionPost(url,data, drawer=0){
 }
 
 function preEnviarFormPagar(){
-    savePropina();
     var pagaE = parseFloat($("td#paga_efectivo>input").inputmask('unmaskedvalue'));
     var pagaD = parseFloat($("td#paga_debito>input").inputmask('unmaskedvalue'));
     var pagaC = parseFloat($("td#paga_credito>input").inputmask('unmaskedvalue'));
@@ -1707,16 +1698,24 @@ function isCajero(cajero_role='Cajero'){
 }
 function savePropina(){
     var propina = $('td#propina .curr').inputmask('unmaskedvalue');
-    var old_propina = $('input[name=old_propina]').val();
     var pedido_id = $('meta[name=pedido_id]').attr('content');
-    if(parseFloat(propina) == old_propina || !pedido_id){
-        return false;
-    }
     if(pedido_id){
         $.post('/pedido/'+pedido_id+'/save-propina',
             {
                 propina: propina
             },
+            function (data) {
+                if(data.code == 200){
+                    $('input[name=old_propina]').val(propina);
+                }
+            })
+    }
+}
+function loadPropina(){
+    var propina = $('td#propina .curr').inputmask('unmaskedvalue');
+    var pedido_id = $('meta[name=pedido_id]').attr('content');
+    if(pedido_id){
+        $.get('/propina/'+pedido_id,
             function (data) {
                 if(data.code == 200){
                     $('input[name=old_propina]').val(propina);

@@ -37,6 +37,7 @@ class ConfigController extends Controller
             $config->pie_pos = 'Gracias por preferirnos';
             $config->iva = 0;
             $config->impcon = 0;
+            $config->propina = 0;
             $config->valida_inventario = 0;
             $config->subtotales_factura = 1;
             $config->save();
@@ -58,6 +59,11 @@ class ConfigController extends Controller
     public function getValidaInventario() {
         $config = Config::first();
         return $config->valida_inventario;
+    }
+
+    public function getPropina() {
+        $config = Config::first();
+        return $config->propina;
     }
     
     public function estado_mesas2() {
@@ -151,6 +157,7 @@ class ConfigController extends Controller
             $config->valor = Input::get('valor');
             $config->valor_alf = Input::get('valor_alf');
             $config->valida_inventario = Input::get('valida_inventario');
+            $config->propina = Input::get('propina');
             $config->subtotales_factura = Input::get('subtotales_factura');
             $config->save();
         
@@ -204,6 +211,7 @@ class ConfigController extends Controller
             $config->encabezado_comanda = Input::get('encabezado_comanda');
             $config->pie_pos = Input::get('pie_pos');
             $config->valida_inventario = Input::get('valida_inventario');
+            $config->propina = Input::get('propina');
             $config->subtotales_factura = Input::get('subtotales_factura');
             $config->save();
         
@@ -316,6 +324,7 @@ class ConfigController extends Controller
         $config->encabezado_comanda = '';
         $config->encabezado_pos = '';
         $config->pie_pos = '';
+        $config->propina = 0;
         $config->valida_inventario = $config->valida_inventario == 1;
         $config->subtotales_factura = $config->subtotales_factura == 1;
 

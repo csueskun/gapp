@@ -102,6 +102,7 @@
             <input type="hidden" name="fecha_inicio"/>
             <input type="hidden" name="fecha_fin"/>
             <input type="hidden" name="mail"/>
+            <input type="hidden" name="caja_id" value='0'/>
             
         </form>
     </div>
