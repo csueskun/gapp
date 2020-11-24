@@ -402,6 +402,7 @@ class PedidoController extends Controller
             ->with('mesa_alias', app('App\Http\Controllers\ConfigController')->getMesaAlias($pedido->mesa_id))
             ->with('valida_inventario', app('App\Http\Controllers\ConfigController')->getValidaInventario())
             ->with('combos', app('App\Http\Controllers\ComboController')->menu())
+            ->with('propina', app('App\Http\Controllers\ConfigController')->getPropina())
             ->with('tipos_producto', app('App\Http\Controllers\TipoProductoController')->mostrarMenu());
     }
 
