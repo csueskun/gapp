@@ -189,10 +189,12 @@ class ProductoPedidoController extends Controller
         }
     }
     public function patchObs($id){
+        $new_cant = intval(Input::get('ppcantidad'));
         $pp = ProductoPedido::find($id);
         $pp->obs = Input::get('data');
         $pp->obs = json_encode($pp->obs);
-        $pp->cant = Input::get('ppcantidad');
+        $pp->total = $new_cant * $pp->total/$pp->cant;
+        $pp->cant = $new_cant;
         $pp->save();
 
         if(Input::get('adicional')!=0){
