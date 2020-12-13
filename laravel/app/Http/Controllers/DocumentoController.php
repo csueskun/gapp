@@ -142,7 +142,7 @@ class DocumentoController extends Controller
         
         $fv = DB::select("
             select concat(tp.descripcion,' ',JSON_EXTRACT(pp.obs, '$.tamano')) as descripcion, 
-            sum(pp.cant) as cantidad, sum(pp.total) as total from {$this->conn}_documento d
+            sum(pp.cant) as cantidad, sum(pp.total) as total, numdoc, d.id from {$this->conn}_documento d
 
             join {$this->conn}_pedido as p
             on p.id = d.pedido_id
@@ -161,7 +161,7 @@ class DocumentoController extends Controller
             group by 1
             
             UNION ALL
-            Select 'Otros' as descripcion, 1 as cantidad, sum(total) as total
+            Select 'Otros' as descripcion, 1 as cantidad, sum(total) as total, numdoc, id
             from pizza_documento where tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
             and created_at >= $fecha_inicio and created_at <= $fecha_fin 
             $caja_condicion_f
@@ -419,7 +419,7 @@ class DocumentoController extends Controller
 
         $fv = DB::select("
             select concat(tp.descripcion,' ',JSON_EXTRACT(pp.obs, '$.tamano')) as descripcion, 
-            sum(pp.cant) as cantidad, sum(pp.total) as total from {$this->conn}_documento d
+            sum(pp.cant) as cantidad, sum(pp.total) as total, d.numdoc, d.id from {$this->conn}_documento d
 
             join {$this->conn}_pedido as p
             on p.id = d.pedido_id
@@ -438,7 +438,7 @@ class DocumentoController extends Controller
             group by 1
             
             UNION ALL
-            Select 'Otros' as descripcion, 1 as cantidad, sum(total) as total
+            Select 'Otros' as descripcion, 1 as cantidad, sum(total) as total, numdoc, id
             from pizza_documento where tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
             and created_at >= $fecha_inicio and created_at <= $fecha_fin  
             $caja_condicion_f

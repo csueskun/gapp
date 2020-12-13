@@ -574,6 +574,26 @@ class POS{
 
     public static function cuadrePos($config, $cuadre, $fvs, $fecha_inicio, $fecha_fin, $descuento, $propina, $totalq, $caja, $printer){
         $stack = [];
+
+        $minFv = '';
+        $maxFv = '';
+        foreach ($fvs as $fv) {
+            if($fv->id){
+                if($minFv == ''){
+                    $minFv = $fv->numdoc;
+                }
+                if($maxFv == ''){
+                    $maxFv = $fv->numdoc;
+                }
+                if($fv->numdoc<$minFv){
+                    $minFv = $fv->numdoc;
+                }
+                if($fv->numdoc>$maxFv){
+                    $maxFv = $fv->numdoc;
+                }
+            }
+        }
+
         if($printer == 2){
             $caracteres = $config->num_impresora2;
             $stack[] = ["i"=> "impresora", "v"=> $config->impresora2];
@@ -642,6 +662,26 @@ class POS{
                 $caracteres
             );
             $stack[] = ["i"=>"texto","v"=>$linea];
+            
+            if($documento->tipo=='FV'){
+                if($minFv){
+                    $linea = self::impLinea(
+                        'Desde número:',
+                        $minFv,
+                        $caracteres
+                    );
+                    $stack[] = ["i"=>"texto","v"=>$linea];
+                }
+                if($maxFv){
+                    $linea = self::impLinea(
+                        'Hasta número:',
+                        $maxFv,
+                        $caracteres
+                    );
+                    $stack[] = ["i"=>"texto","v"=>$linea];
+                }
+            }
+
         }
         foreach ($descuento as $d){
             $total-=$d->v;

@@ -152,7 +152,26 @@ class PDF{
         if($caja_id == '0'){
             $caja_id = 'Todas';
         }
+        
+        $minFv = '';
+        $maxFv = '';
 
+        foreach ($fvs as $fv) {
+            if($fv->id){
+                if($minFv == ''){
+                    $minFv = $fv->numdoc;
+                }
+                if($maxFv == ''){
+                    $maxFv = $fv->numdoc;
+                }
+                if($fv->numdoc<$minFv){
+                    $minFv = $fv->numdoc;
+                }
+                if($fv->numdoc>$maxFv){
+                    $maxFv = $fv->numdoc;
+                }
+            }
+        }
         
         $html = '
         
@@ -220,6 +239,14 @@ class PDF{
                     <h3 class="centrado letra-sans grande">CUADRE DE CAJA</h3>
                     <table>
                         <tr>
+                            <td class="letra-sans">Min:</td>
+                            <td class="al-der">'.$minFv.'</td>
+                        </tr>
+                        <tr>
+                            <td class="letra-sans">Max:</td>
+                            <td class="al-der">'.$maxFv.'</td>
+                        </tr>
+                        <tr>
                             <td class="letra-sans">Caja Número:</td>
                             <td class="al-der">'.$caja_id.'</td>
                         </tr>
@@ -276,6 +303,14 @@ class PDF{
                             '.($linea->ie=='E'?'- ':'').'$ '.number_format($linea->total,0).'
                             </td>
                         </tr>';
+                        if($linea->tipo=='FV'){
+                            if($minFv){
+                                $html.="<tr><td colspan='2' class='al-izq'>Desde Número:</td><td style='width: 180px;font-size: 1.3em;' class='al-der'>FV".$minFv."</td></tr>";
+                            }
+                            if($maxFv){
+                                $html.="<tr><td colspan='2' class='al-izq'>Hasta Número:</td><td style='width: 180px;font-size: 1.3em;' class='al-der'>FV".$maxFv."</td></tr>";
+                            }
+                        }
 
             $html.='
                     </table>
