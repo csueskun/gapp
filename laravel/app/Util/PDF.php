@@ -155,9 +155,10 @@ class PDF{
         
         $minFv = '';
         $maxFv = '';
-
+        $fvcount = 0;
         foreach ($fvs as $fv) {
             if($fv->id){
+                $fvcount++;
                 if($minFv == ''){
                     $minFv = $fv->numdoc;
                 }
@@ -304,6 +305,7 @@ class PDF{
                             </td>
                         </tr>';
                         if($linea->tipo=='FV'){
+                            $html.="<tr><td colspan='2' class='al-izq'>Cant. Documentos:</td><td style='width: 180px;font-size: 1.3em;' class='al-der'>".$fvcount."</td></tr>";
                             if($minFv){
                                 $html.="<tr><td colspan='2' class='al-izq'>Desde Número:</td><td style='width: 180px;font-size: 1.3em;' class='al-der'>FV".$minFv."</td></tr>";
                             }

@@ -577,8 +577,10 @@ class POS{
 
         $minFv = '';
         $maxFv = '';
+        $fvcount = 0;
         foreach ($fvs as $fv) {
             if($fv->id){
+                $fvcount++;
                 if($minFv == ''){
                     $minFv = $fv->numdoc;
                 }
@@ -664,6 +666,12 @@ class POS{
             $stack[] = ["i"=>"texto","v"=>$linea];
             
             if($documento->tipo=='FV'){
+                $linea = self::impLinea(
+                    'Cant. documentos:',
+                    $fvcount,
+                    $caracteres
+                );
+                $stack[] = ["i"=>"texto","v"=>$linea];
                 if($minFv){
                     $linea = self::impLinea(
                         'Desde número:',

@@ -666,7 +666,18 @@ class PedidoController extends Controller
     }
     
     public function cambiarMesa($origen, $destino) {
-        return DB::table('pedido')->where('mesa_id', $origen)->where('estado', 1)->update(['mesa_id' => $destino]);
+        
+        $pedido = Pedido::where('mesa_id', $origen)->where('estado', 1)->first();
+        if($pedido->obs == null || $pedido->obs == ''){
+            $obs = json_decode("{}");
+        }
+        else{
+            $obs = json_decode($pedido->obs);
+        }
+        $obs->mesa_alias = $destino;
+        $pedido->obs = json_encode($obs);
+        $pedido->mesa_id = $destino;
+        $pedido->save();
     }
     
     public function entregarEn($id,$entregar_en,$observacion) {
