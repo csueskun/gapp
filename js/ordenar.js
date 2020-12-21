@@ -1390,7 +1390,7 @@ function enviarAServicioImpresionPost(url,data, drawer=0){
         type: 'POST',
         crossDomain: true,
         dataType: "json",
-        data: {stack: data},
+        data: {stack: data, servicio: servicio_impresion},
         xhrFields: {
             withCredentials: true,
         },

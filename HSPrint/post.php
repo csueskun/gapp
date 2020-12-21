@@ -1,6 +1,7 @@
 <?php
 $drawer = $_GET['drawer']?:0;
 $stack = $_POST['stack'];
+$servicio = $_POST['servicio'];
 $dedicadas = array();
 $stack = json_decode(json_encode($stack), FALSE);
 require 'escpos-php/autoload.php';
@@ -96,7 +97,7 @@ foreach($dedicadas as $impresora_dedicada){
     foreach ($quitar as $i){
         unset($stack[$i]);
     }
-    header("Location: http://localhost/HSPrint?stack=".json_encode($stack));
+    header("Location: ".$servicio."?stack=".json_encode($stack));
     die();
 }
 
