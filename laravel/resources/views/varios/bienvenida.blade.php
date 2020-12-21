@@ -227,7 +227,11 @@
 
             var html = '<h2>Trasladar pedido de la mesa:</h2>';
             for(var i=0;i<mesas.length;i++){
-                var alias = json[mesas[i]-1].mesa;
+                try {
+                    var alias = json[mesas[i]-1].mesa;
+                } catch (error) {
+                    continue;
+                }
                 if(json[mesas[i]-1].alias != null && typeof json[mesas[i]-1].alias != 'undefined'){
                     alias = json[mesas[i]-1].alias;
                 }
