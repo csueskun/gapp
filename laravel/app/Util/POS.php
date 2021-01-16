@@ -577,10 +577,12 @@ class POS{
 
         $minFv = '';
         $maxFv = '';
-        $fvcount = 0;
+        $numDocs = [];
         foreach ($fvs as $fv) {
-            if($fv->id){
-                $fvcount++;
+            if($fv->numdoc){
+                if(!in_array($fv->numdoc, $numDocs)){
+                    $numDocs[] = $fv->numdoc;
+                }
                 if($minFv == ''){
                     $minFv = $fv->numdoc;
                 }
@@ -595,7 +597,8 @@ class POS{
                 }
             }
         }
-
+        $fvcount = count($numDocs);
+        
         if($printer == 2){
             $caracteres = $config->num_impresora2;
             $stack[] = ["i"=> "impresora", "v"=> $config->impresora2];
