@@ -921,6 +921,12 @@ class PedidoController extends Controller
         $producto_pedido_json = Input::get('producto_pedido_json');
         $mesa = Input::get('mesa');
         $pedido =  Input::get('pedido');
+        if($pedido == null || $pedido == '0' || $pedido == '-1'){
+            $pedido = Pedido::where('mesa_id', $mesa)->where('estado', 1)->first();
+            if($pedido){
+                $pedido = $pedido->id;
+            }
+        }
         $first =  Input::get('first');
         if($first != 'true' && ($pedido == null || $pedido == '0' || $pedido == '-1') ){
             $producto_pedido_json_ = json_decode($producto_pedido_json);

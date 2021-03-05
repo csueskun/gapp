@@ -140,7 +140,7 @@ class PDF{
         return $html;
     }
     
-    public static function impCuadre($cuadre, $fvs, $inicio, $fin, $descuento, $propina, $totalq, $caja_id){
+    public static function impCuadre($cuadre, $fvs, $fv_count, $inicio, $fin, $descuento, $propina, $totalq, $caja_id){
         
         $fecha = date("d/m/Y h:ia");
         $inicio = date_create($inicio);
@@ -153,25 +153,15 @@ class PDF{
             $caja_id = 'Todas';
         }
         
-        $minFv = '';
-        $maxFv = '';
-        $fvcount = 0;
-        foreach ($fvs as $fv) {
-            if($fv->id){
-                $fvcount++;
-                if($minFv == ''){
-                    $minFv = $fv->numdoc;
-                }
-                if($maxFv == ''){
-                    $maxFv = $fv->numdoc;
-                }
-                if($fv->numdoc<$minFv){
-                    $minFv = $fv->numdoc;
-                }
-                if($fv->numdoc>$maxFv){
-                    $maxFv = $fv->numdoc;
-                }
-            }
+        try {
+            $fv_count = $fv_count[0];
+            $minFv = $fv_count->min;
+            $maxFv = $fv_count->max;
+            $fvcount = $fv_count->count;
+        } catch (\Throwable $th) {
+            $minFv = '';
+            $maxFv = '';
+            $fvcount = '';
         }
         
         $html = '

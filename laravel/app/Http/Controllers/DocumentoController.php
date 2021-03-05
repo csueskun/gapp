@@ -166,8 +166,15 @@ class DocumentoController extends Controller
             and created_at >= $fecha_inicio and created_at <= $fecha_fin 
             $caja_condicion_f
             ");
+        
+        $fv_count = DB::select("
+            select min(numdoc) as min, max(numdoc) as max, count(numdoc) as count
+            from {$this->conn}_documento d
+            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
+            $caja_condicion_d 
+            ");
 
-            $descuentos = DB::select("
+        $descuentos = DB::select("
             select sum(COALESCE(d.descuento, 0)) as v
             from pizza_documento d
             where d.tipodoc = 'FV'
@@ -176,7 +183,7 @@ class DocumentoController extends Controller
             $caja_condicion_d
             ");
     
-            $propinas = DB::select("
+        $propinas = DB::select("
             select sum(COALESCE(p.propina, 0)) as v
             from pizza_pedido p
             where p.estado = 2
@@ -185,7 +192,7 @@ class DocumentoController extends Controller
             $caja_condicion_p
             ");
     
-            $total = DB::select("
+        $total = DB::select("
             SELECT sum(iva) impiva, sum(impco) impcon, sum(descuento) dcto, sum(paga_efectivo) efectivo, SUM(paga_debito) debito, SUM(paga_credito) tcredito
             FROM pizza_documento
             WHERE created_at >= $fecha_inicio
@@ -193,9 +200,9 @@ class DocumentoController extends Controller
             $caja_condicion_f
             ");
         
-            $fecha_inicio = Input::get("fecha_inicio");
-            $fecha_fin = Input::get("fecha_fin");
-            $html = \App\Util\PDF::ImpCuadre($cuadre, $fv, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id);
+        $fecha_inicio = Input::get("fecha_inicio");
+        $fecha_fin = Input::get("fecha_fin");
+        $html = \App\Util\PDF::ImpCuadre($cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id);
         if($mail){
             return response()->json(array('code'=>200,'msg'=>$html));
         }
@@ -442,41 +449,46 @@ class DocumentoController extends Controller
             from pizza_documento where tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
             and created_at >= $fecha_inicio and created_at <= $fecha_fin  
             $caja_condicion_f
-            ");
+        ");
+
+        $fv_count = DB::select("
+            select min(numdoc) as min, max(numdoc) as max, count(numdoc) as count
+            from {$this->conn}_documento d
+            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
+            $caja_condicion_d 
+        ");
 
 
         $descuentos = DB::select("
-        select sum(COALESCE(d.descuento, 0)) as v
-        from pizza_documento d
-        where d.tipodoc = 'FV'
-        and d.created_at >= $fecha_inicio
-        and d.created_at <= $fecha_fin 
-        $caja_condicion_d
+            select sum(COALESCE(d.descuento, 0)) as v
+            from pizza_documento d
+            where d.tipodoc = 'FV'
+            and d.created_at >= $fecha_inicio
+            and d.created_at <= $fecha_fin 
+            $caja_condicion_d
         ");
 
         $propinas = DB::select("
-        select sum(COALESCE(p.propina, 0)) as v
-        from pizza_pedido p
-        where p.estado = 2
-        and p.created_at >= $fecha_inicio
-        and p.created_at <= $fecha_fin 
-        $caja_condicion_p
+            select sum(COALESCE(p.propina, 0)) as v
+            from pizza_pedido p
+            where p.estado = 2
+            and p.created_at >= $fecha_inicio
+            and p.created_at <= $fecha_fin 
+            $caja_condicion_p
         ");
 
         $total = DB::select("
-        SELECT sum(iva) impiva, sum(impco) impcon, sum(descuento) dcto, sum(paga_efectivo) efectivo, SUM(paga_debito) debito, SUM(paga_credito) tcredito
-        FROM pizza_documento
-        WHERE created_at >= $fecha_inicio
-        AND created_at <= $fecha_fin 
-        $caja_condicion_f
+            SELECT sum(iva) impiva, sum(impco) impcon, sum(descuento) dcto, sum(paga_efectivo) efectivo, SUM(paga_debito) debito, SUM(paga_credito) tcredito
+            FROM pizza_documento
+            WHERE created_at >= $fecha_inicio
+            AND created_at <= $fecha_fin 
+            $caja_condicion_f
         ");
 
         $fecha_inicio = Input::get("fecha_inicio");
         $fecha_fin = Input::get("fecha_fin");
-
-
         
-        return (\App\Util\POS::cuadrePos(app('App\Http\Controllers\ConfigController')->first(),$cuadre, $fv, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id, Auth::user()->caja_id));
+        return (\App\Util\POS::cuadrePos(app('App\Http\Controllers\ConfigController')->first(),$cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id, Auth::user()->caja_id));
     }
 
     public function crear(){

@@ -572,32 +572,20 @@ class POS{
         return $stack;
     }
 
-    public static function cuadrePos($config, $cuadre, $fvs, $fecha_inicio, $fecha_fin, $descuento, $propina, $totalq, $caja, $printer){
+    public static function cuadrePos($config, $cuadre, $fvs, $fv_count, $fecha_inicio, $fecha_fin, $descuento, $propina, $totalq, $caja, $printer){
         $stack = [];
 
-        $minFv = '';
-        $maxFv = '';
-        $numDocs = [];
-        foreach ($fvs as $fv) {
-            if($fv->numdoc){
-                if(!in_array($fv->numdoc, $numDocs)){
-                    $numDocs[] = $fv->numdoc;
-                }
-                if($minFv == ''){
-                    $minFv = $fv->numdoc;
-                }
-                if($maxFv == ''){
-                    $maxFv = $fv->numdoc;
-                }
-                if($fv->numdoc<$minFv){
-                    $minFv = $fv->numdoc;
-                }
-                if($fv->numdoc>$maxFv){
-                    $maxFv = $fv->numdoc;
-                }
-            }
+        try {
+            $fv_count = $fv_count[0];
+            $minFv = $fv_count->min;
+            $maxFv = $fv_count->max;
+            $fvcount = $fv_count->count;
+        } catch (\Throwable $th) {
+            $minFv = '';
+            $maxFv = '';
+            $fvcount = '';
         }
-        $fvcount = count($numDocs);
+
         
         if($printer == 2){
             $caracteres = $config->num_impresora2;
