@@ -232,6 +232,9 @@
                             Grande
                         </th>
                         <th class="con-tamanos">
+                            Extra Grande
+                        </th>
+                        <th class="con-tamanos">
                             Mediano
                         </th>
                         <th class="con-tamanos">
