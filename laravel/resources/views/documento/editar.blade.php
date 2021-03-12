@@ -186,6 +186,16 @@
                 </div>
             </div>
             <div class = "col-md-3">
+                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('paga_transferencia')) ? 'has-error'  :''}}">
+                    <label for = "paga_transferencia" class = "control-label">Transferencia</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        <input readonly type="text" class="form-control" value="{{ number_format(old('paga_transferencia')?old('paga_transferencia'):$documento->paga_transferencia, 0) }}"/>
+                    </div>
+                    <div class = "help-block with-errors">{{ $errors->first('paga_transferencia') }}</div>
+                </div>
+            </div>
+            <div class = "col-md-3">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('total')) ? 'has-error'  :''}}">
                     <label for = "total" class = "control-label">Total Documento</label>
                     <div class="input-group">

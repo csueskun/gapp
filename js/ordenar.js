@@ -917,6 +917,7 @@ function impItemPedido(productos_pedido){
                         '<input type = "hidden" name = "paga_efectivo" value = "" / >' +
                         '<input type = "hidden" name = "paga_debito" value = "" / >' +
                         '<input type = "hidden" name = "paga_credito" value = "" / >' +
+                        '<input type = "hidden" name = "paga_transferencia" value = "" / >' +
                         '<input type = "hidden" name = "num_documento" value = "" / >' +
                         '<input type = "hidden" name = "banco" value = "" / >' +
                         '<input type = "hidden" name = "debe" value = "" / >' +
@@ -1409,6 +1410,7 @@ function preEnviarFormPagar(){
     var pagaE = parseFloat($("td#paga_efectivo>input").inputmask('unmaskedvalue'));
     var pagaD = parseFloat($("td#paga_debito>input").inputmask('unmaskedvalue'));
     var pagaC = parseFloat($("td#paga_credito>input").inputmask('unmaskedvalue'));
+    var pagaT = parseFloat($("td#paga_transferencia>input").inputmask('unmaskedvalue'));
     var cambio = parseFloat($("td#cambio_cambio>input").inputmask('unmaskedvalue'));
     var descuento = parseFloat($("td#descuento table input.curr").inputmask('unmaskedvalue'));
     var num_documento = $("td#num_documento>input").val();
@@ -1443,6 +1445,7 @@ function preEnviarFormPagar(){
     $f.find('input[name=paga_efectivo]').val(isNaN(pagaE)?0:pagaE);
     $f.find('input[name=paga_debito]').val(isNaN(pagaD)?0:pagaD);
     $f.find('input[name=paga_credito]').val(isNaN(pagaC)?0:pagaC);
+    $f.find('input[name=paga_transferencia]').val(isNaN(pagaT)?0:pagaT);
     $f.find('input[name=num_documento]').val(num_documento);
     $f.find('input[name=banco]').val(banco);
     $f.find('input[name=debe]').val(debe);
@@ -1543,7 +1546,7 @@ function toggleOtrosMedios(viendo){
     else{
         $("td#paga_debito>input").val(0);
         $("td#paga_credito>input").val(0);
-        $("td#paga_debito>input").val(0);
+        $("td#paga_transferencia>input").val(0);
         $("td#banco>select").val(null);
     }
     calcularCambio();
@@ -1552,12 +1555,13 @@ function calcularCambio(){
     var pagaE = parseFloat($("td#paga_efectivo>input").inputmask('unmaskedvalue'));
     var pagaD = parseFloat($("td#paga_debito>input").inputmask('unmaskedvalue'));
     var pagaC = parseFloat($("td#paga_credito>input").inputmask('unmaskedvalue'));
+    var pagaT = parseFloat($("td#paga_transferencia>input").inputmask('unmaskedvalue'));
     var total = parseFloat($("td#cambio_total>input").inputmask('unmaskedvalue'));
     var descuento = parseFloat($("td#descuento table input.curr").inputmask('unmaskedvalue'));
     var propina = parseFloat($("td#propina table input.curr").inputmask('unmaskedvalue'));
     descuento = !isNaN(descuento)?descuento:0;
     propina = !isNaN(propina)?propina:0;
-    var cambio = (!isNaN(pagaE)?pagaE:0)+(!isNaN(pagaD)?pagaD:0)+(!isNaN(pagaC)?pagaC:0)-total + descuento - propina;
+    var cambio = (!isNaN(pagaE)?pagaE:0)+(!isNaN(pagaD)?pagaD:0)+(!isNaN(pagaC)?pagaC:0)+(!isNaN(pagaT)?pagaT:0)-total + descuento - propina;
     if(cambio<0){
         cambio = -cambio;
         $("td#debiendo").show();

@@ -474,6 +474,10 @@ class POS{
                 $texto.= self::impLinea("Crédito", ' $'.number_format($documento->paga_credito, 0), $caracteres);
                 $impMedios = true;
             }
+            if($documento->paga_transferencia != null && $documento->paga_transferencia != ''){
+                $texto.= self::impLinea("Transferencia", ' $'.number_format($documento->paga_transferencia, 0), $caracteres);
+                $impMedios = true;
+            }
             if($impMedios){
                 $texto = 'Forma de pago:'.("\n").$texto;
                 $texto.= ("\n");
