@@ -305,12 +305,22 @@ class POS{
         $cantidad_productos = 0;
         $iva_grupos = [];
         $ico_grupos = [];
+
+        $columns = [3, 6, 7]; //AYUDA: ancho en chars de las columnas UNIDAD VALOR Y TOTAL
+
         $combos = self::buildCombos($productos);
         if(count($combos)>0){
             $productos = array_merge($productos, $combos);
         }
         $productos = self::reagruparProductosPedidoFactura($productos);
         $subtotales = $config->subtotales_factura;
+        if(count($productos)){
+            $texto .= ("\n");
+            $texto .= self::impLinea(
+                'PRODUCTO', 
+                str_pad('UND', $columns[0], ' ', STR_PAD_LEFT).' '.str_pad('VALOR', $columns[1], ' ', STR_PAD_LEFT).' '.str_pad('TOTAL', $columns[2], ' ', STR_PAD_LEFT), 
+                $caracteres);
+        }
         foreach ($productos as $producto) {
             if(isset($producto->combo) && $producto->combo!=''){
                 continue;
@@ -332,12 +342,13 @@ class POS{
                 $texto .= (str_repeat("-", $caracteres) . "\n");
             }
             $total_producto += $producto->total;
+            $t_ = str_pad(number_format($producto->cant * $producto->valor, 0), $columns[2], ' ', STR_PAD_LEFT);
+            $s_ = str_pad(number_format($producto->valor, 0), $columns[1], ' ', STR_PAD_LEFT);
+            $c_ = str_pad($producto->cant, $columns[0], ' ', STR_PAD_LEFT);
             if ($obs->tipo == "MIXTA") {
                 $aux = "$tipo_producto $obs->tamano";
                 $texto .= self::impLinea(
-                    self::normalizeSizes($aux),
-                    "x$producto->cant ".str_pad(number_format($producto->cant * $producto->valor, 0), 7, " ", STR_PAD_LEFT),
-                    $caracteres);
+                    self::normalizeSizes($aux), " ".$c_." ".$s_." ".$t_, $caracteres);
 
                 $cant_mix = count($obs->mix);
                 foreach ($obs->mix as $mix) {
@@ -350,18 +361,16 @@ class POS{
                 }
                 $texto = self::normalizeSizes($texto);
             } else {
-                if ($tipo_producto_a == "" || $tipo_producto != $tipo_producto_a){
-                    $texto .= "$tipo_producto";
-                    $texto .= ("\n");
-                }
+                // if ($tipo_producto_a == "" || $tipo_producto != $tipo_producto_a){
+                //     $texto .= "$tipo_producto";
+                //     $texto .= ("\n");
+                // }
                 $obs->sabor = isset($obs->sabor) ? $obs->sabor : "";
                 $obs->tamano = isset($obs->tamano) ? $obs->tamano : "";
                 $adicionales_producto = json_decode($producto->adicionales);
                 $aux = " $producto->descripcion $obs->sabor $obs->tamano ";
                 $texto .= self::impLinea(
-                    self::normalizeSizes($aux),
-                    "x$producto->cant ".str_pad(number_format($producto->cant * $producto->valor, 0), 7, " ", STR_PAD_LEFT),
-                    $caracteres);
+                    self::normalizeSizes($aux), " ".$c_." ".$s_." ".$t_, $caracteres);
 
                 if ($producto->adicionales != null) {
                     foreach ($adicionales_producto as $adicional_producto) {
