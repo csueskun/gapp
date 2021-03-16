@@ -729,6 +729,7 @@ class POS{
             $linea.= self::impLinea('EFECTIVO','$'.number_format($t->efectivo,0),$caracteres);
             $linea.= self::impLinea('DÉBITO','$'.number_format($t->debito,0),$caracteres);
             $linea.= self::impLinea('CRÉDITO','$'.number_format($t->tcredito,0),$caracteres);
+            $linea.= self::impLinea('TRANSFERENCIA','$'.number_format($t->transferencia,0),$caracteres);
             $stack[] = ["i"=>"texto","v"=>$linea];
         }
 
