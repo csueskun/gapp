@@ -1779,3 +1779,20 @@ function hotKey(key){
         }
     }
 }
+function getPedidoId(){
+    return $('meta[name=pedido_id]').attr('content');
+}
+function getMesaId(){
+    return $('meta[name=mesa]').attr('content');
+}
+
+function togglePagarDomicilio(pagar=true){
+    var show = '#content-pagar';
+    var hide = '#content-domicilio';
+    if(!pagar){
+        hide = '#content-pagar';
+        show = '#content-domicilio';
+    }
+    $(hide).slideUp('slow');
+    $(show).slideDown('slow');
+}

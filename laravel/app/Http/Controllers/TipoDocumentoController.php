@@ -18,6 +18,10 @@ class TipoDocumentoController extends Controller
     public function todos() {
         return TipoDocumento::all();
     }
+    public function prepareDomicilioDocumento() {
+        $tipos = TipoDocumento::all();
+        return response(array('data'=>$tipos), 200)->header('Content-Type', 'application/json');
+    }
     
     public function buscar($id) {
         return TipoDocumento::find($id);

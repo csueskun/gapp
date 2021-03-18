@@ -1,5 +1,5 @@
 <div class="modal fade" id="modalEditarItemPedido" tabindex="-1" role="dialog" aria-labelledby="obervacionesModal">
-    <div class="modal-dialog" role="document" ng-app="myApp" ng-controller="menuController">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <table>

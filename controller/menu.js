@@ -140,4 +140,47 @@ app.controller('menuController', function($scope, $http) {
         );
     }
 
+
+    $scope.tipoDocumentos = [];
+    $scope.domicilioDocumento = {valor: 4000, observacion: 'Domicilio'};
+
+    $scope.loadTipoDocumentos = function(){
+        mostrarFullLoading();
+        $http.get("/prepare-domicilio-documento")
+        .then(
+            function(response){
+                ocultarFullLoading();
+                if(response.status == 200){
+                    $scope.tipoDocumentos = response.data.data;
+                }
+                else{
+                }
+            }
+        );
+    }
+    $scope.saveDomicilioDocumento = function(){
+        var pedidoId = getPedidoId();
+        if(isNaN(pedidoId)){
+            return false;
+        }
+        var data = $scope.domicilioDocumento;
+        data.pedido_id = pedidoId;
+        data.mesa_id = getMesaId();
+        $scope.saving = true;
+        $http.post("/domicilio-documento", data)
+        .then(
+            function(response){
+                $scope.saving = false;
+                $scope.domicilioDocumento = {valor: 4000, observacion: 'Domicilio'};
+                if(response.status == 200){
+                    mostrarSuccess('Documento registrado.');
+                }
+                else{
+                    mostrarWarning('No se pudo registrar el documento.');
+                }
+            }
+        );
+    }
+
+    $scope.loadTipoDocumentos();
 });

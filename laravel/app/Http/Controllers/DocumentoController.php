@@ -7,6 +7,7 @@ use App\Pedido;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
 use DB;
 use Auth;
 
@@ -713,5 +714,30 @@ class DocumentoController extends Controller
         $pdf = app('dompdf.wrapper');
         $pdf->loadHTML(\App\Util\PDF::ImpDocumento($documento))->setPaper('letter');
         return $pdf->stream();
+    }
+
+    public function saveDomicilioDocumento(Request $request){
+
+        $data = $request->all();
+        $documento = new Documento;
+        $documento->total = $request->valor;
+        $documento->observacion = $request->observacion;
+        $documento->tipodoc = $request->tipodoc;
+        $documento->pedido_id = $request->pedido_id;
+        $documento->mesa_id = $request->mesa_id;
+        $documento->usuario_id = Auth::user()->id;
+        $documento->caja_id = Auth::user()->caja_id;
+        $documento->save();
+
+        $detalleDocumento = new DetalleDocumento;
+        $detalleDocumento->documento_id = $documento->id;
+        $detalleDocumento->producto_id = 1;
+        $detalleDocumento->cantidad = 1;
+        $detalleDocumento->valor = $documento->total;
+        $detalleDocumento->total = $documento->total;
+        $detalleDocumento->detalle = $documento->observacion;
+        $detalleDocumento->save();
+
+        return response(array('data'=>''), 200)->header('Content-Type', 'application/json');
     }
 }

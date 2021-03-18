@@ -448,7 +448,7 @@ span.producto-express>span{
     /*max-width: 145px;*/
     overflow-x: hidden;
 }
-div#cambio input{
+div#cambio input, input.xl, select.xl, textarea.xl{
     font-family: 'bebas_neuebold';
     font-size: 30px;
     color: #5f5f5f;
@@ -456,7 +456,7 @@ div#cambio input{
     margin-bottom: 5px;
     width: 100%;
 }
-div#cambio .label{
+div#cambio .label, label.xl{
     font-family: 'bebas_neuebold';
     font-size: 30px;
     color: #5f5f5f;
