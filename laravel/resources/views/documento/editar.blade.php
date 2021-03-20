@@ -160,7 +160,7 @@
                     <label for = "paga_efectivo" class = "control-label">Efectivo</label>
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input readonly type="text" class="form-control" value="{{ number_format(old('paga_efectivo')?old('paga_efectivo'):$documento->paga_efectivo, 0) }}"/>
+                        <input name="paga_efectivo" type="text" class="form-control metodo-pago" value="{{ number_format(old('paga_efectivo')?old('paga_efectivo'):$documento->paga_efectivo, 0) }}"/>
                     </div>
                     <div class = "help-block with-errors">{{ $errors->first('paga_efectivo') }}</div>
                 </div>
@@ -170,7 +170,7 @@
                     <label for = "paga_debito" class = "control-label">Débito</label>
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input readonly type="text" class="form-control" value="{{ number_format(old('paga_debito')?old('paga_debito'):$documento->paga_debito, 0) }}"/>
+                        <input name="paga_debito" type="text" class="form-control metodo-pago" value="{{ number_format(old('paga_debito')?old('paga_debito'):$documento->paga_debito, 0) }}"/>
                     </div>
                     <div class = "help-block with-errors">{{ $errors->first('paga_debito') }}</div>
                 </div>
@@ -180,7 +180,7 @@
                     <label for = "paga_credito" class = "control-label">Crédito</label>
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input readonly type="text" class="form-control" value="{{ number_format(old('paga_credito')?old('paga_credito'):$documento->paga_credito, 0) }}"/>
+                        <input name="paga_credito" type="text" class="form-control metodo-pago" value="{{ number_format(old('paga_credito')?old('paga_credito'):$documento->paga_credito, 0) }}"/>
                     </div>
                     <div class = "help-block with-errors">{{ $errors->first('paga_credito') }}</div>
                 </div>
@@ -190,9 +190,14 @@
                     <label for = "paga_transferencia" class = "control-label">Transferencia</label>
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input readonly type="text" class="form-control" value="{{ number_format(old('paga_transferencia')?old('paga_transferencia'):$documento->paga_transferencia, 0) }}"/>
+                        <input name="paga_transferencia" type="text" class="form-control metodo-pago" value="{{ number_format(old('paga_transferencia')?old('paga_transferencia'):$documento->paga_transferencia, 0) }}"/>
                     </div>
                     <div class = "help-block with-errors">{{ $errors->first('paga_transferencia') }}</div>
+                </div>
+            </div>
+            <div class="col-md-12 total-error">
+                <div class="alert alert-danger"  style="width: 100%;" role="alert">
+                    La suma de los métodos de pago debe ser igual al total del documento
                 </div>
             </div>
             <div class = "col-md-3">
@@ -200,7 +205,7 @@
                     <label for = "total" class = "control-label">Total Documento</label>
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input readonly type="text" class="form-control" value="{{ number_format(old('total')?old('total'):$documento->total, 0) }}"/>
+                        <input id='total' readonly type="text" class="form-control" value="{{ number_format(old('total')?old('total'):$documento->total, 0) }}"/>
                     </div>
                     <div class = "help-block with-errors">{{ $errors->first('total') }}</div>
                 </div>
@@ -285,7 +290,7 @@
         </div>
         <div class = "col-xs-12">
             <div class = "form-group">
-                <button type = "button" onclick="enviarForm()" class = "btn btn-primary pd"><img height='18' src='/images/loading.gif'/> Guardar</button>
+                <button id='save-button' type = "button" onclick="enviarForm()" class = "btn btn-primary pd"><img height='18' src='/images/loading.gif'/> Guardar</button>
             </div>
         </div>
     </div>
@@ -321,21 +326,52 @@
     }
 </style>
 <script>
+    $(function(){
+        $('.total-error').hide();
+        $('.metodo-pago').each(function(i,v){
+            v.value = v.value.replace(',','');
+        });    
+    });
+    var validTotal = true;
+    function validateTotal() {
+        var total = $('#total').val();
+        total = parseInt(total.replace(',',''));
+        var totalMp = 0;
+        $('.metodo-pago').each(function(i,v){
+            totalMp+=parseInt(v.value);
+        });    
+        validTotal = totalMp == total;
+        if(validTotal){
+            $('#save-button').prop('disabled', false);
+            $('.metodo-pago').closest('.form-group').removeClass('has-error');
+            $('.total-error').hide();
+            
+        }
+        else{
+            $('.metodo-pago').closest('.form-group').addClass('has-error');
+            $('#save-button').prop('disabled', true)
+            $('.total-error').show();
+        }
+    }
+    $('.metodo-pago').on('keyup', validateTotal);
     function enviarForm(){
-        $('.alert').hide();
+        $('.alert:not(.total)').hide();
         $('button>img').show();
+
         $.post( 
             "/documento/{{$documento->id}}/editar-post", 
             $("form#form-documento").serialize(),
             function( data ) {
                 if(data.id!=null){
-                    $('.alert.alert-success').show();
-                    $('.alert.alert-danger').hide();
+                    // $('.alert:not(.total).alert-success').show();
+                    // $('.alert:not(.total).alert-danger').hide();
+                    mostrarSuccess('Datos actualizados');
                     $('button>img').hide();
                 }
                 else{
-                    $('.alert.alert-success').hide();
-                    $('.alert.alert-danger').show();
+                    mostrarError('No se actualizaron los datos');
+                    $('.alert:not(.total).alert-success').hide();
+                    $('.alert:not(.total).alert-danger').show();
                     $('button>img').hide();
                 }
             }

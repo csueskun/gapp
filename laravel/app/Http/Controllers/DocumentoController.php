@@ -735,6 +735,7 @@ class DocumentoController extends Controller
         $documento->usuario_id = Auth::user()->id;
         $documento->caja_id = Auth::user()->caja_id;
         $documento->tipoie = $ie[$request->tipodoc];
+        $documento->paga_efectivo = $request->valor;
         $documento->tercero_id = 1;
         $tipo_documento_ = app('App\Http\Controllers\TipoDocumentoController')->siguienteTipo($documento->tipodoc);
         $documento->numdoc = str_pad($tipo_documento_->consecutivo, 8, "0", STR_PAD_LEFT);
