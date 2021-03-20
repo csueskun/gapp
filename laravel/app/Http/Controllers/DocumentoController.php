@@ -718,6 +718,13 @@ class DocumentoController extends Controller
 
     public function saveDomicilioDocumento(Request $request){
 
+        $ie = [
+            'RC'=> 'I',
+            'RT'=> 'E',
+            'CE'=> 'E',
+            'CI'=> 'I'
+        ];
+
         $data = $request->all();
         $documento = new Documento;
         $documento->total = $request->valor;
@@ -727,7 +734,13 @@ class DocumentoController extends Controller
         $documento->mesa_id = $request->mesa_id;
         $documento->usuario_id = Auth::user()->id;
         $documento->caja_id = Auth::user()->caja_id;
+        $documento->tipoie = $ie[$request->tipodoc];
+        $documento->tercero_id = 1;
+        $tipo_documento_ = app('App\Http\Controllers\TipoDocumentoController')->siguienteTipo($documento->tipodoc);
+        $documento->numdoc = str_pad($tipo_documento_->consecutivo, 8, "0", STR_PAD_LEFT);
+
         $documento->save();
+        $tipo_documento_->aumentarConsecutivo();
 
         $detalleDocumento = new DetalleDocumento;
         $detalleDocumento->documento_id = $documento->id;

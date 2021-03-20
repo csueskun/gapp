@@ -136,7 +136,7 @@
                         </div>
                         <div class="col-md-12">
                             <select required class="xl form-control" name="" id="" ng-model="domicilioDocumento.tipodoc">
-                                <option ng-repeat='tipo in tipoDocumentos' value="@{{tipo.id}}">@{{tipo.descripcion}}</option>
+                                <option ng-repeat='tipo in tipoDocumentos' value="@{{tipo.codigo}}">@{{tipo.descripcion}}</option>
                             </select>
                         </div>
                         <div class="col-md-12">

@@ -635,9 +635,9 @@ class POS{
 
         $total = 0;
         foreach ($cuadre as $documento){
-            if(!($documento->tipo == 'FV' || $documento->tipo == 'BI')){
-                continue;
-            }
+            // if(!($documento->tipo == 'FV' || $documento->tipo == 'BI')){
+            //     continue;
+            // }
             $stack[] = ["i"=>"texto","v"=>str_repeat('-', $caracteres)];
 
             if($documento->tipo == '00'){
@@ -698,10 +698,10 @@ class POS{
             }
 
         }
-        // foreach ($descuento as $d){
-        //     $total-=$d->v;
-        //     $stack[] = self::textoD("DESCUENTOS: "."", "- $ ".number_format($d->v,0),$caracteres);
-        // }
+        foreach ($descuento as $d){
+            $total-=$d->v;
+            $stack[] = self::textoD("DESCUENTOS: "."", "- $ ".number_format($d->v,0),$caracteres);
+        }
 
         if(count($descuento)>0){
             $stack[] = self::textoI(str_repeat('-',$caracteres));

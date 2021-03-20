@@ -151,7 +151,12 @@ app.controller('menuController', function($scope, $http) {
             function(response){
                 ocultarFullLoading();
                 if(response.status == 200){
-                    $scope.tipoDocumentos = response.data.data;
+                    $scope.tipoDocumentos = [];
+                    response.data.data.forEach(function(t){
+                        if(['RC', 'RT', 'CE', 'CI'].includes(t.codigo)){
+                            $scope.tipoDocumentos.push(t);
+                        }
+                    });                    
                 }
                 else{
                 }

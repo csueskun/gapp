@@ -268,7 +268,7 @@ class PDF{
         }
             foreach($cuadre as $linea){   
                 
-                if($linea->tipo != '00' && ($linea->tipo == 'FV' || $linea->tipo == 'BI')){
+                if($linea->tipo != '00' /*&& ($linea->tipo == 'FV' || $linea->tipo == 'BI')*/){
             $html.='<font size="5px"></font><table>
                         <tr><td colspan="3" class="overflow"><hr></td></tr>';
             
