@@ -85,14 +85,16 @@
         <form id="cuadre" action="cuadre" method="POST" target="_blank">
             {{ csrf_field() }}
             <input type="hidden" name="_method" value="POST"/>
-            <div class = "col-md-4">
-                <label>Fecha de Inicio</label>
+            <div class = "col-md-4 centrado">
+                <label class='centrado'>Fecha de Inicio <span id="_fecha_inicio"></span></label>
                 <div class = "campo tipo fecha form-group has-feedback">
                     <div id="fecha_inicio"></div>
                 </div>
             </div>
-            <div class = "col-md-4">
-                <label>Fecha Final</label>
+            <div class = "col-md-4 centrado">
+                <label>
+                    Fecha Final <span id="_fecha_fin"></span>
+                </label>
                 <div class = "campo tipo fecha form-group has-feedback">
                     <div id="fecha_fin"></div>
                 </div>
@@ -101,6 +103,7 @@
             </div>
             <input type="hidden" name="fecha_inicio"/>
             <input type="hidden" name="fecha_fin"/>
+            <input type="hidden" name="hora" value="true"/>
             <input type="hidden" name="mail"/>
             <input type="hidden" name="caja_id" value='0'/>
             
@@ -144,8 +147,6 @@
         </div>
     </div>
 </div>
-
-
 <script>
     var tipoCorreo = 1;
     function enviarCorreo(){
@@ -169,41 +170,78 @@
 
         $("button#diario").append(formatearFecha(fecha, "MM dd, yyyy"));
         $("button#mensual").append(formatearFecha(fecha, "MM, yyyy"));
-        $("form#cuadre input[name=fecha_inicio]").val(formatearFecha(fecha, "yyyy-mm-dd 00:00:00"));
-        $("form#cuadre input[name=fecha_fin]").val(formatearFecha(fecha, "yyyy-mm-dd 23:59:59"));
+        $("form#cuadre input[name=fecha_inicio]").val(formatearFecha(fecha, "yyyy-mm-dd hh:00:00"));
+        $("form#cuadre input[name=fecha_fin]").val(formatearFecha(fecha, "yyyy-mm-dd hh:00:00"));
+        $("span#_fecha_inicio").html(formatearFecha(fecha, "dd/mm/yyyy hh:00:00"));
+        $("span#_fecha_fin").html(formatearFecha(fecha, "dd/mm/yyyy hh:00:00"));
         
         $('div#fecha_inicio').datetimepicker({
             endDate: new Date(),
             language:  'es',
             autoclose: 1,
-            todayHighlight: 1,
-            minView: 2,
+            minView: 1,
             forceParse: 0
         });
         $('div#fecha_fin').datetimepicker({
             language:  'es',
             autoclose: 1,
             todayHighlight: 1,
-            minView: 2,
-            forceParse: 0
+            minView: 1,
+            forceParse: 0,
         });
-        
+        fecha.setHours(fecha.getHours()+1);
+        $('div#fecha_fin').datetimepicker('setDate', fecha);
+        updateManualFecha('fecha_fin');
+
         $('#_caja_id').on('change', function() {
             $("form#cuadre_ input[name=caja_id]").val($(this).val());
         });
         
-        $('div#fecha_inicio').on('changeDate', function() {
-            var fecha = new Date($('div#fecha_inicio').datetimepicker('getFormattedDate'));
-            $("form#cuadre input[name=fecha_inicio]").val(formatearFecha(fecha, "yyyy-mm-dd 00:00:00"));
+        
+
+        //fecha inicio
+        $('div#fecha_inicio').on('changeDay', function() {
+            fixSelectDate('fecha_inicio');
         });
-        $('div#fecha_fin').on('changeDate', function() {
-            var fecha = new Date($('div#fecha_fin').datetimepicker('getFormattedDate'));
-            $("form#cuadre input[name=fecha_fin]").val(formatearFecha(fecha, "yyyy-mm-dd 23:59:59"));
+        $('div#fecha_inicio').on('changeHour', function() {
+            updateManualFecha('fecha_inicio');
+        });
+        $('div#fecha_inicio .datetimepicker-hours th.prev').on('click', function() {
+            fixSelectDate('fecha_inicio');
+        });
+        $('div#fecha_inicio .datetimepicker-hours th.next').on('click', function() {
+            fixSelectDate('fecha_inicio');
+        });
+
+        //fecha fin
+        $('div#fecha_fin').on('changeDay', function() {
+            fixSelectDate('fecha_fin');
+        });
+        $('div#fecha_fin').on('changeHour', function() {
+            updateManualFecha('fecha_fin');
+        });
+        $('div#fecha_fin .datetimepicker-hours th.prev').on('click', function() {
+            fixSelectDate('fecha_fin');
+        });
+        $('div#fecha_fin .datetimepicker-hours th.next').on('click', function() {
+            fixSelectDate('fecha_fin');
         });
         
         $(".icon-arrow-left").addClass("glyphicon-chevron-left");
         $(".icon-arrow-right").addClass("glyphicon-chevron-right");
+
     });
+    function fixSelectDate(selector){
+        setTimeout(() => {
+            $('#'+selector+' .hour.active').trigger('click');
+            updateManualFecha(selector);
+        }, 100);
+    }
+    function updateManualFecha(selector){
+        var fecha = new Date($('div#'+selector).datetimepicker('getFormattedDate'));
+        $("form#cuadre input[name="+selector+']').val(formatearFecha(fecha, "yyyy-mm-dd hh:00:00"));
+        $("span#_"+selector).html(formatearFecha(fecha, "dd/mm/yyyy hh:00:00"));
+    }
     function cuadreDiario(mail = 0){
         var fecha = new Date();
         $("form#cuadre_ input[name=fecha_inicio]").val(formatearFecha(fecha, "yyyy-mm-dd 00:00:00"));
@@ -293,6 +331,13 @@
     .is-busy{
         display: none;
     }
+    .campo.tipo.fecha>div>div{
+        margin: auto;
+    }
+    label>span{
+        display: block;
+        font-size: 20px;
+    }
 </style>
     <script>
 
@@ -319,14 +364,14 @@
         }
         function posManual(){
             var fechaI = new Date($('div#fecha_inicio').datetimepicker('getFormattedDate'));
-            fechaI = formatearFecha(fechaI, "yyyy-mm-dd 00:00:00");
+            fechaI = formatearFecha(fechaI, "yyyy-mm-dd hh:00:00");
             var fechaF = new Date($('div#fecha_fin').datetimepicker('getFormattedDate'));
-            fechaF = formatearFecha(fechaF, "yyyy-mm-dd 23:59:59");
+            fechaF = formatearFecha(fechaF, "yyyy-mm-dd hh:00:00");
 
             // $.post("/caja/cuadre-post", {fecha_inicio: fechaI, fecha_fin: fechaF}, function (data) {
             //     enviarAServicioImpresion('http://localhost:8000/HtmlPrint?stack='+JSON.stringify(data))
             // });
-            impPos({fecha_inicio: fechaI, fecha_fin: fechaF, caja_id:$("form#cuadre_ input[name=caja_id]").val()});
+            impPos({hora: true, fecha_inicio: fechaI, fecha_fin: fechaF, caja_id:$("form#cuadre_ input[name=caja_id]").val()});
         }
 
         function impPos(params){

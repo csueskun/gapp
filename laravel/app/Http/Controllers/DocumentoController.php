@@ -37,8 +37,16 @@ class DocumentoController extends Controller
         $mail = Input::get("mail") == 1;
         $fecha_inicio = Input::get("fecha_inicio");
         $fecha_fin = Input::get("fecha_fin");
-        $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
-        $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
+
+        $with_hours = Input::get('hora');
+        if($with_hours){
+            $fecha_inicio = "'$fecha_inicio'";
+            $fecha_fin = "'$fecha_fin'";
+        }
+        else{
+            $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
+            $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
+        }
 
         $caja_id = Input::get("caja_id");
         $caja_condicion = '';
@@ -205,6 +213,15 @@ class DocumentoController extends Controller
         
         $fecha_inicio = Input::get("fecha_inicio");
         $fecha_fin = Input::get("fecha_fin");
+        $fecha_inicio = date_create($fecha_inicio);
+        $fecha_fin = date_create($fecha_fin);
+        if(!$with_hours){
+            date_add($fecha_inicio, date_interval_create_from_date_string('3 hours'));
+            date_add($fecha_fin, date_interval_create_from_date_string('3 hours'));
+        }
+        $fecha_inicio = date_format($fecha_inicio, "d/m/Y g:ia");
+        $fecha_fin = date_format($fecha_fin, "d/m/Y g:ia");
+            
         $html = \App\Util\PDF::ImpCuadre($cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id);
         if($mail){
             return response()->json(array('code'=>200,'msg'=>$html));
@@ -338,8 +355,16 @@ class DocumentoController extends Controller
     public function preCuadrePos() {
         $fecha_inicio = Input::get("fecha_inicio");
         $fecha_fin = Input::get("fecha_fin");
-        $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
-        $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
+
+        $with_hours = Input::get('hora');
+        if($with_hours){
+            $fecha_inicio = "'$fecha_inicio'";
+            $fecha_fin = "'$fecha_fin'";
+        }
+        else{
+            $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
+            $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
+        }
 
         $caja_id = Input::get("caja_id");
         $caja_condicion = '';
@@ -491,7 +516,15 @@ class DocumentoController extends Controller
 
         $fecha_inicio = Input::get("fecha_inicio");
         $fecha_fin = Input::get("fecha_fin");
-        
+        $fecha_inicio = date_create($fecha_inicio);
+        $fecha_fin = date_create($fecha_fin);
+        if(!$with_hours){
+            date_add($fecha_inicio, date_interval_create_from_date_string('3 hours'));
+            date_add($fecha_fin, date_interval_create_from_date_string('3 hours'));
+        }
+        $fecha_inicio = date_format($fecha_inicio, "d/m/Y g:ia");
+        $fecha_fin = date_format($fecha_fin, "d/m/Y g:ia");
+
         return (\App\Util\POS::cuadrePos(app('App\Http\Controllers\ConfigController')->first(),$cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id, Auth::user()->caja_id));
     }
 

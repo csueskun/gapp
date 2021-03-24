@@ -143,10 +143,6 @@ class PDF{
     public static function impCuadre($cuadre, $fvs, $fv_count, $inicio, $fin, $descuento, $propina, $totalq, $caja_id){
         
         $fecha = date("d/m/Y h:ia");
-        $inicio = date_create($inicio);
-        $inicio = date_format($inicio, "d/m/Y");
-        $fin = date_create($fin);
-        $fin = date_format($fin, "d/m/Y");
 
 
         if($caja_id == '0'){

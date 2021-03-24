@@ -625,12 +625,10 @@ class POS{
         $linea = self::impLinea('Fecha', date("d/m/Y h:ia"), $caracteres);
         $stack[] = ["i"=>"texto","v"=>$linea];
 
-        $fecha = date_create($fecha_inicio);
-        $linea = self::impLinea('Inicio cuadre', date_format($fecha, "d/m/Y"), $caracteres);
+        $linea = self::impLinea('Inicio cuadre', $fecha_inicio, $caracteres);
         $stack[] = ["i"=>"texto","v"=>$linea];
 
-        $fecha = date_create($fecha_fin);
-        $linea = self::impLinea('Fin cuadre', date_format($fecha, "d/m/Y"), $caracteres);
+        $linea = self::impLinea('Fin cuadre', $fecha_fin, $caracteres);
         $stack[] = ["i"=>"texto","v"=>$linea];
 
         $total = 0;
