@@ -139,7 +139,7 @@ class PDF{
             {$detalle->des}
             </td>
             <td class='al-der'>
-            {$cantidad}
+            {$signo}{$cantidad}
             </td>
             <td class='al-der'>
             {$saldo}

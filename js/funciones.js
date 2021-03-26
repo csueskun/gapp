@@ -26,7 +26,7 @@ $(function() {
     
 });
 
-function reemplazarParamEnURL(param, valor, eager = true){
+function reemplazarParamEnURL(param, valor, eager = true, removePage = false){
     var link = window.location.href;
     if((link.indexOf("?") !== -1)){
         valor = "&"+param+"="+valor;
@@ -34,14 +34,17 @@ function reemplazarParamEnURL(param, valor, eager = true){
     else{
         valor = "?"+param+"="+valor;
     }
+    if(removePage){
+        link = removeParam('page', link);
+    }
     if(eager){
-        window.location.replace(removeParam(param)+valor);
+        link = removeParam(param, link)+valor;
+        window.location.href = link;
     }
 }
 
 function filtrarTabla(){
-    reemplazarParamEnURL("buscar",$("input#buscar").val());
-    reemplazarParamEnURL("page",1);
+    reemplazarParamEnURL("buscar",$("input#buscar").val(), true, true);
 }
 function addParam(param, value, eager){
     reemplazarParamEnURL(param,value,eager);
