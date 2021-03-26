@@ -195,7 +195,7 @@
 
 
 <form id="excel" action="/HSPrint/excel.php" method="POST">
-    <input type="text" name="data" value="">
+    <input type="hidden" name="data" value="">
 </form>
 
 <script>

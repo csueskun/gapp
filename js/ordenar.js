@@ -937,9 +937,9 @@ function impItemPedido(productos_pedido){
             html+='<button class="boton-inline-grande btn btn-primary imprimir" onclick="preFactura('+pedido_id+')"><span class="fa fa-file-powerpoint-o"/> Prefactura</button>';
             if(isAdmin() || isCajero()){
                 html+= '<a data-toggle=\"modal\" data-target=\"#modal_pagar\" onclick="actualizarCambio()" class = "boton-inline-grande btn btn-success"><span class="fa fa-usd"></span> Pagar</a>';
+                html+='<button class="boton-inline-grande btn btn-danger imprimir" onclick="gaveta()"><span class="fa fa-inbox"/> ABRIR CAJÓN</button>';
             }
             if(isAdmin()){
-                html+='<button class="boton-inline-grande btn btn-danger imprimir" onclick="gaveta()"><span class="fa fa-inbox"/> ABRIR CAJÓN</button>';
                 html+='<button class="boton-inline-grande btn btn-purple imprimir" onclick="reImprimirComanda('+pedido_id+')"><span class="fa fa-print"/> Comanda Completa</button>';
             }
         }

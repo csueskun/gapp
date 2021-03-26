@@ -63,6 +63,7 @@
                     <th class="agregar_ordenar_por" campo="id">Pedido #</th>
                     <th>Entregar En</th>
                     <th class="agregar_ordenar_por" campo="fecha">Fecha y Hora</th>
+                    <th class="agregar_ordenar_por" campo="turno">Turno</th>
                     <th class="agregar_ordenar_por" campo="programado">Programado</th>
                     <th>Cantidad<br/>Productos</th>
                     <th class="agregar_ordenar_por" campo="total">Saldo</th>
@@ -90,6 +91,7 @@
 
                     </td>
                     <td>{{ date_format(date_create($pedido->fecha), 'd/m/Y g:i A') }}</td>
+                    <td>{{ $pedido->turno }}</td>
                     <td class="{{$pedido->programado?'calcular':''}}" valor="{{$pedido->programado}}"><span></span></td>
                     <td class="min-width centrado">{{ count($pedido->productos) }}</td>
                     <td class="align-right">${{ number_format($pedido->total, 0) }}</td>

@@ -711,12 +711,12 @@ class SaldosProductoController extends Controller
         }
 
         $sql = ("
-        SELECT pdc.*, concat(pd.tipodoc,pd.codprefijo,pd.numdoc) as des , pi.descripcion, pd.tipodoc as tipo, pdc.cantidad as can, pdc.valor
+        SELECT pdc.*, concat(pd.tipodoc,pd.codprefijo,pd.numdoc) as des , pr.descripcion, 'Producto' as tipo, pdc.cantidad as can, pdc.valor
         FROM {$this->conn}_detalle_documento pdc
         JOIN {$this->conn}_documento as pd
         ON pdc.documento_id = pd.id 
-        JOIN {$this->conn}_ingrediente as pi
-        ON pdc.ingrediente_id = pi.id 
+        JOIN {$this->conn}_producto as pr
+        ON pdc.producto_id = pr.id 
         WHERE $prod_ing $tipodoc $inicio $fin
             ".$union);
 

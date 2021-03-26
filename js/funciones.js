@@ -41,6 +41,7 @@ function reemplazarParamEnURL(param, valor, eager = true){
 
 function filtrarTabla(){
     reemplazarParamEnURL("buscar",$("input#buscar").val());
+    reemplazarParamEnURL("page",1);
 }
 function addParam(param, value, eager){
     reemplazarParamEnURL(param,value,eager);

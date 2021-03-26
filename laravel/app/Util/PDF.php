@@ -102,6 +102,9 @@ class PDF{
                     Cantidad
                 </th>
                 <th>
+                    Saldo
+                </th>
+                <th>
                     Valor
                 </th>
                 <th>
@@ -110,7 +113,22 @@ class PDF{
             </tr>
         </thead>
         <tbody>";
+        $saldo = 0;
+        $minus = ['FV', 'CO'];
+        $plus = ['FC', 'NI'];
         foreach($detalles as $detalle){
+            $signo = '';
+            $cantidad = floatval($detalle->cantidad);
+            if($detalle->tipo == 'Ingrediente'){
+                $cantidad = floatval($detalle->cantidad) * floatval($detalle->can);
+            }
+            if(in_array(substr($detalle->des, 0, 2), $plus)){
+                $saldo += $cantidad;
+            }
+            elseif(in_array(substr($detalle->des, 0, 2), $minus)){
+                $signo = '- ';
+                $saldo -= $cantidad;
+            }
 
             $html.="
             <tr>
@@ -121,7 +139,10 @@ class PDF{
             {$detalle->des}
             </td>
             <td class='al-der'>
-            {$detalle->cantidad}
+            {$cantidad}
+            </td>
+            <td class='al-der'>
+            {$saldo}
             </td>
             <td class='al-der'>
             {$detalle->valor}
@@ -130,6 +151,8 @@ class PDF{
             {$detalle->tipo}
             </td>
             </tr>";
+
+
         }
         $html.="
             </tbody>
