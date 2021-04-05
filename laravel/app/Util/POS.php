@@ -75,14 +75,47 @@ class POS{
             $x_cantidad = ' x'.$producto_pedido->cant;
             $subtotal = 0;
             $subtotal += $producto_pedido->producto->valor;
-            $obs = json_decode($producto_pedido->obs);
-            $obs->sabor = isset($obs->sabor) ? $obs->sabor : "";
+            if($producto_pedido->nombre_combo){
+                $obs->tipo = 'COMBO';
+                $obs->tamano = 'unico';
+                $obs->sabor = '';
+                $obs->mix = [];
+            }
+            else{
+                $obs = json_decode($producto_pedido->obs);
+                $obs->sabor = isset($obs->sabor) ? $obs->sabor : "";
+            }
             $texto.= ("\n");
             $texto.= (str_repeat("-", ($caracteres/2))."\n");
             //No mostrar tipo en la comanda
             // $tipoProducto = $producto_pedido->producto->tipo_producto->descripcion;
             // $texto.= (isset($producto_pedido->combo) && $producto_pedido->combo && $producto_pedido->combo != null)?"COMBO ": "";
-            if ($obs->tipo == "MIXTA") {
+
+            if ($obs->tipo == "COMBO") {
+                $texto.= $producto_pedido->producto->descripcion;
+                foreach ($producto_pedido->obs as $observaciones){
+                    if($observaciones['sin_ingrediente'] || $observaciones['sabor']){
+                        $texto.= ("\n");
+                        $texto.= $observaciones['producto'];
+                    }
+                    if($observaciones['sin_ingrediente']){
+                        $texto.= ("\n");
+                        $texto.= '  SIN ';
+                        foreach ($observaciones['sin_ingrediente'] as $sin){
+                            $texto.= $sin->descripcion.', ';
+                        }
+                        $texto.= '----';
+                        $texto = str_replace(', ----', '', $texto);
+
+                    }
+                    if(isset($observaciones['sabor'])){
+                        $texto.= ("\n");
+                        $texto.= '  SABOR '.$observaciones['sabor'];
+                    }
+                }
+                
+            }
+            elseif ($obs->tipo == "MIXTA") {
                 $texto.= self::normalizeSizes($obs->tamano=='unico'?'':$obs->tamano).$x_cantidad;
                 foreach ($obs->mix as $fraccion) {
                     $texto.= ("\n");
@@ -943,18 +976,39 @@ class POS{
     public static function buildCombos($pp){
         $combos = [];
         $added_combos = [];
+        $combos_obs = [];
         for($i = 0; $i<count($pp); $i++){
             $p = $pp[$i];
-            $obs = $p->combo;
-            if($obs && $obs != ''){
-                $obs = json_decode($obs);
-                $obs = json_decode($obs);
-                $obs->producto = $p;
-                if(in_array($obs->ref, $added_combos)){
+            $combo_info = $p->combo;
+            if($combo_info && $combo_info != ''){
+                $combo_info = json_decode($combo_info);
+                $combo_info = json_decode($combo_info);
+                $combo_info->producto = $p;
+                $pp_obs = json_decode($p->obs);
+                $combo_obs = [];
+                $add_obs = false;
+                if($pp_obs->sin_ingredientes){
+                    $combo_obs['sin_ingrediente'] = $pp_obs->sin_ingredientes;
+                    $add_obs = true;
+                }
+                if($pp_obs->sabor){
+                    $combo_obs['sabor'] = $pp_obs->sabor;
+                    $add_obs = true;
+                }
+                if($add_obs){
+                    $combo_obs['producto'] = $combo_info->nombre_producto;
+                    if(isset($combos_obs[$combo_info->ref])){
+                    }
+                    else{
+                        $combos_obs[$combo_info->ref] = [];
+                    }
+                    $combos_obs[$combo_info->ref][] = $combo_obs;
+                }
+                if(in_array($combo_info->ref, $added_combos)){
                 }
                 else{
-                    $added_combos[] = $obs->ref;
-                    $combos[] = $obs;
+                    $added_combos[] = $combo_info->ref;
+                    $combos[] = $combo_info;
                 }
             }
             else{
@@ -968,10 +1022,13 @@ class POS{
             $combo->valor= $combo->precio;
             $combo->total= $combo->precio * $combo->cantidad;
             $combo->cant= $combo->cantidad;
-            $combo->obs= '{"tamano":"", "sabor":"", "tipo":"NORMAL", "mix":[], "sin_ingredientes":[]}';
+            $combo->obs= [];
             $combo->impco= 0;
             $combo->iva= 0;
             $combo->adicionales= null;
+            if(isset($combos_obs[$combo->ref])){
+                $combo->obs = $combos_obs[$combo->ref];
+            }
         }
         return $combos;
     }
