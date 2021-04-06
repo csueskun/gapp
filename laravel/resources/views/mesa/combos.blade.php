@@ -27,7 +27,9 @@
                               tamano="{{$comboProducto->tamano}}"
                               valor="{{$comboProducto->valor}}">
                         <ul class="nav nav-pills">
-                            <li class="nombre-producto">{{$comboProducto->producto->tipo_producto->descripcion}} {{$comboProducto->producto->descripcion}}{{$comboProducto->cantidad>1?(' #'.($i+1)):''}}</li>
+                            <li class="nombre-producto" nombre="{{$comboProducto->producto->descripcion}}{{$comboProducto->cantidad>1?(' #'.($i+1)):''}}">
+                            {{$comboProducto->producto->tipo_producto->descripcion}} {{$comboProducto->producto->descripcion}}{{$comboProducto->cantidad>1?(' #'.($i+1)):''}}
+                            </li>
                             @if(count($comboProducto->producto->ingredientes))
                             <li class="active"><a data-toggle="tab" href="#ingredientes-{{$comboProducto->id}}-{{$i}}" class="active">Ingredientes</a></li>
                             @endif

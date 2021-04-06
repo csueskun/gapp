@@ -49,7 +49,7 @@ function addCombo($button){
             comboNombre: selectedComboNombre,
             comboCantidad: $('div#collapse-combos .number-spinner input').val(),
             esComboProducto: true,
-            nombre: $(this).find('li.nombre-producto').html(),
+            nombre: $(this).find('li.nombre-producto').attr('nombre'),
             ingredientes: $.map($(this).find('div.ingredientes>label.ingrediente>input:checked'), function(ingrediente){
                 return {
                     id: ingrediente.getAttribute('id'),
