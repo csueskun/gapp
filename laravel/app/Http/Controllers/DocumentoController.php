@@ -530,7 +530,6 @@ class DocumentoController extends Controller
 
     public function crear(){
         $postData = Input::all();
-        
         $rules = array(
                 'tipodoc' => 'required',
                 'mesa_id' => 'required',
@@ -552,9 +551,14 @@ class DocumentoController extends Controller
         } else {
             $productos = json_decode(Input::get('productos'));
             
-            $total = 0;
-            foreach($productos->detalles as $detalle){
-                $total+=$detalle->total;
+            if($productos->detalles){
+                $total = 0;
+                foreach($productos->detalles as $detalle){
+                    $total+=$detalle->total;
+                }
+            }
+            else{
+                $total = Input::get('total');
             }
             $documento = new Documento;
             $documento->tipodoc = Input::get('tipodoc');

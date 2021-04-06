@@ -675,7 +675,7 @@ class POS{
                 continue;
             }
             $pre = ' $ ';
-            if(in_array($documento->tipo, ['FC', 'PN'])){
+            if(in_array($documento->tipo, ['FC', 'PN', 'CE', 'RC'])){
                 $pre = '- $ ';
                 $total-=$documento->total;
             }

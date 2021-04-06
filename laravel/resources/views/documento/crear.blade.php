@@ -181,7 +181,7 @@
                             <label for = "paga_efectivo" class = "control-label">Efectivo</label>
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
-                                <input type="text" class="form-control" value="{{ old('paga_efectivo')}}"/>
+                                <input type="text" name='paga_efectivo' class="form-control" value="{{ old('paga_efectivo')}}"/>
                             </div>
                             <div class = "help-block with-errors">{{ $errors->first('paga_efectivo') }}</div>
                         </div>
@@ -191,7 +191,7 @@
                             <label for = "paga_debito" class = "control-label">Débito</label>
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
-                                <input type="text" class="form-control" value="{{ old('paga_debito') }}"/>
+                                <input type="text" name='paga_debito' class="form-control" value="{{ old('paga_debito') }}"/>
                             </div>
                             <div class = "help-block with-errors">{{ $errors->first('paga_debito') }}</div>
                         </div>
@@ -201,7 +201,7 @@
                             <label for = "paga_credito" class = "control-label">Crédito</label>
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
-                                <input type="text" class="form-control" value="{{ old('paga_credito') }}"/>
+                                <input type="text" name='paga_credito' class="form-control" value="{{ old('paga_credito') }}"/>
                             </div>
                             <div class = "help-block with-errors">{{ $errors->first('paga_credito') }}</div>
                         </div>
@@ -211,7 +211,7 @@
                             <label for = "paga_transferencia" class = "control-label">Transferencia</label>
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
-                                <input type="text" class="form-control" value="{{ old('paga_transferencia') }}"/>
+                                <input type="text" name='paga_transferencia' class="form-control" value="{{ old('paga_transferencia') }}"/>
                             </div>
                             <div class = "help-block with-errors">{{ $errors->first('paga_transferencia') }}</div>
                         </div>
