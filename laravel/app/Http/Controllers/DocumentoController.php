@@ -506,7 +506,8 @@ class DocumentoController extends Controller
         ");
 
         $total = DB::select("
-            SELECT sum(iva) impiva, sum(impco) impcon, sum(descuento) dcto, sum(paga_efectivo) efectivo, 
+            SELECT sum(iva) impiva, sum(impco) impcon, sum(descuento) dcto, sum(
+                case when tipodoc in ('FV','BI','RC','CI') then paga_efectivo else (paga_efectivo*-1) end) efectivo, 
             SUM(paga_debito) debito, SUM(paga_credito) tcredito, sum(paga_transferencia) transferencia
             FROM pizza_documento
             WHERE created_at >= $fecha_inicio
