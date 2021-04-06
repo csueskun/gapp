@@ -98,7 +98,7 @@ class POS{
                         $texto.= ("\n");
                         $texto.= $observaciones['producto'];
                     }
-                    if($observaciones['sin_ingrediente']){
+                    if(isset($observaciones['sin_ingrediente'])){
                         $texto.= ("\n");
                         $texto.= '  SIN ';
                         foreach ($observaciones['sin_ingrediente'] as $sin){
