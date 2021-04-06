@@ -94,7 +94,7 @@ class POS{
             if ($obs->tipo == "COMBO") {
                 $texto.= $producto_pedido->producto->descripcion;
                 foreach ($producto_pedido->obs as $observaciones){
-                    if($observaciones['sin_ingrediente'] || $observaciones['sabor']){
+                    if(isset($observaciones['sin_ingrediente']) || isset($observaciones['sabor'])){
                         $texto.= ("\n");
                         $texto.= $observaciones['producto'];
                     }
