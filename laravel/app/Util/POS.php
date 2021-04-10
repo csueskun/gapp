@@ -104,8 +104,8 @@ class POS{
                 $texto.= $producto_pedido->producto->descripcion;
                 foreach ($producto_pedido->obs as $observaciones){
                     if(isset($observaciones['sin_ingrediente']) || isset($observaciones['sabor'])){
-                        $texto.= ("\n");
-                        $texto.= $observaciones['producto'];
+                        // $texto.= ("\n");
+                        // $texto.= $observaciones['producto'];
                     }
                     if(isset($observaciones['sin_ingrediente'])){
                         $texto.= ("\n");
