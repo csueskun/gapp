@@ -92,6 +92,15 @@ class POS{
             // $texto.= (isset($producto_pedido->combo) && $producto_pedido->combo && $producto_pedido->combo != null)?"COMBO ": "";
 
             if ($obs->tipo == "COMBO") {
+                try {
+                    $producto_pedido->cantidad = intval($producto_pedido->cantidad);
+                    if($producto_pedido->cantidad > 1){
+                        $texto.= '' . $producto_pedido->cantidad . 'x ';
+                    }
+                } catch (\Throwable $th) {
+                    $producto_pedido->cantidad = 1;
+                }
+
                 $texto.= $producto_pedido->producto->descripcion;
                 foreach ($producto_pedido->obs as $observaciones){
                     if(isset($observaciones['sin_ingrediente']) || isset($observaciones['sabor'])){
@@ -369,7 +378,15 @@ class POS{
             }
             $texto .= ("\n");
 
-            $obs = json_decode($producto->obs);
+            try {
+                $obs = json_decode($producto->obs);
+            } catch (\Throwable $th) {
+                $obs = (object) $producto->obs;
+                $obs->tipo = 'COMBO';
+                $obs->tamano = 'unico';
+                $obs->sabor = '';
+                $obs->mix = [];
+            }
 
             if ($tipo_producto != $tipo_producto_a) {
                 $texto .= (str_repeat("-", $caracteres) . "\n");
@@ -977,6 +994,7 @@ class POS{
         $combos = [];
         $added_combos = [];
         $combos_obs = [];
+
         for($i = 0; $i<count($pp); $i++){
             $p = $pp[$i];
             $combo_info = $p->combo;
