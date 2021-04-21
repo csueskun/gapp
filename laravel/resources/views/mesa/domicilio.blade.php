@@ -30,7 +30,7 @@
                                 <td class="label">T.Débito</td><td id='paga_debito'><input name="paga_debito" onkeyup="calcularCambio()" class="form-control curr"/></td>
                             </tr>
                             <tr class="otros-medios-pago" style="display: none">
-                                <td class="label">T.Cédito</td><td id='paga_credito'><input name="paga_credito" onkeyup="calcularCambio()" class="form-control curr"/></td>
+                                <td class="label">T.Crédito</td><td id='paga_credito'><input name="paga_credito" onkeyup="calcularCambio()" class="form-control curr"/></td>
                             </tr>
                             <tr class="otros-medios-pago" style="display: none">
                                 <td class="label">Transferencia</td><td id='paga_transferencia'><input name="paga_transferencia" onkeyup="calcularCambio()" class="form-control curr"/></td>

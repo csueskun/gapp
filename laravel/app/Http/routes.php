@@ -721,6 +721,7 @@ Route::patch("/tipo_producto/{id}/estado/{estado}", "TipoProductoController@patc
 
 Route::get("/saldos_producto", "SaldosProductoController@vistaLista")->middleware('auth')->middleware('tiene.rol:Administrador');
 Route::get("/inventario/detallado", "SaldosProductoController@generarDetallado")->middleware('auth')->middleware('tiene.rol:Administrador');
+Route::post('/documento/{id}/anular', 'DocumentoController@anular')->middleware('auth')->middleware('tiene.rol:Administrador');
 
 
 

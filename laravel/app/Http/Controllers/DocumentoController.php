@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
+use App\ProductoPedido;
+use App\Http\Controllers\SaldosProductoController;
 use DB;
 use Auth;
 
@@ -792,5 +794,99 @@ class DocumentoController extends Controller
         $detalleDocumento->save();
 
         return response(array('data'=>''), 200)->header('Content-Type', 'application/json');
+    }
+
+    public function anular($id, Request $request){
+        $justificacion = Input::get('justificacion');
+        $data = ['id'=> $id, 'r'=> $request->justificacion, 'justificacion'=>$justificacion];
+        // $res = $this->inventarioFromDocumento($id);
+        $documento = Documento::find($id);
+        $inventario = $this->inventarioFromDocumento($id);
+        if($documento->tipoie='I'){
+            $ingredientes_ = [];
+            $productos_ = [];
+            foreach($inventario['ingredientes'] as $ingrediente){
+                $ingrediente['cantidad'] = $ingrediente['cantidad']*-1;
+                $ingredientes_[] = $ingrediente;
+            }
+            foreach($inventario['productos'] as $producto){
+                $producto['cantidad'] = $producto['cantidad']*-1;
+                $productos_[] = $producto;
+            }
+            $inventario['ingredientes'] = $ingredientes_;
+            $inventario['productos'] = $productos_;
+        }
+        $saldosController = new SaldosProductoController;
+        $res = $saldosController->sumarExistencias($inventario);
+        $documento->fecha_anulado = date("Y-m-d H:i:s");
+        $documento->save();
+        return response($documento, 200)->header('Content-Type', 'application/json');
+    }
+
+    public function inventarioFromDocumento($documento){
+        $inventario = ['ingredientes'=>[], 'productos'=>[]];
+        $documento = Documento::with('pedido.productos', 'detalles.producto.ingredientes')->find($documento);
+        $mes = explode('-',$documento->created_at);
+        $mes = $mes[1];
+        $ingredientes = [];
+        $productos = [];
+        if($documento->pedido_id){
+            $pp = ProductoPedido::where('pedido_id', $documento->pedido_id)->with('producto.ingredientes')->get();
+            foreach($pp as $p){
+                if($p->combo){
+                    $p->observation = json_decode($p->combo);
+                    $p->observation = json_decode($p->observation);
+                }
+            }
+            foreach($pp as $p){
+                if($p->producto->terminado){
+                    $productos[] = ['id'=>$p->producto->id, 'cantidad'=>$p->cant, 'mes'=>$mes];
+                }
+                else{
+                    $p->observation = json_decode($p->obs);
+                    foreach($p->producto->ingredientes as $i){
+                        if(floatval($i->pivot->cantidad)==0){
+                            continue;
+                        }
+                        $ingredientes[] = ['id'=>$i->id, 'cantidad'=>floatval($i->pivot->cantidad)*$p->cant, 'mes'=>$mes];
+                    }
+                    foreach($p->observation->adicionales as $a){
+                        if(floatval($a->cantidad)==0){
+                            continue;
+                        }
+                        $ingredientes[] = ['id'=>intval($a->ingrediente), 'cantidad'=>floatval($i->cantidad)*$p->cant, 'mes'=>$mes];
+                    }
+                    foreach($p->observation->sin_ingredientes as $i){
+                        if(floatval($i->cantidad)==0){
+                            continue;
+                        }
+                        $ingredientes[] = ['id'=>intval($i->id), 'cantidad'=>floatval($i->cantidad)*-1*$p->cant, 'mes'=>$mes];
+                    }
+                }
+            }
+        }
+        else{
+            foreach($documento->detalles as $d){
+                if($d->ingrediente_id){
+                    $ingredientes[] = ['id'=>intval($d->ingrediente_id), 'cantidad'=>floatval($d->cantidad), 'mes'=>$mes];
+                }
+                if($d->producto_id){
+                    if($d->producto->terminado){
+                        $productos[] = ['id'=>intval($d->producto_id), 'cantidad'=>floatval($d->cantidad), 'mes'=>$mes];
+                    }
+                    else{
+                        foreach($d->producto->ingredientes as $i){
+                            if(floatval($i->pivot->cantidad)==0){
+                                continue;
+                            }
+                            $ingredientes[] = ['id'=>$i->id, 'cantidad'=>floatval($i->pivot->cantidad), 'mes'=>$mes];
+                        }
+                    }
+                }
+            }
+        }
+        $inventario['productos'] = $productos;
+        $inventario['ingredientes'] = $ingredientes;
+        return $inventario;
     }
 }

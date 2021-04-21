@@ -922,6 +922,34 @@ class SaldosProductoController extends Controller
             $sql
         );
     }
+
+    public function sumarExistencias($existencias){
+        foreach($existencias['ingredientes'] as $ingrediente){
+            $saldos_producto = SaldosProducto::where('ingrediente_id', $ingrediente['id'])->first();
+            if($saldos_producto == null){
+                $saldos_producto = new SaldosProducto;
+                $saldos_producto->ingrediente_id = $ingrediente['id'];
+                $saldos_producto->save();
+            }
+            $saldos_producto = SaldosProducto::where('ingrediente_id', $ingrediente['id'])->first();
+            $saldos_producto->{"entradas".$ingrediente['mes']} += $ingrediente['cantidad'];
+            $saldos_producto->existencia += $ingrediente['cantidad'];
+            $saldos_producto->save();
+        }
+        foreach($existencias['productos'] as $producto){
+            $saldos_producto = SaldosProducto::where('producto_id', $producto['id'])->first();
+            if($saldos_producto == null){
+                $saldos_producto = new SaldosProducto;
+                $saldos_producto->ingrediente_id = $producto['id'];
+                $saldos_producto->save();
+            }
+            $saldos_producto = SaldosProducto::where('producto_id', $producto['id'])->first();
+            $saldos_producto->{"entradas".$producto['mes']} += $producto['cantidad'];
+            $saldos_producto->existencia += $producto['cantidad'];
+            $saldos_producto->save();
+        }
+        return '777';
+    }
     
     //<
     //>

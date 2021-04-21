@@ -18,7 +18,6 @@ class PDF{
             }
         }
         $tipo = $tipo=='ING'?'Ingrediente':'Producto';
-
         $html="
         <!DOCTYPE html>
         <html>
@@ -116,7 +115,9 @@ class PDF{
         $saldo = 0;
         $minus = ['FV', 'CO'];
         $plus = ['FC', 'NI'];
+        $ii = 0;
         foreach($detalles as $detalle){
+            $ii++;
             $signo = '';
             $cantidad = floatval($detalle->cantidad);
             if($detalle->tipo == 'Ingrediente'){

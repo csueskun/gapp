@@ -3,6 +3,7 @@
 @section('titulo', 'LISTA')
 
 @section('lib')
+<meta name="csrf-token" content="{{ Session::token() }}">
 {{ Html::script('js/validator.min.js') }}
 {{ Html::script('js/datatables.min.js') }}
 {{ Html::script('js/dataTables.bootstrap.min.js') }}
@@ -93,15 +94,18 @@
                     <th class="agregar_ordenar_por" campo="caja">Caja</th>
                     <th class="agregar_ordenar_por" campo="mesa_id">Mesa</th>
                     <th class="agregar_ordenar_por" campo="pedido_id">Pedido</th>
-                    <th class="agregar_ordenar_por" campo="total">Total</th>
+                    <th class="agregar_ordenar_por" campo="total">Subtotal</th>
+                    <th class="agregar_ordenar_por" campo="descuento">Descuento</th>
+                    <th>Valor Neto</th>
                     <th class="agregar_ordenar_por" campo="created_at">Fecha</th>
+                    <th>Anulado</th>
                     {{--<th class="agregar_ordenar_por" campo="observacion">Observacion</th>--}}
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($documento_lista as $documento)
-                <tr id='{{ $documento->id }}'>
+                <tr id='{{ $documento->id }}' class="{{$documento->fecha_anulado?'anulado':''}}">
                     <!--<td>{{ array("FV"=>"Factura de Venta", "NI"=>"Nota Inventario", "FC"=>"Factura de Compra", "PN"=>"Pago de Nómina", "BI"=>"Base Inicial", "NI"=>"Nota de inventario", "CO"=>"Consumo","RC"=>"Recibo de Cartera","RT"=>"Recibo de Tesorería","CI"=>"Comprobante de Ingreso","CE"=>"Comprobante de Egreso")[$documento->tipodoc] }}</td>-->
                     <td>{{ $documento->tipodoc }}</td>
                     <td>{{ $documento->numdoc }}</td>
@@ -110,10 +114,17 @@
                     <td>{{ $documento->mesa_id==999?'':$documento->mesa_id }}</td>
                     <td class="align-right">{{ $documento->pedido_id==0?'':$documento->pedido_id }}</td>
                     <td class="align-right">${{ number_format($documento->total,0) }}</td>
+                    <td class="align-right">${{ number_format($documento->descuento,0) }}</td>
+                    <td class="align-right">${{ number_format($documento->total-$documento->descuento,0) }}</td>
                     <td>{{ date_format(date_create($documento->created_at), 'd/m/Y g:i a') }}</td>
 {{--                    <td>{{ $documento->observacion }}</td>--}}
+                    <td><i class="glyphicon glyphicon-minus icon-anulado" style='color: red'></i></td>
                     <td class="fix-datatable">
-                        <button data-toggle = "confirmation" data-placement="left" data-singleton="true" id="{{$documento->id}}" class="btn btn-default"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
+                        <button 
+                            data-toggle = "confirmation" data-placement="left" data-singleton="true" 
+                            doc='{{ $documento->tipodoc }} {{ $documento->numdoc }}' id="{{$documento->id}}" 
+                            class="btn btn-default"><span class="glyphicon glyphicon-menu-hamburger"></span>
+                        </button>
                     </td>
                 </tr>
                 @endforeach
@@ -218,9 +229,37 @@
     </div>
 </div>
 
+<div class="modal" id="anularModal" tabindex="-1" role="dialog" aria-labelledby="anularModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title font bebas" id="myModalLabel">Anular documento</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="justificacion">Escriba la justificación para realizar la anulación del documento <span id='anulando_doc'></span>:</label>
+                        <textarea class="form-control font bebas" name="justificacion" id="justificacion" cols="30" rows="5" style='font-size: 20px'></textarea>
+                        <input type="hidden" id="anulando">
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer font bebas" style='font-size: 20px'>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary busy" onclick="anularDocumento()">Anular documento</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     h3.popover-title{
         display: none;
+    }
+    .contenedor.ordenar_por{
+        display: flex !important;
     }
     .contenedor.ordenar_por span{
         color: white;
@@ -232,6 +271,18 @@
     }
     td.day:not(.disabled){
 
+    }
+    tr.anulado{
+        color: red;
+    }
+    tr:not(.anulado) .icon-anulado{
+        display: none;
+    }
+    tr.anulado .btn.btn-warning{
+        display:none;
+    }
+    th{
+        vertical-align: inherit !important;
     }
 </style>
 <script type = "text/javascript">
@@ -245,7 +296,7 @@ $('#example')
         {
             buttons: [
                 {
-                  class: 'btn btn-warning',
+                  class: 'btn btn-primary',
                   label: 'Editar',
                   icon: 'fa fa-pencil',
                   onClick: function() {
@@ -253,7 +304,7 @@ $('#example')
                   }
                 },
                 {
-                  class: 'btn btn-primary',
+                  class: 'btn btn-success',
                   label: 'Imprimir',
                   icon: 'fa fa-print',
                   onClick: function() {
@@ -273,7 +324,17 @@ $('#example')
                   }
                 },
                 {
-                  class: 'btn btn-success',
+                  class: 'btn btn-warning',
+                  label: 'Anular',
+                  icon: 'glyphicon glyphicon-ban-circle',
+                  onClick: function() {
+                        $('#anularModal').modal('show');
+                        $('#anulando').val($(this).attr("id"));
+                        $('#anulando_doc').html($(this).attr("doc"));
+                  }
+                },
+                {
+                  class: 'btn btn-default',
                   label: 'Cancelar',
                   icon: 'glyphicon glyphicon-remove',
                   cancel: true
@@ -402,6 +463,25 @@ $('#example')
             },
             error: function (xhr, status) {
                 $(".busy").attr('disabled',false);
+            }
+        });
+    }
+
+    function anularDocumento() {
+        var data = {
+            _token: $('meta[name=csrf-token]').attr('content'),
+            justificacion: $('#justificacion').val(),
+        };
+        var url = '/documento/' + $('#anulando').val() + '/anular';
+        $.post(url, data, function(datax){
+            try {
+                if(datax.fecha_anulado){
+                    $('#anularModal').modal('hide');
+                    mostrarSuccess("Documento Anulado.");
+                    $('tr#'+$('#anulando').val()).addClass('anulado');
+                }
+            } catch (error) {
+                mostrarWarning("No se pudo anular el documento.");
             }
         });
     }
