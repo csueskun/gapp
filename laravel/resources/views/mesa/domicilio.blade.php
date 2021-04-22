@@ -47,10 +47,10 @@
                                         <option value="2">Banco Bogotá</option>
                                         <option value="3">Davivienda</option>
                                         <option value="4">BBVA</option>
-                                        <option value="5">Banco Caja Social</option>
-                                        <option value="6">Banco Popular</option>
-                                        <option value="7">Colmena</option>
-                                        <option value="8">Colpatria</option>
+                                        <option value="5">Uplace Colombia</option>
+                                        <option value="6">Domicilios.com</option>
+                                        <option value="7">Rappi</option>
+                                        <option value="8">Ifood</option>
                                         <option value="9">Nequi</option>
                                         <option value="10">Otro</option>
                                     </select>
