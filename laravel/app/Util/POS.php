@@ -94,9 +94,9 @@ class POS{
             if ($obs->tipo == "COMBO") {
                 try {
                     $producto_pedido->cantidad = intval($producto_pedido->cantidad);
-                    if($producto_pedido->cantidad > 1){
+                    //if($producto_pedido->cantidad > 1){
                         $texto.= '' . $producto_pedido->cantidad . 'x ';
-                    }
+                    //}
                 } catch (\Throwable $th) {
                     $producto_pedido->cantidad = 1;
                 }

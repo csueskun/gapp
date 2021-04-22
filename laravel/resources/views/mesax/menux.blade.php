@@ -113,7 +113,7 @@
                     </div>
                     <div class="col-md-12">
                         <button class="btn-block btn btn-primary min squared">
-                            Prefactura
+                            Resumen Cuenta
                         </button>
                     </div>
 

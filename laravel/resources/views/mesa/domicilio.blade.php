@@ -112,13 +112,14 @@
                     @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Cajero')
                     <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="togglePagarDomicilio(false)" class = "fuente bebas btn btn-warning btn-lg imprimir"><span class="fa fa-motorcycle"></span> Domicilio</button>
                     @endif
-                    <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="preFactura()" class = "fuente bebas btn btn-primary btn-lg imprimir"><span class="fa fa-print"></span> Prefactura</button>
+                    <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="preFactura()" class = "fuente bebas btn btn-primary btn-lg imprimir"><span class="fa fa-print"></span> Resumen Cuenta</button>
                     @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Cajero')
                     <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="preEnviarFormPagar()" class = "fuente bebas btn btn-success btn-lg imprimir"><span class="fa fa-usd"></span> Pagar</button>
-                    @endif
-                    @if(Auth::user()->rol=='Administrador')
                     <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="gaveta()" class = "fuente bebas btn btn-danger btn-lg imprimir"><span class="fa fa-inbox"></span> Cajón</button>
+                    
                     @endif
+                    <!--@if(Auth::user()->rol=='Administrador')
+                    @endif -->
                     <button style="font-size:30px;padding: 4px 6px;" type="button" class="btn btn-default btn-lg fuente bebas" data-dismiss="modal"><span class="fa fa-close"></span> Salir</button>
                 </div>
             </div>

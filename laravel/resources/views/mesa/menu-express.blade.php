@@ -697,13 +697,14 @@
                 </div>
                 <div class="modal-footer">
                     <div class="btn-group">
-                        <button style="font-size:34px;padding: 4px 6px;" type="button" onclick="preFactura()" class = "fuente bebas btn btn-primary btn-lg"><span class="fa fa-print"></span> Preactura</button>
+                        <button style="font-size:34px;padding: 4px 6px;" type="button" onclick="preFactura()" class = "fuente bebas btn btn-primary btn-lg"><span class="fa fa-file-powerpoint-o"></span> Resumen Cuenta</button>
                         @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Cajero')
                         <button style="font-size:34px;padding: 4px 6px;" type="button" onclick="preEnviarFormPagar()" class = "fuente bebas btn btn-success btn-lg"><span  class="fa fa-usd"></span> Pagar</button>
-                        @endif
-                        @if(Auth::user()->rol=='Administrador')
                         <button style="font-size:34px;padding: 4px 6px;" type="button" onclick="gaveta()" class = "fuente bebas btn btn-danger btn-lg"><span class="fa fa-inbox"></span> Cajón</button>
                         @endif
+                        <!--@if(Auth::user()->rol=='Administrador')
+                        <button style="font-size:34px;padding: 4px 6px;" type="button" onclick="gaveta()" class = "fuente bebas btn btn-danger btn-lg"><span class="fa fa-inbox"></span> Cajón</button>
+                        @endif -->
                         <button style="font-size:34px;padding: 4px 6px;" type="button" class="btn btn-default btn-lg fuente bebas" data-dismiss="modal"><span class="fa fa-close"></span> Salir</button>
                     </div>
                 </div>
