@@ -292,7 +292,7 @@ class POS{
             $texto.= ("\n");
         }
         else{
-            $texto.= "RESUMEN DE VENTA (PREFACTURA)\n";
+            $texto.= "RESUMEN DE CUENTA\n";
         }
         $texto.= ("Fecha: $fechaPedido");
         $texto.= ("\n");
