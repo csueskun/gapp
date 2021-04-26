@@ -110,7 +110,7 @@
             <div class="modal-footer">
                 <div class="btn-group centrado">
                     @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Cajero')
-                    <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="togglePagarDomicilio(false)" class = "fuente bebas btn btn-warning btn-lg imprimir"><span class="fa fa-motorcycle"></span> Domicilio</button>
+                    <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="togglePagarDomicilio(false)" class = "fuente bebas btn btn-warning btn-lg imprimir"><span class="fa fa-usd"></span> Domicilio</button>
                     @endif
                     <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="preFactura()" class = "fuente bebas btn btn-primary btn-lg imprimir"><span class="fa fa-print"></span> Resumen Cuenta</button>
                     @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Cajero')
