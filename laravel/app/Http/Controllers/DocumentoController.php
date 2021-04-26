@@ -799,7 +799,6 @@ class DocumentoController extends Controller
     public function anular($id, Request $request){
         $justificacion = Input::get('justificacion');
         $data = ['id'=> $id, 'r'=> $request->justificacion, 'justificacion'=>$justificacion];
-        // $res = $this->inventarioFromDocumento($id);
         $documento = Documento::find($id);
         $inventario = $this->inventarioFromDocumento($id);
         if($documento->tipoie='I'){
@@ -819,7 +818,29 @@ class DocumentoController extends Controller
         $saldosController = new SaldosProductoController;
         $res = $saldosController->sumarExistencias($inventario);
         $documento->fecha_anulado = date("Y-m-d H:i:s");
+        $documento->total = 0;
+        $documento->total_iva = 0;
+        $documento->paga_efectivo = 0;
+        $documento->paga_transferencia = 0;
+        $documento->paga_debito = 0;
+        $documento->paga_credito = 0;
+        $documento->debe = 0;
+        $documento->descuento = 0;
+        $documento->iva = 0;
+        $documento->impco = 0;
+        $documento->justificacion_anula = $justificacion;
         $documento->save();
+
+        $detalles_documento = DetalleDocumento::where('documento_id',$id)->get();
+        foreach($detalles_documento as $detalle){
+            $detalle->cantidad = 0;
+            $detalle->valor = 0;
+            $detalle->total = 0;
+            $detalle->impco = 0;
+            $detalle->iva = 0;
+            $detalle->save();
+        }
+
         return response($documento, 200)->header('Content-Type', 'application/json');
     }
 
