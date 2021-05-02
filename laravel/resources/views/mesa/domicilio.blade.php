@@ -30,7 +30,7 @@
                                 <td class="label">T.Débito</td><td id='paga_debito'><input name="paga_debito" onkeyup="calcularCambio()" class="form-control curr"/></td>
                             </tr>
                             <tr class="otros-medios-pago" style="display: none">
-                                <td class="label">T.Cédito</td><td id='paga_credito'><input name="paga_credito" onkeyup="calcularCambio()" class="form-control curr"/></td>
+                                <td class="label">T.Crédito</td><td id='paga_credito'><input name="paga_credito" onkeyup="calcularCambio()" class="form-control curr"/></td>
                             </tr>
                             <tr class="otros-medios-pago" style="display: none">
                                 <td class="label">Transferencia</td><td id='paga_transferencia'><input name="paga_transferencia" onkeyup="calcularCambio()" class="form-control curr"/></td>
@@ -47,10 +47,10 @@
                                         <option value="2">Banco Bogotá</option>
                                         <option value="3">Davivienda</option>
                                         <option value="4">BBVA</option>
-                                        <option value="5">Banco Caja Social</option>
-                                        <option value="6">Banco Popular</option>
-                                        <option value="7">Colmena</option>
-                                        <option value="8">Colpatria</option>
+                                        <option value="5">Uplace Colombia</option>
+                                        <option value="6">Domicilios.com</option>
+                                        <option value="7">Rappi</option>
+                                        <option value="8">Ifood</option>
                                         <option value="9">Nequi</option>
                                         <option value="10">Otro</option>
                                     </select>
@@ -110,15 +110,16 @@
             <div class="modal-footer">
                 <div class="btn-group centrado">
                     @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Cajero')
-                    <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="togglePagarDomicilio(false)" class = "fuente bebas btn btn-warning btn-lg imprimir"><span class="fa fa-motorcycle"></span> Domicilio</button>
+                    <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="togglePagarDomicilio(false)" class = "fuente bebas btn btn-warning btn-lg imprimir"><span class="fa fa-usd"></span> Domicilio</button>
                     @endif
-                    <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="preFactura()" class = "fuente bebas btn btn-primary btn-lg imprimir"><span class="fa fa-print"></span> Prefactura</button>
+                    <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="preFactura()" class = "fuente bebas btn btn-primary btn-lg imprimir"><span class="fa fa-print"></span> Resumen Cuenta</button>
                     @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Cajero')
                     <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="preEnviarFormPagar()" class = "fuente bebas btn btn-success btn-lg imprimir"><span class="fa fa-usd"></span> Pagar</button>
-                    @endif
-                    @if(Auth::user()->rol=='Administrador')
                     <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="gaveta()" class = "fuente bebas btn btn-danger btn-lg imprimir"><span class="fa fa-inbox"></span> Cajón</button>
+                    
                     @endif
+                    <!--@if(Auth::user()->rol=='Administrador')
+                    @endif -->
                     <button style="font-size:30px;padding: 4px 6px;" type="button" class="btn btn-default btn-lg fuente bebas" data-dismiss="modal"><span class="fa fa-close"></span> Salir</button>
                 </div>
             </div>

@@ -176,7 +176,7 @@
                     </div>
                 </div>
                 
-                <div class = "col-md-3">
+                <div class = "col-md-2">
                         <div class = "key- tipo- form-group ">
                             <label for = "paga_efectivo" class = "control-label">Efectivo</label>
                             <div class="input-group">
@@ -186,7 +186,7 @@
                             <div class = "help-block with-errors">{{ $errors->first('paga_efectivo') }}</div>
                         </div>
                 </div>
-                <div class = "col-md-3">
+                <div class = "col-md-2">
                         <div class = "key- tipo- form-group ">
                             <label for = "paga_debito" class = "control-label">Débito</label>
                             <div class="input-group">
@@ -196,7 +196,7 @@
                             <div class = "help-block with-errors">{{ $errors->first('paga_debito') }}</div>
                         </div>
                 </div>
-                <div class = "col-md-3">
+                <div class = "col-md-2">
                         <div class = "key- tipo- form-group ">
                             <label for = "paga_credito" class = "control-label">Crédito</label>
                             <div class="input-group">
@@ -206,7 +206,7 @@
                             <div class = "help-block with-errors">{{ $errors->first('paga_credito') }}</div>
                         </div>
                 </div>
-                <div class = "col-md-3">
+                <div class = "col-md-2">
                         <div class = "key- tipo- form-group ">
                             <label for = "paga_transferencia" class = "control-label">Transferencia</label>
                             <div class="input-group">
@@ -216,8 +216,19 @@
                             <div class = "help-block with-errors">{{ $errors->first('paga_transferencia') }}</div>
                         </div>
                 </div>
+                
+                <div class = "col-md-2">
+                        <div class = "key- tipo- form-group ">
+                            <label for = "descuento" class = "control-label">Descuento</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="text" name='descuento' class="form-control" value="{{ old('descuento') }}"/>
+                            </div>
+                            <div class = "help-block with-errors">{{ $errors->first('descuento') }}</div>
+                        </div>
+                </div>
 
-                <div class = "col-md-3">
+                <div class = "col-md-2">
                     <div class = "key- tipo- form-group ">
                        <label for = "total" class = "control-label">Total *</label>
                        <input  type = "text"  class = "form-control" id = "total" name = "total" required value = "{{ old('total') }}">

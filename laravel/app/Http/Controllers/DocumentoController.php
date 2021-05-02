@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
+use App\ProductoPedido;
+use App\Http\Controllers\SaldosProductoController;
 use DB;
 use Auth;
 
@@ -165,13 +167,13 @@ class DocumentoController extends Controller
             join {$this->conn}_tipo_producto as tp
             on pr.tipo_producto_id = tp.id
 
-            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
+            where d.fecha_anulado is null and d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
             $caja_condicion_d 
             group by 1
             
             UNION ALL
             Select 'Otros' as descripcion, 1 as cantidad, sum(total) as total, numdoc, id
-            from pizza_documento where tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
+            from pizza_documento where fecha_anulado is null and tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
             and created_at >= $fecha_inicio and created_at <= $fecha_fin 
             $caja_condicion_f
             ");
@@ -180,6 +182,12 @@ class DocumentoController extends Controller
             select min(numdoc) as min, max(numdoc) as max, count(numdoc) as count
             from {$this->conn}_documento d
             where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
+            $caja_condicion_d 
+            ");
+        
+        $anulados = DB::select("
+            select tipodoc, numdoc from pizza_documento d
+            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.fecha_anulado is not null 
             $caja_condicion_d 
             ");
 
@@ -223,7 +231,7 @@ class DocumentoController extends Controller
         $fecha_inicio = date_format($fecha_inicio, "d/m/Y g:ia");
         $fecha_fin = date_format($fecha_fin, "d/m/Y g:ia");
             
-        $html = \App\Util\PDF::ImpCuadre($cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id);
+        $html = \App\Util\PDF::ImpCuadre($cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id, $anulados);
         if($mail){
             return response()->json(array('code'=>200,'msg'=>$html));
         }
@@ -469,13 +477,15 @@ class DocumentoController extends Controller
             join {$this->conn}_tipo_producto as tp
             on pr.tipo_producto_id = tp.id
 
-            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
+            where d.fecha_anulado is null 
+            and d.created_at >= $fecha_inicio 
+            and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
             $caja_condicion_d
             group by 1
             
             UNION ALL
             Select 'Otros' as descripcion, 1 as cantidad, sum(total) as total, numdoc, id
-            from pizza_documento where tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
+            from pizza_documento where fecha_anulado is null and tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
             and created_at >= $fecha_inicio and created_at <= $fecha_fin  
             $caja_condicion_f
         ");
@@ -484,6 +494,12 @@ class DocumentoController extends Controller
             select min(numdoc) as min, max(numdoc) as max, count(numdoc) as count
             from {$this->conn}_documento d
             where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
+            $caja_condicion_d 
+        ");
+
+        $anulados = DB::select("
+            select tipodoc, numdoc from {$this->conn}_documento d
+            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.fecha_anulado is not null 
             $caja_condicion_d 
         ");
 
@@ -527,7 +543,7 @@ class DocumentoController extends Controller
         $fecha_inicio = date_format($fecha_inicio, "d/m/Y g:ia");
         $fecha_fin = date_format($fecha_fin, "d/m/Y g:ia");
 
-        return (\App\Util\POS::cuadrePos(app('App\Http\Controllers\ConfigController')->first(),$cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id, Auth::user()->caja_id));
+        return (\App\Util\POS::cuadrePos(app('App\Http\Controllers\ConfigController')->first(),$cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id, Auth::user()->caja_id, $anulados));
     }
 
     public function crear(){
@@ -792,5 +808,120 @@ class DocumentoController extends Controller
         $detalleDocumento->save();
 
         return response(array('data'=>''), 200)->header('Content-Type', 'application/json');
+    }
+
+    public function anular($id, Request $request){
+        $justificacion = Input::get('justificacion');
+        $data = ['id'=> $id, 'r'=> $request->justificacion, 'justificacion'=>$justificacion];
+        $documento = Documento::find($id);
+        $inventario = $this->inventarioFromDocumento($id);
+        if($documento->tipoie='I'){
+            $ingredientes_ = [];
+            $productos_ = [];
+            foreach($inventario['ingredientes'] as $ingrediente){
+                $ingrediente['cantidad'] = $ingrediente['cantidad']*-1;
+                $ingredientes_[] = $ingrediente;
+            }
+            foreach($inventario['productos'] as $producto){
+                $producto['cantidad'] = $producto['cantidad']*-1;
+                $productos_[] = $producto;
+            }
+            $inventario['ingredientes'] = $ingredientes_;
+            $inventario['productos'] = $productos_;
+        }
+        $saldosController = new SaldosProductoController;
+        $res = $saldosController->sumarExistencias($inventario);
+        $documento->fecha_anulado = date("Y-m-d H:i:s");
+        $documento->total = 0;
+        $documento->total_iva = 0;
+        $documento->paga_efectivo = 0;
+        $documento->paga_transferencia = 0;
+        $documento->paga_debito = 0;
+        $documento->paga_credito = 0;
+        $documento->debe = 0;
+        $documento->descuento = 0;
+        $documento->iva = 0;
+        $documento->impco = 0;
+        $documento->justificacion_anula = $justificacion;
+        $documento->save();
+
+        $detalles_documento = DetalleDocumento::where('documento_id',$id)->get();
+        foreach($detalles_documento as $detalle){
+            $detalle->cantidad = 0;
+            $detalle->valor = 0;
+            $detalle->total = 0;
+            $detalle->impco = 0;
+            $detalle->iva = 0;
+            $detalle->save();
+        }
+
+        return response($documento, 200)->header('Content-Type', 'application/json');
+    }
+
+    public function inventarioFromDocumento($documento){
+        $inventario = ['ingredientes'=>[], 'productos'=>[]];
+        $documento = Documento::with('pedido.productos', 'detalles.producto.ingredientes')->find($documento);
+        $mes = explode('-',$documento->created_at);
+        $mes = $mes[1];
+        $ingredientes = [];
+        $productos = [];
+        if($documento->pedido_id){
+            $pp = ProductoPedido::where('pedido_id', $documento->pedido_id)->with('producto.ingredientes')->get();
+            foreach($pp as $p){
+                if($p->combo){
+                    $p->observation = json_decode($p->combo);
+                    $p->observation = json_decode($p->observation);
+                }
+            }
+            foreach($pp as $p){
+                if($p->producto->terminado){
+                    $productos[] = ['id'=>$p->producto->id, 'cantidad'=>$p->cant, 'mes'=>$mes];
+                }
+                else{
+                    $p->observation = json_decode($p->obs);
+                    foreach($p->producto->ingredientes as $i){
+                        if(floatval($i->pivot->cantidad)==0){
+                            continue;
+                        }
+                        $ingredientes[] = ['id'=>$i->id, 'cantidad'=>floatval($i->pivot->cantidad)*$p->cant, 'mes'=>$mes];
+                    }
+                    foreach($p->observation->adicionales as $a){
+                        if(floatval($a->cantidad)==0){
+                            continue;
+                        }
+                        $ingredientes[] = ['id'=>intval($a->ingrediente), 'cantidad'=>floatval($i->cantidad)*$p->cant, 'mes'=>$mes];
+                    }
+                    foreach($p->observation->sin_ingredientes as $i){
+                        if(floatval($i->cantidad)==0){
+                            continue;
+                        }
+                        $ingredientes[] = ['id'=>intval($i->id), 'cantidad'=>floatval($i->cantidad)*-1*$p->cant, 'mes'=>$mes];
+                    }
+                }
+            }
+        }
+        else{
+            foreach($documento->detalles as $d){
+                if($d->ingrediente_id){
+                    $ingredientes[] = ['id'=>intval($d->ingrediente_id), 'cantidad'=>floatval($d->cantidad), 'mes'=>$mes];
+                }
+                if($d->producto_id){
+                    if($d->producto->terminado){
+                        $productos[] = ['id'=>intval($d->producto_id), 'cantidad'=>floatval($d->cantidad), 'mes'=>$mes];
+                    }
+                    else{
+                        foreach($d->producto->ingredientes as $i){
+                            if(floatval($i->pivot->cantidad)==0){
+                                continue;
+                            }
+                            $ingredientes[] = ['id'=>$i->id, 'cantidad'=>floatval($i->pivot->cantidad), 'mes'=>$mes];
+                        }
+                    }
+                }
+            }
+        }
+        $inventario['productos'] = $productos;
+        $inventario['ingredientes'] = $ingredientes;
+        return $inventario;
     }
 }

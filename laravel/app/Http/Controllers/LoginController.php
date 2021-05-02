@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Form;
 use App\Http\Requests;
+use App\Http\Controllers\ConfigController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
@@ -35,6 +36,8 @@ class LoginController extends Controller
             if(count($sql)>0){
 //                if(strcmp(str_replace(" ", "",$sql[0]->valor), str_replace(" ","",preg_replace( "/\r|\n/", "", trim($this->doAuthLogin())))) === 0){
                 if(true){
+                    $configController = new ConfigController;
+                    $configController->resetTurno();
                     return Redirect::to('/')->with('status', ["success-contenido" => "Bienvenido ".Auth::user()->nombres." ".Auth::user()->apellidos]);
                 }
             }

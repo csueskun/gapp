@@ -94,9 +94,9 @@ class POS{
             if ($obs->tipo == "COMBO") {
                 try {
                     $producto_pedido->cantidad = intval($producto_pedido->cantidad);
-                    if($producto_pedido->cantidad > 1){
+                    //if($producto_pedido->cantidad > 1){
                         $texto.= '' . $producto_pedido->cantidad . 'x ';
-                    }
+                    //}
                 } catch (\Throwable $th) {
                     $producto_pedido->cantidad = 1;
                 }
@@ -292,7 +292,7 @@ class POS{
             $texto.= ("\n");
         }
         else{
-            $texto.= "RESUMEN DE VENTA (PREFACTURA)\n";
+            $texto.= "RESUMEN DE CUENTA\n";
         }
         $texto.= ("Fecha: $fechaPedido");
         $texto.= ("\n");
@@ -635,7 +635,7 @@ class POS{
         return $stack;
     }
 
-    public static function cuadrePos($config, $cuadre, $fvs, $fv_count, $fecha_inicio, $fecha_fin, $descuento, $propina, $totalq, $caja, $printer){
+    public static function cuadrePos($config, $cuadre, $fvs, $fv_count, $fecha_inicio, $fecha_fin, $descuento, $propina, $totalq, $caja, $printer, $anulados){
         $stack = [];
 
         try {
@@ -781,6 +781,18 @@ class POS{
             $linea.= self::impLinea('DÉBITO','$'.number_format($t->debito,0),$caracteres);
             $linea.= self::impLinea('CRÉDITO','$'.number_format($t->tcredito,0),$caracteres);
             $linea.= self::impLinea('TRANSFERENCIA','$'.number_format($t->transferencia,0),$caracteres);
+            $stack[] = ["i"=>"texto","v"=>$linea];
+        }
+        $linea = '';
+        $first = true;
+        foreach ($anulados as $anulado) {
+            if($first){
+                $linea = self::impLinea('ANULADOS:', $anulado->tipodoc.$anulado->numdoc, $caracteres);
+                $first = false;
+            }
+            else{
+                $linea = self::impLinea('', $anulado->tipodoc.$anulado->numdoc, $caracteres);
+            }
             $stack[] = ["i"=>"texto","v"=>$linea];
         }
 

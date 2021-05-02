@@ -18,7 +18,6 @@ class PDF{
             }
         }
         $tipo = $tipo=='ING'?'Ingrediente':'Producto';
-
         $html="
         <!DOCTYPE html>
         <html>
@@ -116,7 +115,9 @@ class PDF{
         $saldo = 0;
         $minus = ['FV', 'CO'];
         $plus = ['FC', 'NI'];
+        $ii = 0;
         foreach($detalles as $detalle){
+            $ii++;
             $signo = '';
             $cantidad = floatval($detalle->cantidad);
             if($detalle->tipo == 'Ingrediente'){
@@ -163,7 +164,7 @@ class PDF{
         return $html;
     }
     
-    public static function impCuadre($cuadre, $fvs, $fv_count, $inicio, $fin, $descuento, $propina, $totalq, $caja_id){
+    public static function impCuadre($cuadre, $fvs, $fv_count, $inicio, $fin, $descuento, $propina, $totalq, $caja_id, $anulados){
         
         $fecha = date("d/m/Y h:ia");
 
@@ -363,6 +364,16 @@ class PDF{
             }
             $html.=$linea;
             $html.= $html2;
+            
+            $first = true;
+            if(count($anulados)){
+                $html .= '<table>';
+                foreach($anulados as $anulado){
+                    $html.= "<tr><td class='al-izq letra-sans mediana'>".($first?"ANULADOS:":"")."</td><td style='width: 180px;font-size: 1.3em;' class='al-der'>" . $anulado->tipodoc.$anulado->numdoc . "</td></tr>";
+                    $first = false;
+                }
+                $html .= '</table>';
+            }
             $html.='</body></html>';
         
         

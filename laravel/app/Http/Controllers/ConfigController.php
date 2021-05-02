@@ -78,6 +78,26 @@ class ConfigController extends Controller
         }
         return $estado_mesas;
     }
+    
+    public function estado_mesas3() {
+        $mesas = $this->estado_mesas2();
+        $config = Config::first();
+        return response()->json([
+            'mesas'=>$mesas,
+            'turno'=>$config->turno
+        ]);
+    }
+    
+    public function resetTurno() {
+        try {
+            $desde = date('Y-m-d 03:00:00');
+            $cuadre = DB::select("select count(id) from pizza_pedido where created_at > '$desde'");
+            Config::where('id', '>', 0)->update(['turno'=>1]);
+        } catch (\Throwable $th) {
+            var_dump($th);
+            asldkjaskld;
+        }
+    }
 
     public function getMesaAlias($id, $config = null){
         if($config == null){

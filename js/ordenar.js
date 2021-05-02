@@ -934,14 +934,14 @@ function impItemPedido(productos_pedido){
         if(pedido_activo){
             html+='<button class="boton-inline-grande btn btn-purple imprimir" onclick="impPos('+pedido_id+')"><span class="fa fa-print"/> Comanda</button>';
             // html+='<button class="boton-inline-grande btn btn-primary imprimir" onclick="pagarImprimirPedido('+pedido_id+')"><span class="fa fa-print"/> Facturar</button>';
-            html+='<button class="boton-inline-grande btn btn-primary imprimir" onclick="preFactura('+pedido_id+')"><span class="fa fa-file-powerpoint-o"/> Prefactura</button>';
+            html+='<button class="boton-inline-grande btn btn-primary imprimir" onclick="preFactura('+pedido_id+')"><span class="fa fa-file-powerpoint-o"/> Resumen Cuenta</button>';
             if(isAdmin() || isCajero()){
                 html+= '<a data-toggle=\"modal\" data-target=\"#modal_pagar\" onclick="actualizarCambio()" class = "boton-inline-grande btn btn-success"><span class="fa fa-usd"></span> Pagar</a>';
                 html+='<button class="boton-inline-grande btn btn-danger imprimir" onclick="gaveta()"><span class="fa fa-inbox"/> ABRIR CAJÓN</button>';
-            }
-            if(isAdmin()){
                 html+='<button class="boton-inline-grande btn btn-purple imprimir" onclick="reImprimirComanda('+pedido_id+')"><span class="fa fa-print"/> Comanda Completa</button>';
             }
+           // if(isAdmin()){
+            //       }
         }
         if(!mesero){
             if(pedido_activo){
@@ -952,9 +952,9 @@ function impItemPedido(productos_pedido){
                 //FACTURA+COMANDA
                 html+='<button class="boton-inline-grande btn btn-success imprimir" onclick="reImprimirComanda('+pedido_id+');impPosFactura('+pedido_id+')"><span class="fa fa-print"/> Factura+Comanda</button>';
                 //
-                if(isAdmin()){
+                //if(isAdmin()){
                     html+='<button class="boton-inline-grande btn btn-danger imprimir" onclick="gaveta()"><span class="fa fa-inbox"/> ABRIR CAJÓN</button>';
-                }
+                //}
             }
         }
         html+=html2+'</div>';
@@ -1330,10 +1330,10 @@ function impPosFactura(id){
 }
 function gaveta(){
     imprimiendo();
-    if(!isAdmin()){
-        mostrarError('Acción no permitida');
-        return false;
-    }
+    //if(!isAdmin()){
+    //    mostrarError('Acción no permitida');
+    //    return false;
+    //}
     if(servicio_impresion=="" || servicio_impresion==null){
         $.get('/config/servicio-impresion', function (data) {
             servicio_impresion = data;

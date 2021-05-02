@@ -155,7 +155,7 @@
             </div>
             
             
-            <div class = "col-md-3">
+            <div class = "col-md-2">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('paga_efectivo')) ? 'has-error'  :''}}">
                     <label for = "paga_efectivo" class = "control-label">Efectivo</label>
                     <div class="input-group">
@@ -165,7 +165,7 @@
                     <div class = "help-block with-errors">{{ $errors->first('paga_efectivo') }}</div>
                 </div>
             </div>
-            <div class = "col-md-3">
+            <div class = "col-md-2">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('paga_debito')) ? 'has-error'  :''}}">
                     <label for = "paga_debito" class = "control-label">Débito</label>
                     <div class="input-group">
@@ -175,7 +175,7 @@
                     <div class = "help-block with-errors">{{ $errors->first('paga_debito') }}</div>
                 </div>
             </div>
-            <div class = "col-md-3">
+            <div class = "col-md-2">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('paga_credito')) ? 'has-error'  :''}}">
                     <label for = "paga_credito" class = "control-label">Crédito</label>
                     <div class="input-group">
@@ -185,7 +185,7 @@
                     <div class = "help-block with-errors">{{ $errors->first('paga_credito') }}</div>
                 </div>
             </div>
-            <div class = "col-md-3">
+            <div class = "col-md-2">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('paga_transferencia')) ? 'has-error'  :''}}">
                     <label for = "paga_transferencia" class = "control-label">Transferencia</label>
                     <div class="input-group">
@@ -195,12 +195,17 @@
                     <div class = "help-block with-errors">{{ $errors->first('paga_transferencia') }}</div>
                 </div>
             </div>
-            <div class="col-md-12 total-error">
-                <div class="alert alert-danger"  style="width: 100%;" role="alert">
-                    La suma de los métodos de pago debe ser igual al total del documento
+            <div class = "col-md-2">
+                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('descuento')) ? 'has-error'  :''}}">
+                    <label for = "descuento" class = "control-label">Descuento</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        <input name="descuento" type="text" class="form-control metodo-pago" value="{{ number_format(old('descuento')?old('descuento'):$documento->descuento, 0) }}"/>
+                    </div>
+                    <div class = "help-block with-errors">{{ $errors->first('descuento') }}</div>
                 </div>
             </div>
-            <div class = "col-md-3">
+            <div class = "col-md-2">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('total')) ? 'has-error'  :''}}">
                     <label for = "total" class = "control-label">Total Documento</label>
                     <div class="input-group">
@@ -208,6 +213,11 @@
                         <input id='total' readonly type="text" class="form-control" value="{{ number_format(old('total')?old('total'):$documento->total, 0) }}"/>
                     </div>
                     <div class = "help-block with-errors">{{ $errors->first('total') }}</div>
+                </div>
+            </div>
+            <div class="col-md-12 total-error">
+                <div class="alert alert-danger"  style="width: 100%;" role="alert">
+                    La suma de los métodos de pago debe ser igual al total del documento
                 </div>
             </div>
             <div class = "col-md-6">
