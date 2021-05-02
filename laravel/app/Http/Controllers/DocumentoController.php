@@ -167,13 +167,13 @@ class DocumentoController extends Controller
             join {$this->conn}_tipo_producto as tp
             on pr.tipo_producto_id = tp.id
 
-            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
+            where d.fecha_anulado is null and d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
             $caja_condicion_d 
             group by 1
             
             UNION ALL
             Select 'Otros' as descripcion, 1 as cantidad, sum(total) as total, numdoc, id
-            from pizza_documento where tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
+            from pizza_documento where fecha_anulado is null and tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
             and created_at >= $fecha_inicio and created_at <= $fecha_fin 
             $caja_condicion_f
             ");
@@ -182,6 +182,12 @@ class DocumentoController extends Controller
             select min(numdoc) as min, max(numdoc) as max, count(numdoc) as count
             from {$this->conn}_documento d
             where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
+            $caja_condicion_d 
+            ");
+        
+        $anulados = DB::select("
+            select tipodoc, numdoc from pizza_documento d
+            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.fecha_anulado is not null 
             $caja_condicion_d 
             ");
 
@@ -225,7 +231,7 @@ class DocumentoController extends Controller
         $fecha_inicio = date_format($fecha_inicio, "d/m/Y g:ia");
         $fecha_fin = date_format($fecha_fin, "d/m/Y g:ia");
             
-        $html = \App\Util\PDF::ImpCuadre($cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id);
+        $html = \App\Util\PDF::ImpCuadre($cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id, $anulados);
         if($mail){
             return response()->json(array('code'=>200,'msg'=>$html));
         }
@@ -471,13 +477,15 @@ class DocumentoController extends Controller
             join {$this->conn}_tipo_producto as tp
             on pr.tipo_producto_id = tp.id
 
-            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
+            where d.fecha_anulado is null 
+            and d.created_at >= $fecha_inicio 
+            and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
             $caja_condicion_d
             group by 1
             
             UNION ALL
             Select 'Otros' as descripcion, 1 as cantidad, sum(total) as total, numdoc, id
-            from pizza_documento where tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
+            from pizza_documento where fecha_anulado is null and tipodoc = 'FV' and (pedido_id = 0 or pedido_id is NULL)
             and created_at >= $fecha_inicio and created_at <= $fecha_fin  
             $caja_condicion_f
         ");
@@ -486,6 +494,12 @@ class DocumentoController extends Controller
             select min(numdoc) as min, max(numdoc) as max, count(numdoc) as count
             from {$this->conn}_documento d
             where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.tipodoc = 'FV' 
+            $caja_condicion_d 
+        ");
+
+        $anulados = DB::select("
+            select tipodoc, numdoc from {$this->conn}_documento d
+            where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.fecha_anulado is not null 
             $caja_condicion_d 
         ");
 
@@ -529,7 +543,7 @@ class DocumentoController extends Controller
         $fecha_inicio = date_format($fecha_inicio, "d/m/Y g:ia");
         $fecha_fin = date_format($fecha_fin, "d/m/Y g:ia");
 
-        return (\App\Util\POS::cuadrePos(app('App\Http\Controllers\ConfigController')->first(),$cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id, Auth::user()->caja_id));
+        return (\App\Util\POS::cuadrePos(app('App\Http\Controllers\ConfigController')->first(),$cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id, Auth::user()->caja_id, $anulados));
     }
 
     public function crear(){
