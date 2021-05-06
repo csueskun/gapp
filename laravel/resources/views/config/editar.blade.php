@@ -160,6 +160,13 @@
                         </div>
                     </div>
                     <div class="col-md-3">
+                        <div class = "form-group has-feedback {{ ($errors->first('fvcodprefijo')) ? 'has-error'  :''}}">
+                            <label for = "fvcodprefijo" class = "control-label">Prefijo factura</label><br/>
+                            <input type = "text" maxlength='4' class = "form-control" id = "fvcodprefijo" name = "fvcodprefijo" value = "{{ old('fvcodprefijo')?old('fvcodprefijo'):$config->fvcodprefijo }}">
+                            <div class = "help-block with-errors">{{ $errors->first('fvcodprefijo') }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <div class = "form-group has-feedback {{ ($errors->first('propina')) ? 'has-error'  :''}}">
                             <label for = "propina" class = "control-label">Propina por defecto (%)</label><br/>
                             <input type = "number" step="0.1" class = "form-control" id = "propina" name = "propina" value = "{{ old('propina')?old('propina'):$config->propina }}">

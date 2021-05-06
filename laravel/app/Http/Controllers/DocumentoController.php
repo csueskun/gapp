@@ -186,7 +186,7 @@ class DocumentoController extends Controller
             ");
         
         $anulados = DB::select("
-            select tipodoc, numdoc from pizza_documento d
+            select tipodoc, codprefijo, numdoc from pizza_documento d
             where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.fecha_anulado is not null 
             $caja_condicion_d 
             ");
@@ -230,7 +230,7 @@ class DocumentoController extends Controller
         }
         $fecha_inicio = date_format($fecha_inicio, "d/m/Y g:ia");
         $fecha_fin = date_format($fecha_fin, "d/m/Y g:ia");
-            
+        
         $html = \App\Util\PDF::ImpCuadre($cuadre, $fv, $fv_count, $fecha_inicio, $fecha_fin, $descuentos, $propinas, $total, $caja_id, $anulados);
         if($mail){
             return response()->json(array('code'=>200,'msg'=>$html));
@@ -498,7 +498,7 @@ class DocumentoController extends Controller
         ");
 
         $anulados = DB::select("
-            select tipodoc, numdoc from {$this->conn}_documento d
+            select tipodoc, codprefijo, numdoc from {$this->conn}_documento d
             where d.created_at >= $fecha_inicio and d.created_at <= $fecha_fin and d.fecha_anulado is not null 
             $caja_condicion_d 
         ");
@@ -597,7 +597,12 @@ class DocumentoController extends Controller
             $documento->pedido_id = 0;
 
             $tipo_documento_ = app('App\Http\Controllers\TipoDocumentoController')->siguienteTipo($documento->tipodoc);
-            $documento->numdoc = str_pad($tipo_documento_->consecutivo, 8, "0", STR_PAD_LEFT);
+            // $documento->numdoc = str_pad($tipo_documento_->consecutivo, 8, "0", STR_PAD_LEFT);
+            $documento->numdoc = strval($tipo_documento_->consecutivo);
+            if($documento->tipodoc=='FV'){
+                $config = app('App\Http\Controllers\ConfigController')->first();
+                $documento->codprefijo = $config->fvcodprefijo;
+            }
             $documento->save();
 
             $tipo_documento_->aumentarConsecutivo();
@@ -793,8 +798,12 @@ class DocumentoController extends Controller
         $documento->paga_efectivo = $request->valor;
         $documento->tercero_id = 1;
         $tipo_documento_ = app('App\Http\Controllers\TipoDocumentoController')->siguienteTipo($documento->tipodoc);
-        $documento->numdoc = str_pad($tipo_documento_->consecutivo, 8, "0", STR_PAD_LEFT);
-
+        // $documento->numdoc = str_pad($tipo_documento_->consecutivo, 8, "0", STR_PAD_LEFT);
+        $documento->numdoc = strval($tipo_documento_->consecutivo);
+        if($documento->tipodoc=='FV'){
+            $config = app('App\Http\Controllers\ConfigController')->first();
+            $documento->codprefijo = $config->fvcodprefijo;
+        }
         $documento->save();
         $tipo_documento_->aumentarConsecutivo();
 

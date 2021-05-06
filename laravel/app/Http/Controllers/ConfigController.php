@@ -38,6 +38,7 @@ class ConfigController extends Controller
             $config->iva = 0;
             $config->impcon = 0;
             $config->propina = 0;
+            $config->fvcodprefijo = '00';
             $config->valida_inventario = 0;
             $config->subtotales_factura = 1;
             $config->save();
@@ -178,6 +179,7 @@ class ConfigController extends Controller
             $config->valor_alf = Input::get('valor_alf');
             $config->valida_inventario = Input::get('valida_inventario');
             $config->propina = Input::get('propina');
+            $config->fvcodprefijo = Input::get('fvcodprefijo');
             $config->subtotales_factura = Input::get('subtotales_factura');
             $config->save();
         
@@ -232,6 +234,7 @@ class ConfigController extends Controller
             $config->pie_pos = Input::get('pie_pos');
             $config->valida_inventario = Input::get('valida_inventario');
             $config->propina = Input::get('propina');
+            $config->fvcodprefijo = Input::get('fvcodprefijo');
             $config->subtotales_factura = Input::get('subtotales_factura');
             $config->save();
         

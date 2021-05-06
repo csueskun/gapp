@@ -787,11 +787,11 @@ class POS{
         $first = true;
         foreach ($anulados as $anulado) {
             if($first){
-                $linea = self::impLinea('ANULADOS:', $anulado->tipodoc.$anulado->numdoc, $caracteres);
+                $linea = self::impLinea('ANULADOS:', $anulado->tipodoc.$anulado->codprefijo.$anulado->numdoc, $caracteres);
                 $first = false;
             }
             else{
-                $linea = self::impLinea('', $anulado->tipodoc.$anulado->numdoc, $caracteres);
+                $linea = self::impLinea('', $anulado->tipodoc.$anulado->codprefijo.$anulado->numdoc, $caracteres);
             }
             $stack[] = ["i"=>"texto","v"=>$linea];
         }
