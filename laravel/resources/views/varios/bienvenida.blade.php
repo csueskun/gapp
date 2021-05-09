@@ -5,6 +5,7 @@
 @section('lib')
 {{ Html::script('js/moment.js') }}
 {{ Html::script('js/moment.es.js') }}
+{{ Html::script('/controller/menu.js') }}
 @endsection
 
 <section class="borde-inferior lista fondo-rojo">
@@ -14,6 +15,26 @@
 </section>
 
 <section class="borde-inferior lista fondo-comun">
+    <br>
+    <div class="col-xs-12" style="text-align: center">
+        <div class="input-group">
+            <span class="input-group-btn"  style="font-family: 'bebas_neuebold';">
+                @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Cajero')
+                <a class="btn btn-success" data-toggle="modal" data-target="#modal_pagar" type="button" style="font-size: 20px">
+                    <i class="fa fa-usd"></i> Pagos/Compras
+                </a>
+                @endif
+                <button class="btn btn-primary" type="button" onclick="$('.fecha_toma_pedido').toggle();" style="font-size: 20px">
+                    <span class="fa fa-eye"></span> Tiempo
+                </button>
+                <button class="btn btn-warning" type="button"  data-toggle="modal" data-target="#modal_cambiar_mesa"  style="font-size: 20px" onclick="cargarOcupadas()">
+                    <i class="glyphicon glyphicon-random"></i> Traslados
+                </button>
+            </span>
+        </div>
+    </div>
+    <br>
+    <br>
     <div class="container_ centrado" style="margin: auto">
         @include('template.status', ['status' => session('status')])
         <br/>
@@ -40,19 +61,6 @@
         
     </div>
     
-    <br/>
-    <div class="col-xs-12" style="text-align: center">
-        <div class="input-group">
-            <span class="input-group-btn"  style="font-family: 'bebas_neuebold';">
-                <button class="btn btn-primary" type="button" onclick="$('.fecha_toma_pedido').toggle();" style="font-size: 20px">
-                    <span class="fa fa-eye"></span> Tiempo
-                </button>
-                <button class="btn btn-warning" type="button"  data-toggle="modal" data-target="#modal_cambiar_mesa"  style="font-size: 20px" onclick="cargarOcupadas()">
-                    <i class="glyphicon glyphicon-random"></i> Traslados
-                </button>
-            </span>
-        </div>
-    </div>
     <br/>
     <br/>
     <br/>
@@ -107,6 +115,82 @@
         </div>
     </div>
 </div>
+<div ng-app="myApp" ng-controller="menuController">
+    <div class="modal fade" tabindex="-1" role="dialog" id='modal_pagar' aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="width: 630px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <table style='width: 100%'>
+                        <tr>
+                            <td>
+                                <h2 class="fuente bebas ml-2" style="margin-top: 0px; margin-bottom: 0px;">Pago/Compra</h2>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="col-md-12">
+                                    <label class="xl">Tipo de documento: </label>   
+                                </div>
+                                <div class="col-md-12">
+                                    <select required class="xl form-control" name="" id="" ng-model="pagoCompra.tipodoc">
+                                        <option ng-repeat='tipo in tipoDocumentos' value="@{{tipo.codigo}}">@{{tipo.descripcion}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="xl">Valor: </label>   
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-success" ng-click='pagoCompra.valor = pagoCompra.valor + 500' style="font-size: 25px">
+                                                <i class="fa fa-plus-square"></i>
+                                            </button>
+                                        </div>
+                                        <input required type="number" min="0" ng-model="pagoCompra.valor" class="xl form-control centrado">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-danger" ng-click='pagoCompra.valor = pagoCompra.valor - 500' style="font-size: 25px">
+                                                <i class="fa fa-minus-square"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="xl">Tipo: </label>   
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="checkbox-inline xl" ng-click="pagoCompra.tipo='PAGO'">
+                                        PAGO
+                                        <i class="fa" ng-class="{'fa-check-circle-o color-success': pagoCompra.tipo=='PAGO', 'fa-circle-o': pagoCompra.tipo!='PAGO'}"></i>
+                                    </label>
+                                    <label class="checkbox-inline xl" ng-click="pagoCompra.tipo='COMPRA'">
+                                        COMPRA
+                                        <i class="fa" ng-class="{'fa-check-circle-o color-success': pagoCompra.tipo=='COMPRA', 'fa-circle-o': pagoCompra.tipo!='COMPRA'}"></i>
+                                    </label>
+                                    <label class="checkbox-inline xl" ng-click="pagoCompra.tipo='VENTA'">
+                                        VENTA
+                                        <i class="fa" ng-class="{'fa-check-circle-o color-success': pagoCompra.tipo=='VENTA', 'fa-circle-o': pagoCompra.tipo!='VENTA'}"></i>
+                                    </label>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="xl">Observaciones: </label>   
+                                </div>
+                                <div class="col-md-12">
+                                    <textarea class="form-control xl" ng-model="pagoCompra.observacion" name="obs" style="height: 120px"></textarea>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-disabled="saving || !(pagoCompra.tipodoc&&pagoCompra.valor&&pagoCompra.observacion)" class="btn btn-success min" ng-click="savePagoCompra()"> <i class="fa fa-save"></i> Guardar</button>
+                    <button type="button" class="btn btn-default min" data-dismiss="modal"> <i class="fa fa-door-open"></i> Salir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <script>
     var j = 1; 

@@ -819,6 +819,51 @@ class DocumentoController extends Controller
         return response(array('data'=>''), 200)->header('Content-Type', 'application/json');
     }
 
+    public function savePagoCompra(Request $request){
+
+        $ie = [
+            'RC'=> 'I',
+            'RT'=> 'E',
+            'CE'=> 'E',
+            'BI'=> 'I',
+            'PN'=> 'E',
+            'CI'=> 'I'
+        ];
+
+        $data = $request->all();
+        $documento = new Documento;
+        $documento->total = $request->valor;
+        $documento->observacion = $request->tipo . ' ' .$request->observacion;
+        $documento->tipodoc = $request->tipodoc;
+        $documento->pedido_id = 0;
+        $documento->mesa_id = 999;
+        $documento->usuario_id = Auth::user()->id;
+        $documento->caja_id = Auth::user()->caja_id;
+        $documento->tipoie = $ie[$request->tipodoc];
+        $documento->paga_efectivo = $request->valor;
+        $documento->tercero_id = 1;
+        $tipo_documento_ = app('App\Http\Controllers\TipoDocumentoController')->siguienteTipo($documento->tipodoc);
+        // $documento->numdoc = str_pad($tipo_documento_->consecutivo, 8, "0", STR_PAD_LEFT);
+        $documento->numdoc = strval($tipo_documento_->consecutivo);
+        if($documento->tipodoc=='FV'){
+            $config = app('App\Http\Controllers\ConfigController')->first();
+            $documento->codprefijo = $config->fvcodprefijo;
+        }
+        $documento->save();
+        $tipo_documento_->aumentarConsecutivo();
+
+        $detalleDocumento = new DetalleDocumento;
+        $detalleDocumento->documento_id = $documento->id;
+        $detalleDocumento->producto_id = 1;
+        $detalleDocumento->cantidad = 1;
+        $detalleDocumento->valor = $documento->total;
+        $detalleDocumento->total = $documento->total;
+        $detalleDocumento->detalle = $documento->observacion;
+        $detalleDocumento->save();
+
+        return response(array('data'=>''), 200)->header('Content-Type', 'application/json');
+    }
+
     public function anular($id, Request $request){
         $justificacion = Input::get('justificacion');
         $data = ['id'=> $id, 'r'=> $request->justificacion, 'justificacion'=>$justificacion];

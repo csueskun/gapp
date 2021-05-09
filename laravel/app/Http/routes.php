@@ -593,6 +593,7 @@ Route::post('/producto_pedido_documento/borrar', 'ProductoPedidoDocumentoControl
 */
 Route::get('/prepare-domicilio-documento', 'TipoDocumentoController@prepareDomicilioDocumento');
 Route::post('/domicilio-documento', 'DocumentoController@saveDomicilioDocumento');
+Route::post('/pago-compra', 'DocumentoController@savePagoCompra');
 /*
 Route::get('/tipo_documento/listar', function () {
     return view('tipo_documento.listar')

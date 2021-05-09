@@ -1,5 +1,5 @@
 <div class="modal fade" tabindex="-1" role="dialog" id='modal_pagar' aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="width: 630px;">
+    <div class="modal-dialog" role="document" style="width: 670px;">
         <div class="modal-content" id='content-pagar'>
             <!-- <div class="modal-header" style="">
                 <h1 class="modal-title" id="exampleModalLabel">Observaciones</h1>
