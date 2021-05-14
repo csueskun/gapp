@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade as PDF;
 use DB;
 
 class InformeController extends Controller
@@ -179,6 +180,10 @@ class InformeController extends Controller
         return view('mesero.informe')->with('meseros', $meseros);
     }
 
+    public function vistaBanco() {
+        return view('bancos.informe');
+    }
+
     public function vistaMasVendido() {
         return view('varios.vendido');
     }
@@ -237,6 +242,32 @@ class InformeController extends Controller
         $html = \App\Util\PDF::reporteMesero($res, $fecha_inicio, $fecha_fin, $mesero);
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadHTML($html)->setPaper("A4", "portrait");
+        return $pdf->stream();
+    }
+
+    public function informeBanco() {
+        $banco = Input::get("banco");
+        $cond = '';
+        $fecha_inicio = Input::get("fecha_inicio");
+        $fecha_fin = Input::get("fecha_fin");
+        if($banco != 'T'){
+            $cond = " and (banco = $banco or banco is null)";
+            $banco = Input::get("nombre_banco");
+        }
+        $res = DB::select("
+        select if(banco=0,'CAJA GENERAL',BANCO) as formapago, sum(paga_efectivo) as efectivo, sum(paga_debito) as debito, 
+        sum(paga_credito) as credito, sum(paga_transferencia) as transferencia, sum(paga_efectivo + paga_debito + paga_credito + paga_transferencia) as total
+        from pizza_documento 
+        where created_at BETWEEN '$fecha_inicio' and  '$fecha_fin' and tipodoc = 'FV' $cond
+        group by banco
+        ");
+        $pdf = PDF::loadView('bancos.template', [
+            'pagos' => $res,
+            'banco' => $banco,
+            'fecha_inicio' => $fecha_inicio,
+            'fecha_inicio' => $fecha_inicio,
+            'fecha_fin' => $fecha_fin,
+        ]);
         return $pdf->stream();
     }
 }

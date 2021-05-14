@@ -146,6 +146,7 @@
             </h2>
             <ul class="nav flex-column">
                 <li class="nav-item"><a href="/mesero/informe" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-address-card" aria-hidden="true"></i> Ventas por usuario</a></li>
+                <li class="nav-item"><a href="/bancos/informe" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-address-card" aria-hidden="true"></i> Ventas por banco</a></li>
                 <li class="nav-item"><a href="/saldos_producto" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-file-text-o" aria-hidden="true"></i> Inventario</a></li>
                 <li class="nav-item"><a href="/informe" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-database" aria-hidden="true"></i> Histórico</a></li>
             </ul>

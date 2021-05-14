@@ -17,6 +17,7 @@
 <section class="borde-inferior lista fondo-comun">
     <br>
     <div class="col-xs-12" style="text-align: center">
+        @include('template.status', ['status' => session('status')])
         <div class="input-group">
             <span class="input-group-btn"  style="font-family: 'bebas_neuebold';">
                 @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Cajero')
@@ -36,7 +37,6 @@
     <br>
     <br>
     <div class="container_ centrado" style="margin: auto">
-        @include('template.status', ['status' => session('status')])
         <br/>
         <a href="/mesa/0" class="btn btn-warning cuadrado boton-grande mesa">
             <span>&nbsp;</span>

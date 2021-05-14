@@ -784,6 +784,9 @@ Route::patch('/producto-pedido/{id}/obs', 'ProductoPedidoController@patchObs');
 Route::get('/mesero/informe', 'InformeController@vistaMesero');
 Route::post('/mesero/informe', 'InformeController@informeMesero');
 
+Route::get('/bancos/informe', 'InformeController@vistaBanco');
+Route::post('/bancos/informe', 'InformeController@informeBanco');
+
 Route::get('/mesax/{mesa}', 'ConfigController@vistaMenu');
 Route::get('/preMenu/{mesa}', 'ConfigController@preMenu');
 Route::get('/adding-producto/{id}', 'ProductoController@adding');
