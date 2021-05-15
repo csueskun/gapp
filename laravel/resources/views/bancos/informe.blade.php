@@ -29,19 +29,18 @@
                         <label>Banco</label>
                         <select name="banco" class="form-control">
                             <option value="T">Todos</option>
-                            <option value="0">CAJA GENERAL</option>
-                            <option value="1">BANCOLOMBIA</option>
-                            <option value="2">BANCO BOGOTÁ</option>
-                            <option value="3">DAVIVIENDA</option>
-                            <option value="4">BANCO CAJA SOCIAL</option>
-                            <option value="5">BANCO AVVILLAS</option>
-                            <option value="6">BANCO BBVA</option>
-                            <option value="7">BANCO FALLABELA</option>
-                            <option value="8">BANCO POPULAR</option>
-                            <option value="9">BANCO DE OCCIDENTE</option>
-                            <option value="10">BANCO COLPATRIA</option>
-                            <option value="11">CITIBANK</option>
-                            <option value="12">BANCO SANTANDER</option>
+                            <option value="0">Caja General</option>
+                            <option value="1">BanColombia</option>
+                                        <option value="2">Banco Bogotá</option>
+                                        <option value="3">Davivienda</option>
+                                        <option value="4">BBVA</option>
+                                        <option value="5">Uplace Colombia</option>
+                                        <option value="6">Domicilios.com</option>
+                                        <option value="7">Rappi</option>
+                                        <option value="8">Ifood</option>
+                                        <option value="9">Nequi</option>
+                                        <option value="10">Otro</option>
+
                         </select>
                     </div>
                 </div>

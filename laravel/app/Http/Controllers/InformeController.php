@@ -255,7 +255,7 @@ class InformeController extends Controller
             $banco = Input::get("nombre_banco");
         }
         $res = DB::select("
-        select if(banco=0,'CAJA GENERAL',BANCO) as formapago, sum(paga_efectivo) as efectivo, sum(paga_debito) as debito, 
+        select if(banco=0,'Caja General',BANCO) as formapago, sum(paga_efectivo) as efectivo, sum(paga_debito) as debito, 
         sum(paga_credito) as credito, sum(paga_transferencia) as transferencia, sum(paga_efectivo + paga_debito + paga_credito + paga_transferencia) as total
         from pizza_documento 
         where created_at BETWEEN '$fecha_inicio' and  '$fecha_fin' and tipodoc = 'FV' $cond

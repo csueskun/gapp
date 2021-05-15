@@ -99,15 +99,14 @@
             "b1"=>"BANCOLOMBIA",
             "b2"=>"BANCO BOGOTÁ",
             "b3"=>"DAVIVIENDA",
-            "b4"=>"BANCO CAJA SOCIAL",
-            "b5"=>"BANCO AVVILLAS",
-            "b6"=>"BANCO BBVA",
-            "b7"=>"BANCO FALLABELA",
-            "b8"=>"BANCO POPULAR",
-            "b9"=>"BANCO DE OCCIDENTE",
-            "b10"=>"BANCO COLPATRIA",
-            "b11"=>"CITIBANK",
-            "b12"=>"BANCO SANTANDER"
+            "b4"=>"BANCO BBVA",
+            "b5"=>"UPLACE COLOMBIA",
+            "b6"=>"DOMICILIOS.COM",
+            "b7"=>"RAPPI",
+            "b8"=>"IFOOD",
+            "b9"=>"NEQUI",
+            "b10"=>"OTRO",
+            
         ];
         $total = [0, 0, 0, 0, 0];
         foreach($pagos as $pago){
