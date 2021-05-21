@@ -91,12 +91,17 @@ class ConfigController extends Controller
     
     public function resetTurno() {
         try {
-            $desde = date('Y-m-d 03:00:00');
-            $cuadre = DB::select("select count(id) from pizza_pedido where created_at > '$desde'");
-            Config::where('id', '>', 0)->update(['turno'=>1]);
+            $desde = date('Y-m-d 04:00:00');
+            $now = date('Y-m-d H:i:s');
+            if($now>$desde){
+                $cantidad = DB::select("select count(id) as c from pizza_pedido where created_at > '$desde'");
+                if($cantidad[0]->c > 0){
+                }
+                else{
+                    Config::where('id', '>', 0)->update(['turno'=>1]);
+                }
+            }
         } catch (\Throwable $th) {
-            var_dump($th);
-            asldkjaskld;
         }
     }
 
