@@ -195,12 +195,12 @@ $(function () {
     })
 
     $('body').not("input").on('keyup', function(event) {
-        if(!$(event.target).is(':input')){
-            hotKey(event.keyCode);
-        }
-        else{
-            hotKey(event.keyCode);
-        }
+       // if(!$(event.target).is(':input')){
+       //     hotKey(event.keyCode);
+       // }
+       // else{
+       //     hotKey(event.keyCode);
+       // }
     });
 
     $('div.tamano>label>input[value=grande]').prop('checked', true);
