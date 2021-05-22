@@ -1759,6 +1759,7 @@ function preCancelarPedido(callback){
         );
 }
 function hotKey(key){
+    return false;
     if(!altDown){
         return false;
     }
