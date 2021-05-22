@@ -108,7 +108,7 @@
                 <tr id='{{ $documento->id }}' class="{{$documento->fecha_anulado?'anulado':''}}">
                     <!--<td>{{ array("FV"=>"Factura de Venta", "NI"=>"Nota Inventario", "FC"=>"Factura de Compra", "PN"=>"Pago de Nómina", "BI"=>"Base Inicial", "NI"=>"Nota de inventario", "CO"=>"Consumo","RC"=>"Recibo de Cartera","RT"=>"Recibo de Tesorería","CI"=>"Comprobante de Ingreso","CE"=>"Comprobante de Egreso")[$documento->tipodoc] }}</td>-->
                     <td>{{ $documento->tipodoc }}</td>
-                    <td>{{ $documento->numdoc }}</td>
+                    <td>{{ $documento->codprefijo }}{{ $documento->numdoc }}</td>
                     <td>{{ $documento->tercero?$documento->tercero->nombrecompleto:'VARIOS' }}</td>
                     <td>{{ $documento->caja_id }}</td>  
                     <td>{{ $documento->mesa_id==999?'':$documento->mesa_id }}</td>

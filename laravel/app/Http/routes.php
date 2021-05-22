@@ -593,6 +593,7 @@ Route::post('/producto_pedido_documento/borrar', 'ProductoPedidoDocumentoControl
 */
 Route::get('/prepare-domicilio-documento', 'TipoDocumentoController@prepareDomicilioDocumento');
 Route::post('/domicilio-documento', 'DocumentoController@saveDomicilioDocumento');
+Route::post('/pago-compra', 'DocumentoController@savePagoCompra');
 /*
 Route::get('/tipo_documento/listar', function () {
     return view('tipo_documento.listar')
@@ -782,6 +783,9 @@ Route::patch('/producto-pedido/{id}/obs', 'ProductoPedidoController@patchObs');
 
 Route::get('/mesero/informe', 'InformeController@vistaMesero');
 Route::post('/mesero/informe', 'InformeController@informeMesero');
+
+Route::get('/bancos/informe', 'InformeController@vistaBanco');
+Route::post('/bancos/informe', 'InformeController@informeBanco');
 
 Route::get('/mesax/{mesa}', 'ConfigController@vistaMenu');
 Route::get('/preMenu/{mesa}', 'ConfigController@preMenu');

@@ -143,6 +143,7 @@ app.controller('menuController', function($scope, $http) {
 
     $scope.tipoDocumentos = [];
     $scope.domicilioDocumento = {valor: 4000, observacion: 'Domicilio'};
+    $scope.pagoCompra = {valor: 0, tipo: 'PAGO'};
 
     $scope.loadTipoDocumentos = function(){
         mostrarFullLoading();
@@ -153,7 +154,7 @@ app.controller('menuController', function($scope, $http) {
                 if(response.status == 200){
                     $scope.tipoDocumentos = [];
                     response.data.data.forEach(function(t){
-                        if(['RC', 'RT', 'CE', 'CI'].includes(t.codigo)){
+                        if(['RC', 'RT', 'CE', 'CI', 'BI', 'PN'].includes(t.codigo)){
                             $scope.tipoDocumentos.push(t);
                         }
                     });                    
@@ -178,6 +179,24 @@ app.controller('menuController', function($scope, $http) {
                 $scope.saving = false;
                 $scope.domicilioDocumento = {valor: 4000, observacion: 'Domicilio'};
                 if(response.status == 200){
+                    mostrarSuccess('Documento registrado.');
+                }
+                else{
+                    mostrarWarning('No se pudo registrar el documento.');
+                }
+            }
+        );
+    }
+    $scope.savePagoCompra = function(){
+        var data = $scope.pagoCompra;
+        $scope.saving = true;
+        $http.post("/pago-compra", data)
+        .then(
+            function(response){
+                $scope.saving = false;
+                $scope.pagoCompra = {valor: 0, tipo: 'PAGO'};;
+                if(response.status == 200){
+                    $('#modal_pagar').modal('hide');
                     mostrarSuccess('Documento registrado.');
                 }
                 else{

@@ -38,6 +38,7 @@ class ConfigController extends Controller
             $config->iva = 0;
             $config->impcon = 0;
             $config->propina = 0;
+            $config->fvcodprefijo = '00';
             $config->valida_inventario = 0;
             $config->subtotales_factura = 1;
             $config->save();
@@ -90,12 +91,17 @@ class ConfigController extends Controller
     
     public function resetTurno() {
         try {
-            $desde = date('Y-m-d 03:00:00');
-            $cuadre = DB::select("select count(id) from pizza_pedido where created_at > '$desde'");
-            Config::where('id', '>', 0)->update(['turno'=>1]);
+            $desde = date('Y-m-d 04:00:00');
+            $now = date('Y-m-d H:i:s');
+            if($now>$desde){
+                $cantidad = DB::select("select count(id) as c from pizza_pedido where created_at > '$desde'");
+                if($cantidad[0]->c > 0){
+                }
+                else{
+                    Config::where('id', '>', 0)->update(['turno'=>1]);
+                }
+            }
         } catch (\Throwable $th) {
-            var_dump($th);
-            asldkjaskld;
         }
     }
 
@@ -178,6 +184,7 @@ class ConfigController extends Controller
             $config->valor_alf = Input::get('valor_alf');
             $config->valida_inventario = Input::get('valida_inventario');
             $config->propina = Input::get('propina');
+            $config->fvcodprefijo = Input::get('fvcodprefijo');
             $config->subtotales_factura = Input::get('subtotales_factura');
             $config->save();
         
@@ -232,6 +239,7 @@ class ConfigController extends Controller
             $config->pie_pos = Input::get('pie_pos');
             $config->valida_inventario = Input::get('valida_inventario');
             $config->propina = Input::get('propina');
+            $config->fvcodprefijo = Input::get('fvcodprefijo');
             $config->subtotales_factura = Input::get('subtotales_factura');
             $config->save();
         

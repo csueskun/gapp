@@ -369,7 +369,7 @@ class PDF{
             if(count($anulados)){
                 $html .= '<table>';
                 foreach($anulados as $anulado){
-                    $html.= "<tr><td class='al-izq letra-sans mediana'>".($first?"ANULADOS:":"")."</td><td style='width: 180px;font-size: 1.3em;' class='al-der'>" . $anulado->tipodoc.$anulado->numdoc . "</td></tr>";
+                    $html.= "<tr><td class='al-izq letra-sans mediana'>".($first?"ANULADOS:":"")."</td><td style='width: 180px;font-size: 1.3em;' class='al-der'>".$anulado->tipodoc.$anulado->codprefijo.$anulado->numdoc . "</td></tr>";
                     $first = false;
                 }
                 $html .= '</table>';

@@ -61,7 +61,7 @@
                     <td class="centrado">{{ $pedido->mesa_id == 0?'Domicilio':$pedido->mesa_id }}
                         </td>
                     <td>{{ $pedido->turno }}</td>
-                    <td>{{ $pedido->caja }}</td>
+                    <td>{{ $pedido->caja_id }}</td>
                     <td class="">
                     @if(($pedido->obs != null && $pedido->obs != ''))
                     {{isset(json_decode($pedido->obs)->para_llevar)?(" ".json_decode($pedido->obs)->para_llevar.". "):""}}

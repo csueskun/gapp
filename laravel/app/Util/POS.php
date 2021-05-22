@@ -104,8 +104,8 @@ class POS{
                 $texto.= $producto_pedido->producto->descripcion;
                 foreach ($producto_pedido->obs as $observaciones){
                     if(isset($observaciones['sin_ingrediente']) || isset($observaciones['sabor'])){
-                        // $texto.= ("\n");
-                        // $texto.= $observaciones['producto'];
+                       // $texto.= ("\n");
+                       // $texto.= $observaciones['producto'];
                     }
                     if(isset($observaciones['sin_ingrediente'])){
                         $texto.= ("\n");
@@ -787,11 +787,11 @@ class POS{
         $first = true;
         foreach ($anulados as $anulado) {
             if($first){
-                $linea = self::impLinea('ANULADOS:', $anulado->tipodoc.$anulado->numdoc, $caracteres);
+                $linea = self::impLinea('ANULADOS:', $anulado->tipodoc.$anulado->codprefijo.$anulado->numdoc, $caracteres);
                 $first = false;
             }
             else{
-                $linea = self::impLinea('', $anulado->tipodoc.$anulado->numdoc, $caracteres);
+                $linea = self::impLinea('', $anulado->tipodoc.$anulado->codprefijo.$anulado->numdoc, $caracteres);
             }
             $stack[] = ["i"=>"texto","v"=>$linea];
         }

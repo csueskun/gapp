@@ -225,8 +225,14 @@ class PedidoController extends Controller
 
         
         $tipo_documento_ = app('App\Http\Controllers\TipoDocumentoController')->siguienteTipo($documento->tipodoc);
-        $documento->numdoc = str_pad($tipo_documento_->consecutivo, 8, "0", STR_PAD_LEFT);
+        // $documento->numdoc = str_pad($tipo_documento_->consecutivo, 8, "0", STR_PAD_LEFT);
+        $documento->numdoc = strval($tipo_documento_->consecutivo);
 
+
+        if($documento->tipodoc=='FV'){
+            $config = app('App\Http\Controllers\ConfigController')->first();
+            $documento->codprefijo = $config->fvcodprefijo;
+        }
         $documento->save();
         $tipo_documento_->aumentarConsecutivo();
 

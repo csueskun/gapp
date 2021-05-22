@@ -797,3 +797,9 @@ h3.adicionales-header.showing{
     height: 50px;
     padding: 0 4px;
 }
+.color-success{
+    color:#5cb85c;
+}
+.bg-success{
+    background-color:#5cb85c;
+}
