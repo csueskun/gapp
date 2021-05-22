@@ -779,7 +779,7 @@ function impItemPedido(productos_pedido){
             var valorCombo = isNaN(combos[i].precio)?0:parseFloat(combos[i].precio);
             var cantidad = isNaN(combos[i].cantidad)?0:parseInt(combos[i].cantidad);
             valorTotal += valorCombo * cantidad;
-            html+= printCombo(combos[i]);
+            html+= printCombo(combos[i], pedido_activo);
             vacio = false;
         }
         for(var i in productos_pedido){
@@ -907,6 +907,7 @@ function impItemPedido(productos_pedido){
             '    </ul>';
 
     html += descuentoHtml(descuento);
+    html += propinaHtml(propina);
     
     if(!vacio){
         html += '' +
@@ -976,6 +977,25 @@ function descuentoHtml(descuento = 0){
         <span class="producto">Descuento:</span>
         <div class="btn-group">
             <span class="btn btn-success total valor" total="">${descuento}</span>
+        </div>
+        </li>
+        </ul>`;
+    return html;
+}
+function propinaHtml(propina = 0){
+    var style = 'display: none';
+    if(propina == 0 || propina == null){
+        propina = '$ 0';
+    }
+    else{
+        propina = accounting.formatMoney(propina, '$', 0);
+        style = ''
+    }
+    var html = `<ul class="list-group items_pedido" id="descuento" style="${style}">
+        <li class="list-group-item" style="height: 48px">
+        <span class="producto">Propina:</span>
+        <div class="btn-group">
+            <span class="btn btn-success total valor" total="">${propina}</span>
         </div>
         </li>
         </ul>`;

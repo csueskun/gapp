@@ -70,7 +70,7 @@
                     </td>
                     <td class="centrado">{{ $pedido->mesa_id == 0?'Domicilio':$pedido->mesa_id }}</td>
                     <td>{{ $pedido->turno }}</td>
-                    <td>{{ $pedido->caja }}</td>
+                    <td>{{ $pedido->caja_id }}</td>
                     <td class="align-right min-width centrado">{{ count($pedido->productos) }}</td>
                     <td class="align-right">${{ number_format($pedido->total, 0) }}</td>
                     <td class="">{{ $pedido->usuario['nombres'] }} </td>
