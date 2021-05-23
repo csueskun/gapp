@@ -171,7 +171,7 @@
                                         <i class="fa" ng-class="{'fa-check-circle-o color-success': pagoCompra.tipo=='VENTA', 'fa-circle-o': pagoCompra.tipo!='VENTA'}"></i>
                                     </label>
                                     <label class="checkbox-inline xl" ng-click="pagoCompra.tipo='OTRO'">
-                                        OTRO CONCEPTO
+                                        OTRO CONCEPTO   
                                         <i class="fa" ng-class="{'fa-check-circle-o color-success': pagoCompra.tipo=='OTRO', 'fa-circle-o': pagoCompra.tipo!='OTRO'}"></i>
                                     </label>
                                 </div>
