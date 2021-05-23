@@ -23,9 +23,11 @@
             </a>
         @else
             <h1 class="titulo titulo-boton">Detalles del pedido</h1>
-
-            <a class="btn btn-default" href="../listar?ordenar_por=id&sentido=desc">
-                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Volver a pedidos archivados
+            <a class="btn btn-default font bebas" href="../listar?ordenar_por=id&sentido=desc">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Ir a pedidos activos
+            </a>
+            <a class="btn btn-default font bebas" href="../archivados?ordenar_por=id&sentido=desc">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Ir a pedidos archivados
             </a>
         @endif
         <br/>
@@ -37,52 +39,81 @@
         <br/>
         @include('template.status', ['status' => session('status')])
         <br/>
-        <span><h4 class="titulo">Número de Orden: </h4><h2 class="titulo">{{$pedido->id}}</h2></span>
-        <br/>
-        <span><h4 class="titulo">Creación: </h4><h2 class="titulo">{{ $pedido->fechaC }}</h2></span>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        @if($pedido->estado == 2)
-        <br/>
-        <span><h4 class="titulo">Pagado: </h4><h2 class="titulo">{{$pedido->fechaU}}</h2></span>
-        @endif
-        <br/>
-        <span><h4 class="titulo">Mesero: </h4><h2 class="titulo">{{$pedido->usuario->nombres}} {{$pedido->usuario->apellidos}}</h2></span>
-        @if($pedido->mesa_id != 0)
-        
-        <br/>
-        <span><h4 class="titulo">Mesa Número: </h4><h2 class="titulo">{{$pedido->mesa_id}}</h2></span>
-        
-        @endif
-        <br/>
-        @if($pedido->mesa_id == 0)
-        @if(($pedido->obs != null && $pedido->obs != ''))
-        <span><h4 class="titulo">Entregar en: </h4><h2 class="titulo">
-        @if(($pedido->obs != null && $pedido->obs != ''))
-        @if(isset(json_decode($pedido->obs)->entregar_en))
-            @if(json_decode($pedido->obs)->entregar_en=='CAJA')
-            CAJA ({{ isset(json_decode($pedido->obs)->entregar_obs)?json_decode($pedido->obs)->entregar_obs : '' }})
-            @else
-            {{ isset(json_decode($pedido->obs)->entregar_obs)?json_decode($pedido->obs)->entregar_obs : '' }}
-            @endif
-        @endif
-        @endif
-        @endif
-        @else
-        <span><h4 class="titulo">Observación: </h4><h2 class="titulo">
-        @if(($pedido->obs != null && $pedido->obs != ''))
-        {{isset(json_decode($pedido->obs)->para_llevar)?(" ".json_decode($pedido->obs)->para_llevar.". "):""}}
-        {{isset(json_decode($pedido->obs)->observacion)?(json_decode($pedido->obs)->observacion." "):""}}
-        @endif
-        </h2></span>
-        @endif
-        <br/>
-        <br/>
-        
+        <table width="100%">
+            <tr>
+                <th width="140"><h4 class="titulo">Número de Orden: </h4></th>
+                <td><h2 class="titulo">{{$pedido->id}}</h2></td>
+                <th><h4 class="titulo">Creación: </h4></th>
+                <td><h2 class="titulo">{{ $pedido->fechaC }}</h2></td>
+                @if($pedido->estado == 2)
+                <th><h4 class="titulo">Pagado: </h4></th>
+                <td><h2 class="titulo">{{ $pedido->fechaU }}</h2></td>
+                @endif
+            </tr>
+        </table>
+        <table width="100%">
+            <tr>
+                <th width="140"><h4 class="titulo">Mesero: </h4></th>
+                <td><h2 class="titulo">{{$pedido->usuario->nombres}} {{$pedido->usuario->apellidos}}</h2></td>
+                @if($pedido->mesa_id != 0)
+                <th><h4 class="titulo">Mesa Número: </h4></th>
+                <td><h2 class="titulo">{{$pedido->mesa_id}}</h2></td>
+                @endif
+                <th><h4 class="titulo">Turno: </h4></th>
+                <td><h2 class="titulo">{{$pedido->turno}}</h2></td>
+                <th><h4 class="titulo">Caja: </h4></th>
+                <td><h2 class="titulo">{{$pedido->caja_id}}</h2></td>
+            </tr>
+        </table>
+
+        <table width="100%" style="border-bottom: thin solid #bdbdbd;">
+            <tr>
+                @if($pedido->mesa_id == 0)
+                @if(($pedido->obs != null && $pedido->obs != ''))
+                <th width="1"><h4 class="titulo">Entregar en: </h4></th>
+                <td><h2 class="titulo">
+                @if(($pedido->obs != null && $pedido->obs != ''))
+                @if(isset(json_decode($pedido->obs)->entregar_en))
+                    @if(json_decode($pedido->obs)->entregar_en=='CAJA')
+                    CAJA ({{ isset(json_decode($pedido->obs)->entregar_obs)?json_decode($pedido->obs)->entregar_obs : '' }})
+                    @else
+                    {{ isset(json_decode($pedido->obs)->entregar_obs)?json_decode($pedido->obs)->entregar_obs : '' }}
+                    @endif
+                @endif
+                @endif
+                @endif
+                @else
+                <th width="1"><h4 class="titulo">Observación: </h4></th>
+                <td><h2 class="titulo">
+                @if(($pedido->obs != null && $pedido->obs != ''))
+                {{isset(json_decode($pedido->obs)->para_llevar)?(" ".json_decode($pedido->obs)->para_llevar.". "):""}}
+                {{isset(json_decode($pedido->obs)->observacion)?(json_decode($pedido->obs)->observacion." "):""}}
+                @endif
+                </h2></td>
+                @endif
+            </tr>
+        </table>
+        <br>
+        <br>
         <div class="col-xs-12" id="pedido">
         </div>
     </div>
 </section>
 <style>
+
+th{
+    padding: 4px;
+    vertical-align: bottom;
+    border: thin solid #bdbdbd;
+    border-bottom: none;
+}
+td{
+    padding: 4px;
+    vertical-align: middle;
+    border: thin solid #bdbdbd;
+    border-bottom: none;
+
+}
 h4.titulo{
     color: #adadad;
 

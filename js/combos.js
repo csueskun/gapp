@@ -115,7 +115,7 @@ function cancelarCombo(ref){
 function setSpinnerValue(){
     $('div#collapse-combos .number-spinner-valor input').val(comboSelected.precio * 100 / 100);
 }
-function printCombo(combo){
+function printCombo(combo, pedido_activo){
     var detalles = [];
     for(i in combo.productosCombo){
         var comboProducto = combo.productosCombo[i];
@@ -138,12 +138,15 @@ function printCombo(combo){
         cantidad = `<span style="color: #5cb85c">${combo.cantidad}x </span>`;
         combo.precio = parseFloat(combo.precio) * parseInt(combo.cantidad);
     }
-    return html = `
+    var html = `
                 <li class="list-group-item">
                     <span class="producto">${cantidad}${combo.nombre_combo} </span>
                     ${detalles}
                     <div class="spaceholder-valor-item">___________________</div>
-                    <div class="btn-group items">
-                    <span onclick="cancelarCombo(${combo.ref});" class="btn btn-danger total fa fa-trash boton-cancelar"></span>
+                    <div class="btn-group items">`;
+    if(pedido_activo){
+        html += `<span onclick="cancelarCombo(${combo.ref});" class="btn btn-danger total fa fa-trash boton-cancelar"></span>`;
+    }
+    return html += `
                     <span class="btn btn-success valor" valor="${parseFloat(combo.precio)}">${accounting.formatMoney(combo.precio,'$',0)}</span></div></li>`;
 }
