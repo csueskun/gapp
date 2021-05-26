@@ -30,6 +30,7 @@ Route::post('/caja/reporte-tipodoc', 'DocumentoController@reporteTipodoc');
 Route::get('/caja/reporte-ventas', 'DocumentoController@preReporteVentas');
 Route::post('/caja/cuadre-post', 'DocumentoController@preCuadrePos');
 Route::get('/push', 'DocumentoController@push');
+Route::post('/documento/print-post', 'DocumentoController@posPrint');
 
 Route::get('/producto/buscarConTamano/{buscar}', 'ProductoTamanoController@todosConProducto');
 Route::get('/ingrediente/buscar/{buscar}', 'IngredienteController@buscarModal');

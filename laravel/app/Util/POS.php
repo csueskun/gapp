@@ -257,6 +257,48 @@ class POS{
         $stack[] = ["i"=>"texto","v"=>$texto];
         return $stack;
     }
+    public static function printDocumento($config, $documento, $caja){
+        $stack = [];
+        $fecha = date_create($documento->created_at);
+        $fecha = date_format($fecha, "d/m/Y h:ia");
+
+        $texto = '';
+        $pedido = $documento->pedido;
+        if($caja == 2){
+            $caracteres = $config->num_impresora2;
+            $stack[] = ["i"=> "impresora", "v"=> $config->impresora2];
+        }
+        elseif($caja == 3){
+            $caracteres = $config->num_impresora3;
+            $stack[] = ["i"=> "impresora", "v"=> $config->impresora3];
+        }
+        else{
+            $caracteres = $config->num_impresora;
+            $stack[] = ["i"=> "impresora", "v"=> $config->impresora];
+        }
+        $stack[] = ["i"=> "logo", "v"=> 0];
+
+        $text=[];
+        $text[] = ['Fecha:', $fecha];
+        $text[] = ['Documento:', $documento->tipodoc.$documento->numdoc];
+        $text[] = ['Mesa:', $documento->mesa_id];
+        $text[] = ['Tercero:', $documento->tercero?($documento->tercero->identificacion.' '.$documento->tercero->nombrecompleto):'VARIOS'];
+        $text[] = [' ', ' '];
+        $text[] = ['Detalle', 'Total'];
+        $stack = array_merge($stack, self::arrayToTextStack($text, $caracteres));
+        $stack[] = self::textoI(str_repeat('-',$caracteres));
+        $text=[];
+        foreach ($documento->detalles as $detalle) {
+            $detalle->detalle = str_replace(" 1/", "<br/>&nbsp;1/", $detalle->detalle);
+            $detalle->detalle = str_replace(" EXTRA", "<br/>&nbsp;&nbsp;EXTRA", $detalle->detalle);
+            $text[] = [$detalle->detalle, '$'.number_format($detalle->total,0)];
+        }
+        $stack = array_merge($stack, self::arrayToTextStack($text, $caracteres));
+        $stack[] = self::textoI(str_repeat('-',$caracteres));
+        $stack[] = ["i"=>"texto","v"=>self::impLinea('Total', '$'.number_format($documento->total,0), $caracteres)];
+        
+        return $stack;
+    }
 
     public static function facturaPosStack($documento,$productos,$config,$pre=false,$propina=10,$descuento=10){
         $post = !$pre;
@@ -1129,5 +1171,12 @@ class POS{
     }
     public static function getObservationArray($obsString){
         return ($obsString == null || $obsString == '')?json_decode("{}"):json_decode($obsString);
+    }
+    protected static function arrayToTextStack($array, $caracteres){
+        $stack = [];
+        foreach ($array as $i){
+            $stack[] = ["i"=>"texto","v"=>self::impLinea($i[0], $i[1], $caracteres)];
+        }
+        return $stack;
     }
 }

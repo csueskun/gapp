@@ -313,6 +313,14 @@ $('#example')
                   }
                 },
                 {
+                  class: 'btn btn-success',
+                  label: 'Imprimir POS',
+                  icon: 'fa fa-print',
+                  onClick: function() {
+                    impPos($(this).attr("id"));
+                  }
+                },
+                {
                   class: 'btn btn-danger',
                   label: 'Borrar',
                   icon: 'glyphicon glyphicon-trash',
@@ -484,6 +492,16 @@ $('#example')
                 mostrarWarning("No se pudo anular el documento.");
             }
         });
+    }
+    function impPos(id){
+        mostrarSuccess("Imprimiendo...");
+        $.get('/config/servicio-impresion', function (data) {
+            servicio_impresion = data;
+            $.post("/documento/print-post", {id: id}, function (data) {
+                enviarAServicioImpresionPost(servicio_impresion, data);
+            });
+        });
+
     }
 
 

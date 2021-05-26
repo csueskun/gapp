@@ -978,4 +978,9 @@ class DocumentoController extends Controller
         $inventario['ingredientes'] = $ingredientes;
         return $inventario;
     }
+    public function posPrint(){
+        $id = Input::get('id');
+        $documento = Documento::find($id);
+        return (\App\Util\POS::printDocumento(app('App\Http\Controllers\ConfigController')->first(),$documento, Auth::user()->caja_id));
+    }
 }
