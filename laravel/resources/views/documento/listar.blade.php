@@ -317,7 +317,7 @@ $('#example')
                   label: 'Imprimir POS',
                   icon: 'fa fa-print',
                   onClick: function() {
-                    impPos($(this).attr("id"));
+                    impDocumentoPos($(this).attr("id"));
                   }
                 },
                 {
@@ -493,7 +493,7 @@ $('#example')
             }
         });
     }
-    function impPos(id){
+    function impDocumentoPos(id){
         mostrarSuccess("Imprimiendo...");
         $.get('/config/servicio-impresion', function (data) {
             servicio_impresion = data;

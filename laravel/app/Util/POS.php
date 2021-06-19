@@ -76,6 +76,7 @@ class POS{
             $subtotal = 0;
             $subtotal += $producto_pedido->producto->valor;
             if($producto_pedido->nombre_combo){
+                $obs = new \stdClass;
                 $obs->tipo = 'COMBO';
                 $obs->tamano = 'unico';
                 $obs->sabor = '';
@@ -259,6 +260,7 @@ class POS{
     }
     public static function printDocumento($config, $documento, $caja){
         $stack = [];
+        var_dump($documento);
         $fecha = date_create($documento->created_at);
         $fecha = date_format($fecha, "d/m/Y h:ia");
 
