@@ -745,7 +745,10 @@ function impItemPedido(productos_pedido){
             var combo = productos_pedido[i].combo;
             if(productos_pedido[i].combo != null){
                 combo = JSON.parse(combo);
-                combo = JSON.parse(combo);
+                try {
+                    combo = JSON.parse(combo);
+                } catch (error) {
+                }
                 var obs = JSON.parse(productos_pedido[i].obs);
                 var sin = [];
                 for (var k = 0; k < obs.sin_ingredientes.length; k++) {
@@ -1651,32 +1654,33 @@ function calcularPropina2(){
     calcularCambio();
 }
 function abrirObservaciones(){
-    if(!esDomicilio){
-        $('#observacionesModal .row.domicilio').hide();
-    }
-    else{
-        $('#observacionesModal .row.restaurante').hide();
-        if(observaciones.entregar_en != '' && observaciones.entregar_en != null){
-            if(observaciones.entregar_en == "DOMICILIO" ){
-                $('#observacionesModal #domicilio').val(observaciones.entregar_obs);
-                $('#observacionesModal input[name=entregar-en][value=DOMICILIO]').prop('checked', true);
-            }
-            else{
-                $('#observacionesModal #cliente').val(observaciones.entregar_obs);
-                $('#observacionesModal input[name=entregar-en][value=CAJA]').prop('checked', true);
-            }
-        }
-        else{
-            $('#observacionesModal input[name=entregar-en][value=DOMICILIO]').prop('checked', true);
-        }
-    }
-    $('#observacionesModal #domicilio').val(observaciones.domicilio);
-    $('#observacionesModal #cliente').val(observaciones.cliente);
-    $('#observacionesModal #cliente_id').val(observaciones.clienteId);
-    $('#observacionesModal #telefono').val(observaciones.tel);
-    $('#observacionesModal #identificacion').val(observaciones.identificacion);
-    $('#observacionesModal #para-llevar').prop('checked', observaciones.para_llevar == 'PARA LLEVAR');
-    $('#observacionesModal #observacion').val(observaciones.observacion);
+    // if(!esDomicilio){
+    //     $('#observacionesModal .row.domicilio').hide();
+    // }
+    // else{
+    //     $('#observacionesModal .row.restaurante').hide();
+    //     if(observaciones.entregar_en != '' && observaciones.entregar_en != null){
+    //         if(observaciones.entregar_en == "DOMICILIO" ){
+    //             $('#observacionesModal #domicilio').val(observaciones.entregar_obs);
+    //             $('#observacionesModal input[name=entregar-en][value=DOMICILIO]').prop('checked', true);
+    //         }
+    //         else{
+    //             $('#observacionesModal #cliente').val(observaciones.entregar_obs);
+    //             $('#observacionesModal input[name=entregar-en][value=CAJA]').prop('checked', true);
+    //         }
+    //     }
+    //     else{
+    //         $('#observacionesModal input[name=entregar-en][value=DOMICILIO]').prop('checked', true);
+    //     }
+    // }
+    // $('#observacionesModal #domicilio').val(observaciones.domicilio);
+    // $('#observacionesModal #cliente').val(observaciones.cliente);
+    // $('#observacionesModal #cliente_id').val(observaciones.clienteId);
+    // $('#observacionesModal #telefono').val(observaciones.tel);
+    // $('#observacionesModal #identificacion').val(observaciones.identificacion);
+    // $('#observacionesModal #para-llevar').prop('checked', observaciones.para_llevar == 'PARA LLEVAR');
+    // $('#observacionesModal #observacion').val(observaciones.observacion);
+    $('#loadObservacionesButton').trigger('click');
     $('#observacionesModal').modal('show');
 }
 function saveObs() {
@@ -1816,4 +1820,8 @@ function togglePagarDomicilio(pagar=true){
     }
     $(hide).slideUp('slow');
     $(show).slideDown('slow');
+}
+
+function getPedidoObservaciones(){
+    return observaciones;
 }

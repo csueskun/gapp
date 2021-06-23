@@ -171,15 +171,20 @@ class TerceroController extends Controller
         $ordenar_por = isset($input["ordenar_por"])?$input["ordenar_por"]:"";
         $sentido = isset($input["sentido"])?$input["sentido"]:"";
         $por_pagina = isset($input["por_pagina"])?$input["por_pagina"]:"";
-        
+
         return $this->paginar_($buscar, $ordenar_por, $sentido, $por_pagina);
     }
     
     public function paginar_($buscar, $ordenar_por, $sentido, $por_pagina) {
+
+        $res = Tercero::orWhere('identificacion', 'like', "%$buscar%")
+        ->orWhere('nombrecompleto', 'like', "%$buscar%")
+        ->orWhere('telefono', 'like', "%$buscar%");
+
         if($ordenar_por==""||$ordenar_por==null){
-            return Tercero::Where("id","like", "%$buscar%")->paginate($por_pagina);
+            return $res->paginate($por_pagina);
         }
-        return Tercero::Where("id","like", "%$buscar%")->orderBy($ordenar_por, $sentido)->paginate($por_pagina);
+        return $res->orderBy($ordenar_por, $sentido)->paginate($por_pagina);
     }
 
     function api_listar(){
@@ -357,16 +362,21 @@ class TerceroController extends Controller
     }
 
 
-
     public function getTerceros(){
         $limit = Input::get('limit')?:10;
-        $params = Input::get('params', '{}');
-        $params = json_decode($params, true);
-        $result = Tercero::where($params)
+        $buscar = Input::get('params', '');
+        $result = Tercero::orWhere('identificacion', 'like', "%$buscar%")
+            ->orWhere('nombrecompleto', 'like', "%$buscar%")
+            ->orWhere('telefono', 'like', "%$buscar%")
             ->take($limit)
             ->get();
         return $result;
     }
+
+    public function buscar($buscar){
+        return $this->paginar($buscar);
+    }
+    
 
 
     
