@@ -739,6 +739,7 @@ Route::get('/tercero/buscar/{buscar}', 'TerceroController@buscar');
 Route::get('/tercero/paginar', 'TerceroController@paginar_modal');
 Route::post('/tercero/', 'TerceroController@crear');
 Route::post('/tercero/modal/', 'TerceroController@crearModal');
+Route::post('/new-tercero/', 'TerceroController@crearIf');
 Route::put('/tercero/', 'TerceroController@editar');
 Route::put('/tercero/modal', 'TerceroController@editarModal');
 Route::delete('/tercero/', 'TerceroController@borrar');

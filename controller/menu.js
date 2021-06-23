@@ -226,19 +226,24 @@ app.controller('menuController', function($scope, $http) {
     $scope.saveObs = function(){
         var pedidoId = getPedidoId();
         mostrarFullLoading();
-        $http.post(`/pedido/${pedidoId}/patch`, {obs:JSON.stringify($scope.observaciones)})
+        $http.post("/new-tercero", $scope.observaciones)
         .then(
             function(response){
-                $scope.saving = false;
-                $scope.pagoCompra = {valor: 0, tipo: 'PAGO'};;
-                if(response.status == 200){
-                    $('#modal_pagar').modal('hide');
-                    mostrarSuccess('Observación guardada.');
-                }
-                else{
-                    mostrarWarning('No se pudo guardar la observación.');
-                }
-                ocultarFullLoading();
+                $http.post(`/pedido/${pedidoId}/patch`, {obs:JSON.stringify($scope.observaciones)})
+                .then(
+                    function(response){
+                        $scope.saving = false;
+                        $scope.pagoCompra = {valor: 0, tipo: 'PAGO'};;
+                        if(response.status == 200){
+                            $('#modal_pagar').modal('hide');
+                            mostrarSuccess('Observación guardada.');
+                        }
+                        else{
+                            mostrarWarning('No se pudo guardar la observación.');
+                        }
+                        ocultarFullLoading();
+                    }
+                );
             }
         );
     }

@@ -51,11 +51,10 @@
             <thead>
                 <tr>
                     <th class="agregar_ordenar_por" campo="identificacion">Identificación</th>
-                    <th class="agregar_ordenar_por" campo="tipoidenti">Tipo id</th>
                     <th class="agregar_ordenar_por" campo="nombrecompleto">Nombre Completo</th>
                     <th class="agregar_ordenar_por" campo="tipoclie">Tipo Cliente</th>
-                    <th class="agregar_ordenar_por" campo="email">Email</th>
-                    <th class="agregar_ordenar_por" campo="celular">Celular</th>
+                    <th class="agregar_ordenar_por" campo="telefono">Teléfono</th>
+                    <th class="agregar_ordenar_por" campo="email">Dirección</th>
                     <th class="agregar_ordenar_por" campo="puntosacumulados">Puntos Acumulados</th>
                     <th>Acciones</th>
                 </tr>
@@ -63,13 +62,13 @@
             <tbody>
                 @foreach($tercero_lista as $tercero)
                 <tr id='{{ $tercero->id }}'>
-                    <td>{{ $tercero->identificacion }}</td>
                     <td>
                         @if($tercero->tipoidenti=='1')
                         CC
                         @elseif($tercero->tipoidenti=='2')
                         NIT
                         @endif
+                        {{ $tercero->identificacion }}
                     </td>
                     <td>{{ $tercero->nombrecompleto }}</td>
                     <td>
@@ -83,8 +82,8 @@
                         Otro
                         @endif
                     </td>
-                    <td>{{ $tercero->email }}</td>
-                    <td>{{ $tercero->celular }}</td>
+                    <td>{{ $tercero->telefono }}</td>
+                    <td>{{ $tercero->direccion }}</td>
                     <td>{{ $tercero->puntosacumulados }}</td>
                     <td class="min-width text-align-center">
                         <div style="display: flex">

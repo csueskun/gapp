@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Tercero;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
-use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Tercero;
+use DB;
 
 class TerceroController extends Controller
 {
@@ -200,6 +201,35 @@ class TerceroController extends Controller
     public function api_listar_por_campo($campo, $buscar) {
         return response($this->encontrarPorCampo($campo, $buscar), 200)
         ->header('Content-Type', 'application/json');
+    }
+
+    public function crearIf(Request $request){
+        $data = $request->all();
+        try {
+            if($data['cliente_id']){
+                return response(array('data'=>'Tercero ya registrado'), 540)->header('Content-Type', 'application/json');
+            }
+        } catch (\Throwable $th) {}
+        try {
+            if(!$data['identificacion'] || !$data['cliente']){
+                return response(array('data'=>'Datos incompletos'), 540)->header('Content-Type', 'application/json');
+            }
+        } catch (\Throwable $th) {
+            return response(array('data'=>'Datos incompletos'), 540)->header('Content-Type', 'application/json');
+        }
+        
+        $tercero = Tercero::where('identificacion', $data['identificacion'])->count();
+        if($tercero){
+            return response(array('data'=>'Identificación ya registrada'), 540)->header('Content-Type', 'application/json');
+        }
+        $tercero = new Tercero;
+        $tercero->identificacion = $data['identificacion'];
+        $tercero->nombrecompleto = $data['cliente'];
+        $tercero->telefono = isset($data['telefono'])?$data['telefono']:'';
+        $tercero->direccion = isset($data['domicilio'])?$data['domicilio']:'';
+        $tercero->tipoclie = 'C';
+        $tercero->save();
+        return response(array('data'=>$tercero), 200)->header('Content-Type', 'application/json');
     }
 
     function api_crear(){

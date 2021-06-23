@@ -61,7 +61,7 @@
         </div>
         <div class="modal-footer">
                 <input type="hidden" name="cliente_id" id="cliente_id" ng-model="observaciones.cliente_id">
-                <input type="text" name="cliente_data" id="cliente_data">
+                <input type="hidden" name="cliente_data" id="cliente_data">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
                 <button type="button" class="btn btn-success" ng-click="saveObs()">Guardar</button>
                 <button style="display: none" id="loadObservacionesButton" ng-click="loadObservaciones()">obs</button>
