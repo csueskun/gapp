@@ -68,7 +68,7 @@
                         @elseif($tercero->tipoidenti=='2')
                         NIT
                         @endif
-                        {{ $tercero->identificacion }}
+                        &nbsp;{{ $tercero->identificacion }}
                     </td>
                     <td>{{ $tercero->nombrecompleto }}</td>
                     <td>

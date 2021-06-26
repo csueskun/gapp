@@ -152,6 +152,16 @@ function abstraerAdicionales3(){
 function guardarAdicionales(){
     $("button").prop('disabled', true);
     mostrarWarning("Guardando adicionales.");
+
+    setTimeout(() => {
+        guardarAdicionales_().then(function(){
+            $("button").prop('disabled', false);
+        });
+    }, 500);
+}
+
+async function guardarAdicionales_() {
+
     if(!validarTodo()){
         mostrarError("No se guardaron los ingredientes.");
         return false;
@@ -166,17 +176,8 @@ function guardarAdicionales(){
         else{
         }
         mostrarSuccess("Guardados.");
-        $("button").prop('disabled', false);
     });
-    // $.get( "/adicionales/guardar/"+JSON.stringify(adicionales))
-    // .done(function (data) {
-    //     if(data["errors"]==null || data["errors"]==""){
-    //     }
-    //     else{
-    //     }
-    //     mostrarSuccess("Guardados.");
-    // });
-}
+};
 
 function validarTodo(){
     var valida = true;
