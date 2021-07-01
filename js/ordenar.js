@@ -1351,7 +1351,7 @@ function impPosFactura(id){
         });
     }
     mostrarFullLoading();
-    $.post('/pedido/'+id+'/patch', {impreso: 1}, function (data) {
+    $.post('/documento/'+id+'/patch', {impreso: 1}, function (data) {
         ocultarFullLoading();
     })
 }

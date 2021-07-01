@@ -79,6 +79,7 @@ Route::get('/adicionales', 'AdicionalController@getAdicionales');
 
 Route::get('/pedido/{id}/editar', 'PedidoController@vistaEditar')->middleware('auth')->middleware('tiene.roles:Mesero.Administrador.Cajero');
 Route::post('/pedido/{id}/patch', 'PedidoController@patchPedido')->middleware('auth');
+Route::post('/documento/{id}/patch', 'DocumentoController@patchDocumento')->middleware('auth');
 Route::post('/pedido/{id}/save-propina', 'PedidoController@savePropina')->middleware('auth');
 
 Route::get('/producto/ver/{id}', function ($id = 0) {

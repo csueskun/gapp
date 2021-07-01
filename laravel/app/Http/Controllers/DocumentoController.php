@@ -983,4 +983,18 @@ class DocumentoController extends Controller
         $documento = Documento::find($id);
         return (\App\Util\POS::printDocumento(app('App\Http\Controllers\ConfigController')->first(),$documento, Auth::user()->caja_id));
     }
+
+    public function patchDocumento($pedido){
+        try {
+            $documento = Documento::where('pedido_id', $pedido)->first();
+            foreach(Input::all() as $key=>$value) {
+                $documento->$key = $value;
+            }
+            $documento->save();
+            return $documento;
+        } catch (\Throwable $th) {
+            var_dump($th);
+            return [];
+        }
+    }
 }
