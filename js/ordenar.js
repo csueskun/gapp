@@ -1350,6 +1350,10 @@ function impPosFactura(id){
             // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
         });
     }
+    mostrarFullLoading();
+    $.post('/pedido/'+id+'/patch', {impreso: 1}, function (data) {
+        ocultarFullLoading();
+    })
 }
 function gaveta(){
     imprimiendo();
