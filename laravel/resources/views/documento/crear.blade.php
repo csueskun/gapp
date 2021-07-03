@@ -214,6 +214,16 @@
                             <div class = "help-block with-errors">{{ $errors->first('paga_transferencia') }}</div>
                         </div>
                 </div>
+                <div class = "col-md-2">
+                        <div class = "key- tipo- form-group ">
+                            <label for = "paga_plataforma" class = "control-label">Plataforma</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="text" name='paga_plataforma' class="form-control" value="{{ old('paga_plataforma') }}"/>
+                            </div>
+                            <div class = "help-block with-errors">{{ $errors->first('paga_plataforma') }}</div>
+                        </div>
+                </div>
                 
                 <div class = "col-md-2">
                         <div class = "key- tipo- form-group ">

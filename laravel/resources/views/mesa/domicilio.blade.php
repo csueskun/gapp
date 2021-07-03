@@ -36,6 +36,9 @@
                                 <td class="label">Transferencia</td><td id='paga_transferencia'><input name="paga_transferencia" onkeyup="calcularCambio()" class="form-control curr"/></td>
                             </tr>
                             <tr class="otros-medios-pago" style="display: none">
+                                <td class="label">Plataforma</td><td id='paga_plataforma'><input name="paga_plataforma" onkeyup="calcularCambio()" class="form-control curr"/></td>
+                            </tr>
+                            <tr class="otros-medios-pago" style="display: none">
                                 <td class="label">Documento</td><td id='num_documento'><input name="num_documento" class="form-control"/></td>
                             </tr>
                             <tr class="otros-medios-pago" style="display: none">
