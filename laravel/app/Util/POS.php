@@ -237,19 +237,22 @@ class POS{
             if(isset($obs->entregar_en) && $obs->entregar_en != ''){
 
                 $texto .= 'ENTREGAR EN '.strtoupper($obs->entregar_en);
-                $texto.= ("\n");
-            }
-            if(isset($obs->entregar_obs) && $obs->entregar_obs != ''){
+                if(isset($obs->entregar_obs) && $obs->entregar_obs != ''){
 
-                $texto.= (": ".strtoupper($obs->entregar_obs));
+                    $texto.= (": ".strtoupper($obs->entregar_obs));
+                    }
                 $texto.= ("\n");
             }
+            
             if(isset($obs->observacion)){
                 $texto.= (strtoupper($obs->observacion));
                 $texto.= ("\n");
             }
             if(isset($obs->cliente)&&$obs->cliente!=''){
                 $texto .= ("Cliente: $obs->cliente\n");
+                if(isset($obs->telefono)&&$obs->telefono!=''){
+                    $texto .= ("Teléf: $obs->telefono\n");
+                }
             }
             if(isset($obs->domicilio)&&$obs->domicilio!=''){
                 $texto .= ("Domicilio: $obs->domicilio\n");
