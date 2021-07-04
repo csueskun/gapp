@@ -30,9 +30,9 @@
             <div class="dataTables_length" id="example_length">
                 <label>Mostrar 
                     <select id="por_pagina" name="example_length" aria-controls="example" class="">
-                        <option>15</option>
+                        <option>100</option>
+                        <option>30</option>
                         <option>10</option>
-                        <option>5</option>
                     </select> registros de {{ $tercero_lista->total() }} en total
                 </label>
             </div>

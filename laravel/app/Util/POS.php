@@ -16,7 +16,12 @@ class POS{
         $stack[] = ["i"=>"texto","v"=>$texto];
         $texto = ("Orden Nro: $pedido->id")."\n";
         $stack[] = ["i"=>"texto","v"=>$texto];
+        $texto = ("Fecha: $fechaPedido")."\n";
+        $stack[] = ["i"=>"texto","v"=>$texto];
+        $texto = ("Mesero: {$pedido->usuario->nombres} {$pedido->usuario->apellidos}")."\n";
+        $stack[] = ["i"=>"texto","v"=>$texto];
 
+        $stack[] = ["i"=>"doble","v"=>2];
         if($pedido->mesa_id==0){
             $texto = "Domicilio\n";
         }
@@ -31,12 +36,7 @@ class POS{
             $texto = $mesa."\n";
         }
         $stack[] = ["i"=>"texto","v"=>$texto];
-        $texto = ("Mesero: {$pedido->usuario->nombres} {$pedido->usuario->apellidos}")."\n";
-        $stack[] = ["i"=>"texto","v"=>$texto];
-        $texto = ("Fecha: $fechaPedido")."\n";
-        $stack[] = ["i"=>"texto","v"=>$texto];
 
-        $stack[] = ["i"=>"doble","v"=>2];
         if($pedido->turno){
             $texto = ("Turno: $pedido->turno");
             $stack[] = ["i"=>"texto","v"=>$texto];
@@ -237,6 +237,10 @@ class POS{
             if(isset($obs->entregar_en) && $obs->entregar_en != ''){
 
                 $texto .= 'ENTREGAR EN '.strtoupper($obs->entregar_en);
+                $texto.= ("\n");
+            }
+            if(isset($obs->entregar_obs) && $obs->entregar_obs != ''){
+
                 $texto.= (": ".strtoupper($obs->entregar_obs));
                 $texto.= ("\n");
             }
