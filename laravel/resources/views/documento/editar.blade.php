@@ -196,6 +196,16 @@
                 </div>
             </div>
             <div class = "col-md-2">
+                <div class = "key- tipo- form-group has-feedback {{ ($errors->first('paga_plataforma')) ? 'has-error'  :''}}">
+                    <label for = "paga_plataforma" class = "control-label">Plataforma</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        <input name="paga_plataforma" type="text" class="form-control metodo-pago" value="{{ number_format(old('paga_plataforma')?old('paga_plataforma'):$documento->paga_plataforma, 0) }}"/>
+                    </div>
+                    <div class = "help-block with-errors">{{ $errors->first('paga_plataforma') }}</div>
+                </div>
+            </div>
+            <div class = "col-md-2">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('descuento')) ? 'has-error'  :''}}">
                     <label for = "descuento" class = "control-label">Descuento</label>
                     <div class="input-group">

@@ -216,6 +216,7 @@ class PedidoController extends Controller
         $documento->paga_debito = isset($formaPago['paga_debito'])?$formaPago['paga_debito']:null;
         $documento->paga_credito = isset($formaPago['paga_credito'])?$formaPago['paga_credito']:null;
         $documento->paga_transferencia = isset($formaPago['paga_transferencia'])?$formaPago['paga_transferencia']:null;
+        $documento->paga_plataforma = isset($formaPago['paga_plataforma'])?$formaPago['paga_plataforma']:null;
         $documento->num_documento = isset($formaPago['num_documento'])?$formaPago['num_documento']:null;
         $documento->banco = isset($formaPago['banco'])?$formaPago['banco']:null;
         $documento->debe = isset($formaPago['debe'])?$formaPago['debe']:null;
@@ -358,6 +359,7 @@ class PedidoController extends Controller
         $formaPago['paga_debito'] = Input::get('paga_debito');
         $formaPago['paga_credito'] = Input::get('paga_credito');
         $formaPago['paga_transferencia'] = Input::get('paga_transferencia');
+        $formaPago['paga_plataforma'] = Input::get('paga_plataforma');
         $formaPago['num_documento'] = Input::get('num_documento');
         $formaPago['banco'] = Input::get('banco');
         $formaPago['debe'] = Input::get('debe');

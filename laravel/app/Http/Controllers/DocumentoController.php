@@ -213,7 +213,9 @@ class DocumentoController extends Controller
             SELECT sum(iva) impiva, sum(impco) impcon, sum(descuento) dcto, sum(
                 case when tipodoc in ('FV','BI','RC','CI') then paga_efectivo else (0) end) efectivo, 
             SUM(paga_debito) debito, 
-            sum(paga_credito) tcredito, sum(paga_transferencia) transferencia 
+            sum(paga_credito) tcredito,
+            sum(paga_transferencia) transferencia,
+            sum(paga_plataforma) plataforma 
             FROM pizza_documento
             WHERE created_at >= $fecha_inicio
             AND created_at <= $fecha_fin 
@@ -525,7 +527,8 @@ class DocumentoController extends Controller
         $total = DB::select("
             SELECT sum(iva) impiva, sum(impco) impcon, sum(descuento) dcto, sum(
                 case when tipodoc in ('FV','BI','RC','CI') then paga_efectivo else (0) end) efectivo, 
-            SUM(paga_debito) debito, SUM(paga_credito) tcredito, sum(paga_transferencia) transferencia
+            SUM(paga_debito) debito, SUM(paga_credito) tcredito, 
+            sum(paga_transferencia) transferencia, sum(paga_plataforma) plataforma
             FROM pizza_documento
             WHERE created_at >= $fecha_inicio
             AND created_at <= $fecha_fin 
@@ -587,6 +590,7 @@ class DocumentoController extends Controller
             $documento->num_documento = Input::get('num_documento');
             $documento->paga_efectivo = Input::get('paga_efectivo');
             $documento->paga_transferencia = Input::get('paga_transferencia');
+            $documento->paga_plataforma = Input::get('paga_plataforma');
             $documento->paga_debito = Input::get('paga_debito');
             $documento->paga_credito = Input::get('paga_credito');
             $documento->observacion = Input::get('observacion');
@@ -686,6 +690,7 @@ class DocumentoController extends Controller
             $documento->banco = Input::get('banco');
             $documento->paga_efectivo = Input::get('paga_efectivo');
             $documento->paga_transferencia = Input::get('paga_transferencia');
+            $documento->paga_plataforma = Input::get('paga_plataforma');
             $documento->paga_debito = Input::get('paga_debito');
             $documento->paga_credito = Input::get('paga_credito');
             $documento->total = Input::get('total');
@@ -709,6 +714,7 @@ class DocumentoController extends Controller
         $documento->banco = Input::get('banco');
         $documento->paga_efectivo = Input::get('paga_efectivo');
         $documento->paga_transferencia = Input::get('paga_transferencia');
+        $documento->paga_plataforma = Input::get('paga_plataforma');
         $documento->paga_debito = Input::get('paga_debito');
         $documento->paga_credito = Input::get('paga_credito');
             
@@ -890,6 +896,7 @@ class DocumentoController extends Controller
         $documento->total_iva = 0;
         $documento->paga_efectivo = 0;
         $documento->paga_transferencia = 0;
+        $documento->paga_plataforma = 0;
         $documento->paga_debito = 0;
         $documento->paga_credito = 0;
         $documento->debe = 0;
@@ -982,5 +989,19 @@ class DocumentoController extends Controller
         $id = Input::get('id');
         $documento = Documento::find($id);
         return (\App\Util\POS::printDocumento(app('App\Http\Controllers\ConfigController')->first(),$documento, Auth::user()->caja_id));
+    }
+
+    public function patchDocumento($pedido){
+        try {
+            $documento = Documento::where('pedido_id', $pedido)->first();
+            foreach(Input::all() as $key=>$value) {
+                $documento->$key = $value;
+            }
+            $documento->save();
+            return $documento;
+        } catch (\Throwable $th) {
+            var_dump($th);
+            return [];
+        }
     }
 }

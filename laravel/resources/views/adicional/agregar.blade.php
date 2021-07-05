@@ -84,6 +84,9 @@ table#adicionales th{
                         Único
                     </th>
                     <th>
+                        Extra Grande
+                    </th>
+                    <th>
                         Grande
                     </th>
                     <th>
@@ -103,6 +106,14 @@ table#adicionales th{
                             {{$ingrediente->descripcion}}
                         </td>
                         <td class="form-group" tamano='UNICO' style="padding-left: 8px;">
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type = "number" min="0" max="999999999" class = "align-right form-control valor" id = "valor-{{$ingrediente->id}}" nombre = "{{$ingrediente->descripcion}}" name = "valor" style="max-width: 95px;">
+                                <span class="input-group-addon">{{$ingrediente->unidad}}</span>
+                                <input type = "number" step="0.01" min="0" max="999999999" class = "align-right form-control cantidad" id = "cantidad-{{$ingrediente->id}}" nombre = "{{$ingrediente->descripcion}}" name = "valor" style="max-width: 95px;">
+                            </div>
+                        </td>
+                        <td class="form-group" tamano="EXTRAG" style="padding-left: 8px;">
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
                                 <input type = "number" min="0" max="999999999" class = "align-right form-control valor" id = "valor-{{$ingrediente->id}}" nombre = "{{$ingrediente->descripcion}}" name = "valor" style="max-width: 95px;">
@@ -157,6 +168,27 @@ table#adicionales th{
             @foreach($ingrediente_lista as $ingrediente)
                     <div class="container">
                             <h3 class = "titulo">{{$ingrediente->descripcion}}</h3>
+                            <table class="adicional con-tamanos">
+                                <tbody>
+                                    <tr style="height: 43px">
+                                        <td>
+                                            <div class="form-group">
+                                                <label class="radio-inline control-label font bebas">
+                                                    <input type="checkbox" value="{{$ingrediente->id}}-g" id="{{$ingrediente->id}}-xg">Extra Grande
+                                                </label>
+                                            </div>
+
+                                        </td>
+                                        <td class="form-group" style="padding-left: 8px;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input disabled nombre="EXTRAG" type = "number" min="0" max="999999999" class = "align-right form-control" id = "valor-{{$ingrediente->id}}-xg" name = "valor" style="max-width: 95px;" ingrediente-nombre='{{$ingrediente->descripcion}}'>
+                                            </div>
+                                            <div class="help-block with-errors"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                             <table class="adicional con-tamanos">
                                 <tbody>
                                     <tr style="height: 43px">

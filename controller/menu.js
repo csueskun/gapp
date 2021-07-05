@@ -7,6 +7,7 @@ function editarItemPedido(id){
 var app = angular.module('myApp', ['ngAnimate']);
 app.controller('menuController', function($scope, $http) {
     $scope.id = 0;
+    $scope.observaciones = {};
     $scope.productoPedido = {};
     $scope.intercambio = {
         origen: null,
@@ -204,6 +205,56 @@ app.controller('menuController', function($scope, $http) {
                 }
             }
         );
+    }
+
+    $scope.loadObservaciones = function(){
+        try {
+            $scope.observaciones = getPedidoObservaciones();
+            if(!$scope.observaciones.entregar_en){
+                $scope.observaciones.entregar_en = 'DOMICILIO';
+            }
+            try {
+                $scope.observaciones.para_llevar = $scope.observaciones.para_llevar != '';
+            } catch (error) {
+                $scope.observaciones.para_llevar = false;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    $scope.saveObs = function(){
+        var pedidoId = getPedidoId();
+        mostrarFullLoading();
+        $http.post("/new-tercero", $scope.observaciones)
+        .then(
+            function(response){
+                $http.post(`/pedido/${pedidoId}/patch`, {obs:JSON.stringify($scope.observaciones)})
+                .then(
+                    function(response){
+                        $scope.saving = false;
+                        $scope.pagoCompra = {valor: 0, tipo: 'PAGO'};;
+                        if(response.status == 200){
+                            $('#modal_pagar').modal('hide');
+                            mostrarSuccess('Observación guardada.');
+                        }
+                        else{
+                            mostrarWarning('No se pudo guardar la observación.');
+                        }
+                        ocultarFullLoading();
+                    }
+                );
+            }
+        );
+    }
+
+    $scope.loadClienteData = function(){
+        var clienteData = JSON.parse($('#cliente_data').val());
+        $scope.observaciones.cliente_id = clienteData.id;
+        $scope.observaciones.cliente = clienteData.nombrecompleto;
+        $scope.observaciones.telefono = clienteData.telefono;
+        $scope.observaciones.domicilio = clienteData.direccion;
+        $scope.observaciones.identificacion = clienteData.identificacion;
     }
 
     $scope.loadTipoDocumentos();

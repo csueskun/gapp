@@ -203,7 +203,7 @@
                     <div class = "col-xs-12">
                         <div class = "form-group centrado">
                             <!--<h1 class="titulo">-->
-                                <button type = "submit" class = "btn btn-sm btn-success" ><span class="fa fa-save" aria-hidden="true"> Guardar </span></button>
+                                <button style="font-size: 20px;" type = "submit" class = "font bebas btn btn-lg btn-success" ><span class="fa fa-save" aria-hidden="true"></span> Guardar</button>
                                 <!--<a href='../' class="btn btn-sm btn-primary"><span class="fa fa-th-list" aria-hidden="true"></span> Volver a la Lista</a>-->
                             <!--</h1>-->
                         </div>

@@ -745,7 +745,10 @@ function impItemPedido(productos_pedido){
             var combo = productos_pedido[i].combo;
             if(productos_pedido[i].combo != null){
                 combo = JSON.parse(combo);
-                combo = JSON.parse(combo);
+                try {
+                    combo = JSON.parse(combo);
+                } catch (error) {
+                }
                 var obs = JSON.parse(productos_pedido[i].obs);
                 var sin = [];
                 for (var k = 0; k < obs.sin_ingredientes.length; k++) {
@@ -919,6 +922,7 @@ function impItemPedido(productos_pedido){
                         '<input type = "hidden" name = "paga_debito" value = "" / >' +
                         '<input type = "hidden" name = "paga_credito" value = "" / >' +
                         '<input type = "hidden" name = "paga_transferencia" value = "" / >' +
+                        '<input type = "hidden" name = "paga_plataforma" value = "" / >' +
                         '<input type = "hidden" name = "num_documento" value = "" / >' +
                         '<input type = "hidden" name = "banco" value = "" / >' +
                         '<input type = "hidden" name = "debe" value = "" / >' +
@@ -1347,6 +1351,10 @@ function impPosFactura(id){
             // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
         });
     }
+    mostrarFullLoading();
+    $.post('/documento/'+id+'/patch', {impreso: 1}, function (data) {
+        ocultarFullLoading();
+    })
 }
 function gaveta(){
     imprimiendo();
@@ -1431,6 +1439,7 @@ function preEnviarFormPagar(){
     var pagaD = parseFloat($("td#paga_debito>input").inputmask('unmaskedvalue'));
     var pagaC = parseFloat($("td#paga_credito>input").inputmask('unmaskedvalue'));
     var pagaT = parseFloat($("td#paga_transferencia>input").inputmask('unmaskedvalue'));
+    var pagaP = parseFloat($("td#paga_plataforma>input").inputmask('unmaskedvalue'));
     var cambio = parseFloat($("td#cambio_cambio>input").inputmask('unmaskedvalue'));
     var descuento = parseFloat($("td#descuento table input.curr").inputmask('unmaskedvalue'));
     var num_documento = $("td#num_documento>input").val();
@@ -1466,6 +1475,7 @@ function preEnviarFormPagar(){
     $f.find('input[name=paga_debito]').val(isNaN(pagaD)?0:pagaD);
     $f.find('input[name=paga_credito]').val(isNaN(pagaC)?0:pagaC);
     $f.find('input[name=paga_transferencia]').val(isNaN(pagaT)?0:pagaT);
+    $f.find('input[name=paga_plataforma]').val(isNaN(pagaP)?0:pagaP);
     $f.find('input[name=num_documento]').val(num_documento);
     $f.find('input[name=banco]').val(banco);
     $f.find('input[name=debe]').val(debe);
@@ -1567,6 +1577,7 @@ function toggleOtrosMedios(viendo){
         $("td#paga_debito>input").val(0);
         $("td#paga_credito>input").val(0);
         $("td#paga_transferencia>input").val(0);
+        $("td#paga_plataforma>input").val(0);
         $("td#banco>select").val(null);
     }
     calcularCambio();
@@ -1576,12 +1587,13 @@ function calcularCambio(){
     var pagaD = parseFloat($("td#paga_debito>input").inputmask('unmaskedvalue'));
     var pagaC = parseFloat($("td#paga_credito>input").inputmask('unmaskedvalue'));
     var pagaT = parseFloat($("td#paga_transferencia>input").inputmask('unmaskedvalue'));
+    var pagaP = parseFloat($("td#paga_plataforma>input").inputmask('unmaskedvalue'));
     var total = parseFloat($("td#cambio_total>input").inputmask('unmaskedvalue'));
     var descuento = parseFloat($("td#descuento table input.curr").inputmask('unmaskedvalue'));
     var propina = parseFloat($("td#propina table input.curr").inputmask('unmaskedvalue'));
     descuento = !isNaN(descuento)?descuento:0;
     propina = !isNaN(propina)?propina:0;
-    var cambio = (!isNaN(pagaE)?pagaE:0)+(!isNaN(pagaD)?pagaD:0)+(!isNaN(pagaC)?pagaC:0)+(!isNaN(pagaT)?pagaT:0)-total + descuento - propina;
+    var cambio = (!isNaN(pagaE)?pagaE:0)+(!isNaN(pagaD)?pagaD:0)+(!isNaN(pagaC)?pagaC:0)+(!isNaN(pagaT)?pagaT:0)+(!isNaN(pagaP)?pagaP:0)-total + descuento - propina;
     if(cambio<0){
         cambio = -cambio;
         $("td#debiendo").show();
@@ -1651,32 +1663,33 @@ function calcularPropina2(){
     calcularCambio();
 }
 function abrirObservaciones(){
-    if(!esDomicilio){
-        $('#observacionesModal .row.domicilio').hide();
-    }
-    else{
-        $('#observacionesModal .row.restaurante').hide();
-        if(observaciones.entregar_en != '' && observaciones.entregar_en != null){
-            if(observaciones.entregar_en == "DOMICILIO" ){
-                $('#observacionesModal #domicilio').val(observaciones.entregar_obs);
-                $('#observacionesModal input[name=entregar-en][value=DOMICILIO]').prop('checked', true);
-            }
-            else{
-                $('#observacionesModal #cliente').val(observaciones.entregar_obs);
-                $('#observacionesModal input[name=entregar-en][value=CAJA]').prop('checked', true);
-            }
-        }
-        else{
-            $('#observacionesModal input[name=entregar-en][value=DOMICILIO]').prop('checked', true);
-        }
-    }
-    $('#observacionesModal #domicilio').val(observaciones.domicilio);
-    $('#observacionesModal #cliente').val(observaciones.cliente);
-    $('#observacionesModal #cliente_id').val(observaciones.clienteId);
-    $('#observacionesModal #telefono').val(observaciones.tel);
-    $('#observacionesModal #identificacion').val(observaciones.identificacion);
-    $('#observacionesModal #para-llevar').prop('checked', observaciones.para_llevar == 'PARA LLEVAR');
-    $('#observacionesModal #observacion').val(observaciones.observacion);
+    // if(!esDomicilio){
+    //     $('#observacionesModal .row.domicilio').hide();
+    // }
+    // else{
+    //     $('#observacionesModal .row.restaurante').hide();
+    //     if(observaciones.entregar_en != '' && observaciones.entregar_en != null){
+    //         if(observaciones.entregar_en == "DOMICILIO" ){
+    //             $('#observacionesModal #domicilio').val(observaciones.entregar_obs);
+    //             $('#observacionesModal input[name=entregar-en][value=DOMICILIO]').prop('checked', true);
+    //         }
+    //         else{
+    //             $('#observacionesModal #cliente').val(observaciones.entregar_obs);
+    //             $('#observacionesModal input[name=entregar-en][value=CAJA]').prop('checked', true);
+    //         }
+    //     }
+    //     else{
+    //         $('#observacionesModal input[name=entregar-en][value=DOMICILIO]').prop('checked', true);
+    //     }
+    // }
+    // $('#observacionesModal #domicilio').val(observaciones.domicilio);
+    // $('#observacionesModal #cliente').val(observaciones.cliente);
+    // $('#observacionesModal #cliente_id').val(observaciones.clienteId);
+    // $('#observacionesModal #telefono').val(observaciones.tel);
+    // $('#observacionesModal #identificacion').val(observaciones.identificacion);
+    // $('#observacionesModal #para-llevar').prop('checked', observaciones.para_llevar == 'PARA LLEVAR');
+    // $('#observacionesModal #observacion').val(observaciones.observacion);
+    $('#loadObservacionesButton').trigger('click');
     $('#observacionesModal').modal('show');
 }
 function saveObs() {
@@ -1816,4 +1829,8 @@ function togglePagarDomicilio(pagar=true){
     }
     $(hide).slideUp('slow');
     $(show).slideDown('slow');
+}
+
+function getPedidoObservaciones(){
+    return observaciones;
 }

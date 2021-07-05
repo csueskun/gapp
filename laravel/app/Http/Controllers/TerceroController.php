@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Tercero;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
-use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Tercero;
+use DB;
 
 class TerceroController extends Controller
 {
@@ -171,15 +172,20 @@ class TerceroController extends Controller
         $ordenar_por = isset($input["ordenar_por"])?$input["ordenar_por"]:"";
         $sentido = isset($input["sentido"])?$input["sentido"]:"";
         $por_pagina = isset($input["por_pagina"])?$input["por_pagina"]:"";
-        
+
         return $this->paginar_($buscar, $ordenar_por, $sentido, $por_pagina);
     }
     
     public function paginar_($buscar, $ordenar_por, $sentido, $por_pagina) {
+
+        $res = Tercero::orWhere('identificacion', 'like', "%$buscar%")
+        ->orWhere('nombrecompleto', 'like', "%$buscar%")
+        ->orWhere('telefono', 'like', "%$buscar%");
+
         if($ordenar_por==""||$ordenar_por==null){
-            return Tercero::Where("id","like", "%$buscar%")->paginate($por_pagina);
+            return $res->paginate($por_pagina);
         }
-        return Tercero::Where("id","like", "%$buscar%")->orderBy($ordenar_por, $sentido)->paginate($por_pagina);
+        return $res->orderBy($ordenar_por, $sentido)->paginate($por_pagina);
     }
 
     function api_listar(){
@@ -195,6 +201,35 @@ class TerceroController extends Controller
     public function api_listar_por_campo($campo, $buscar) {
         return response($this->encontrarPorCampo($campo, $buscar), 200)
         ->header('Content-Type', 'application/json');
+    }
+
+    public function crearIf(Request $request){
+        $data = $request->all();
+        try {
+            if($data['cliente_id']){
+                return response(array('data'=>'Tercero ya registrado'), 540)->header('Content-Type', 'application/json');
+            }
+        } catch (\Throwable $th) {}
+        try {
+            if(!$data['identificacion'] || !$data['cliente']){
+                return response(array('data'=>'Datos incompletos'), 540)->header('Content-Type', 'application/json');
+            }
+        } catch (\Throwable $th) {
+            return response(array('data'=>'Datos incompletos'), 540)->header('Content-Type', 'application/json');
+        }
+        
+        $tercero = Tercero::where('identificacion', $data['identificacion'])->count();
+        if($tercero){
+            return response(array('data'=>'Identificación ya registrada'), 540)->header('Content-Type', 'application/json');
+        }
+        $tercero = new Tercero;
+        $tercero->identificacion = $data['identificacion'];
+        $tercero->nombrecompleto = $data['cliente'];
+        $tercero->telefono = isset($data['telefono'])?$data['telefono']:'';
+        $tercero->direccion = isset($data['domicilio'])?$data['domicilio']:'';
+        $tercero->tipoclie = 'C';
+        $tercero->save();
+        return response(array('data'=>$tercero), 200)->header('Content-Type', 'application/json');
     }
 
     function api_crear(){
@@ -357,16 +392,21 @@ class TerceroController extends Controller
     }
 
 
-
     public function getTerceros(){
         $limit = Input::get('limit')?:10;
-        $params = Input::get('params', '{}');
-        $params = json_decode($params, true);
-        $result = Tercero::where($params)
+        $buscar = Input::get('params', '');
+        $result = Tercero::orWhere('identificacion', 'like', "%$buscar%")
+            ->orWhere('nombrecompleto', 'like', "%$buscar%")
+            ->orWhere('telefono', 'like', "%$buscar%")
             ->take($limit)
             ->get();
         return $result;
     }
+
+    public function buscar($buscar){
+        return $this->paginar($buscar);
+    }
+    
 
 
     
