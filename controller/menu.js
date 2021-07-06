@@ -214,7 +214,7 @@ app.controller('menuController', function($scope, $http) {
                 $scope.observaciones.entregar_en = 'DOMICILIO';
             }
             try {
-                $scope.observaciones.para_llevar = $scope.observaciones.para_llevar != '';
+                $scope.observaciones.para_llevar = $scope.observaciones.para_llevar === true;
             } catch (error) {
                 $scope.observaciones.para_llevar = false;
             }
@@ -237,9 +237,6 @@ app.controller('menuController', function($scope, $http) {
                         if(response.status == 200){
                             $('#modal_pagar').modal('hide');
                             mostrarSuccess('Observación guardada.');
-                        }
-                        else{
-                            mostrarWarning('No se pudo guardar la observación.');
                         }
                         ocultarFullLoading();
                     }
