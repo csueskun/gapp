@@ -1708,9 +1708,9 @@ function saveObs() {
     obs.para_llevar = $('#observacionesModal #para-llevar').is(':checked')?'PARA LLEVAR':'';
     obs.entregar_obs = $('#observacionesModal #domicilio').val();
     if(!mesero){
-        obs.entregar_en = $('#observacionesModal input[name=entregar-en]:checked').val();
+        
         if(obs.entregar_en == "DOMICILIO"){
-
+            obs.entregar_en = $('#observacionesModal input[name=entregar-en]:checked').val();
         }
         else{
             obs.entregar_obs = $('#observacionesModal #cliente').val();
