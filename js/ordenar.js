@@ -544,6 +544,68 @@ function actualizarDivPedido() {
     });
 }
 
+function addComboProductoPedido(productos, form, force=false){
+    mostrarFullLoading();
+    var postdata = {
+        productos: productos,
+        alias: $('meta[name=mesa_alias]').attr('content'),
+        _token: $('meta[name=csrf-token]').attr('content'),
+        mesa: $('meta[name=mesa]').attr('content')
+    };
+    $.ajax({
+        type: 'POST',
+        url: "/combo-producto-pedido/agregar",
+        data: postdata,
+        async: true
+    }).done(function (data) {
+        data = JSON.parse(data);
+        
+        if(data.id==-1){
+            ocultarFullLoading();
+            var html = "<ul class='inventario validacion'>";
+            for (var i =0; i<data.errores.length; i++){
+                html += "<li>";
+                html += data.errores[i].mensaje;
+                html += "</li>";
+            }
+            html += "</ul><strong>¿Desea agregar el combo, sin tener en cuenta el inventario?</strong>";
+            $.confirm({
+                title: 'Inventario insuficiente',
+                type: 'red',
+                typeAnimated: true,
+                columnClass: 'col-md-8 col-md-offset-2',
+                content: html,
+                boxWidth: '600px',
+                icon: 'fa fa-warning',
+                buttons: {
+                    confirm: {
+                        btnClass: 'btn-blue',
+                        text: 'Agregar el producto',
+                        action: function(){
+                            addComboProductoPedido(productos, form, true);
+                        }
+                    },
+                    cancel: {
+                        btnClass: 'btn-red',
+                        text: 'Cancelar',
+                        action: function(){
+                            ocultarFullLoading();
+                        }
+                    },
+                }
+            });
+            return false;
+        }
+        else{
+            $('meta[name=pedido_id]').attr('content', data.id);
+            mostrarSuccess('<strong>Listo!</strong> Producto Agregado');
+            actualizarDivPedido();
+            terminarAgregarPedido(form);
+        }
+    });
+
+}
+
 function addProductoPedido(producto, form, last = true, first = true, multi=false) {
     var token = $('meta[name=csrf-token]').attr('content');
     var mesa = $('meta[name=mesa]').attr('content');
@@ -748,6 +810,7 @@ function impItemPedido(productos_pedido){
                 try {
                     combo = JSON.parse(combo);
                 } catch (error) {
+                    console.log(error);
                 }
                 var obs = JSON.parse(productos_pedido[i].obs);
                 var sin = [];

@@ -61,7 +61,7 @@ function addCombo($button){
             adicionales: [],
             alias: "",
             cantidad: $('div#collapse-combos .number-spinner input').val(),
-            force: true,
+            force: false,
             producto: {
                 id: $(this).attr('producto-id'),
                 nombre_tipo: $(this).attr('nombre-tipo'),
@@ -91,7 +91,7 @@ function addCombo($button){
         addProductoPedido(productosCombo[ii], $button, ii == productosCombo.length - 1, ii == 0);
     }
     */
-   addProductoPedido(productosCombo, $button, false, true, true);
+    addComboProductoPedido(productosCombo, $button, false, true, true);
 }
 function cancelarCombo(ref){
     var ppCount = $('ul#ul-pedido>li').length;

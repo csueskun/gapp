@@ -948,9 +948,47 @@ class PedidoController extends Controller
                 $pedido = null;
             }
         }
-        return $this->agregarProductoPedido($producto_pedido_json, $mesa, $pedido);
+        return $this->agregarProductoPedido($producto_pedido_json, $mesa, $pedido, false);
     }
-    public function agregarProductoPedido($producto_pedido_json = null, $mesa = null, $pedido = null){
+
+    public function preAgregarComboProductoPedido(){
+        $pps = Input::get('productos');
+        $mesa = Input::get('mesa');
+        $pedido =  Input::get('pedido');
+        $force =  Input::get('force') == 1;
+        if($pedido == null || $pedido == '0' || $pedido == '-1'){
+            $pedido = Pedido::where('mesa_id', $mesa)->where('estado', 1)->first();
+            if($pedido){
+                $pedido = $pedido->id;
+            }
+        }
+        $pedido_id = 0;
+        foreach($pps as $pp){
+            $pp['force'] = true;
+            $pp['adicionales'] = [];
+            if(!array_key_exists('sin_ingredientes',$pp['obs'])){
+                $pp['obs']['sin_ingredientes'] = [];
+            }
+            if(!array_key_exists('ingredientes',$pp)){
+                $pp['ingredientes'] = [];
+            }
+            $producto_pedido_json = json_encode($pp);
+            try {
+                $res = $this->agregarProductoPedido($producto_pedido_json, $mesa, $pedido, false);
+                if(!$pedido_id){
+                    $pedido_id = json_decode($res);
+                    $pedido_id = $pedido_id->id;
+                }
+            } catch (\Throwable $th) {
+                try {
+                    ProductoPedido::where("id", $pedido_id)->delete();
+                } catch (\Throwable $th) {
+                }
+            }
+        }
+        return $res;
+    }
+    public function agregarProductoPedido($producto_pedido_json = null, $mesa = null, $pedido = null, $es_combo = false){
         $controller = app('App\Http\Controllers\PedidoController');
 
         if($pedido == 0){
@@ -964,6 +1002,9 @@ class PedidoController extends Controller
 
         if(!$producto_pedido_json->force){
             $validarInventario = $controller->validarInventario($producto_pedido_json);
+            if($es_combo){
+                return $validarInventario;
+            }
             if(count($validarInventario->errores) > 0){
                 $validarInventario->id = -1;
                 return json_encode($validarInventario);
@@ -1011,8 +1052,6 @@ class PedidoController extends Controller
         $controller->actualizarValor($pedido->id);
 
         $controller = app('App\Http\Controllers\ProductoPedidoIngredienteController');
-
-
 
         foreach($producto_pedido_json->ingredientes as $ingrediente){
             $producto_pedido_ingrediente = new stdClass();
