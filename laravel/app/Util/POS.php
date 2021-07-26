@@ -127,9 +127,16 @@ class POS{
             }
             elseif ($obs->tipo == "MIXTA") {
                 $texto.= self::normalizeSizes($obs->tamano=='unico'?'':$obs->tamano).$x_cantidad;
+                $jj=0;
                 foreach ($obs->mix as $fraccion) {
                     $texto.= ("\n");
-                    $texto.= (' 1/' . count($obs->mix) . ' ' . $fraccion->nombre);
+                    try {
+                        $texto.=$obs->dist[$jj];
+                    } catch (\Throwable $th) {
+                        $texto.=' 1/' . count($obs->mix);
+                    }
+                    $jj++;
+                    $texto.= (' ' . $fraccion->nombre);
 
                     $esCompuesto = isset($fraccion->compuesto) && $fraccion->compuesto != '' && $fraccion->compuesto != '0' && count($fraccion->compuesto)>0;
                     if($esCompuesto){
@@ -452,9 +459,16 @@ class POS{
                     self::normalizeSizes($aux), " ".$c_." ".$s_." ".$t_, $caracteres);
 
                 $cant_mix = count($obs->mix);
+                $jj = 0;
                 foreach ($obs->mix as $mix) {
                     $texto .= ("\n");
-                    $texto .= ("  1/$cant_mix $mix->nombre");
+                    try {
+                        $texto.=$obs->dist[$jj];
+                    } catch (\Throwable $th) {
+                        $texto.=' 1/' . $cant_mix;
+                    }
+                    $jj++;
+                    $texto .= " $mix->nombre";
                     foreach ($mix->adicionales as $adicional_mix) {
                         $val_adicional_fraccion = ceil($adicional_mix->valor / ($cant_mix * 100)) * 100;
                         $texto .= (self::impLinea("    EXTRA $adicional_mix->nombre", number_format($val_adicional_fraccion, 0), $caracteres));

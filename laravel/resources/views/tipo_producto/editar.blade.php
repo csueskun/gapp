@@ -92,13 +92,16 @@
                     <input disabled checked type="checkbox" value="1/1" name="fraccion">1/1(Completa)
                 </label>
                 <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="2/2" name="fraccion">1/2(Mitades)
+                    <input type="checkbox" value="2/2" name="fraccion">2/2(Mitades)
                 </label>
                 <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="3/3" name="fraccion">1/3(Tercios)
+                    <input type="checkbox" value="3/3" name="fraccion">3/3(Tercios)
                 </label>
                 <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="4/4" name="fraccion">1/4(Cuartos)
+                    <input type="checkbox" value="4/4" name="fraccion">4/4(Cuartos)
+                </label>
+                <label class="radio-inline" style="margin-bottom: 10px">
+                    <input type="checkbox" value="3/4+1/4" name="fraccion">3/4 + 1/4
                 </label>
             </div>
         </div>

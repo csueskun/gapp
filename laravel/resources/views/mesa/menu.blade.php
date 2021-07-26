@@ -135,7 +135,7 @@
                                         if(i===0){
                                             checked = "checked";
                                         }
-                                        html+='<label class="checkbox-inline"><input value="'+fracciones.fracciones[i]+'" '+checked+' type="radio" name="fraccion"><img src="/images/'+(fracciones.fracciones[i]).replace("/","s")+'.png"/></label>';
+                                        html+='<label class="checkbox-inline"><input value="'+fracciones.fracciones[i]+'" '+checked+' type="radio" name="fraccion"><img src="/images/'+(fracciones.fracciones[i]).replace("/","s").replace("/","s")+'.png"/></label>';
                                     }
                                     $("div#fracciones-{{$tipo->id}}").html("<h3>Fracciones:</h3>"+html);
                                 </script>

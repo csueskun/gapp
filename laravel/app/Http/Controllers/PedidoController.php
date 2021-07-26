@@ -252,8 +252,15 @@ class PedidoController extends Controller
                 $detalle = "{$producto->producto->tipo_producto->descripcion} $obs->tamano";
                 $cantidad_mix = count($obs->mix);
                 // $detalles_adicional = new stdClass;
+                $jj=0;
                 foreach($obs->mix as $mix){
-                    $detalle.= " 1/$cantidad_mix $mix->nombre ";
+                    try {
+                        $fraccion_dist=$obs->dist[$jj];
+                    } catch (\Throwable $th) {
+                        $fraccion_dist = "1/ ".$cantidad_mix;
+                    }
+                    $jj++;
+                    $detalle.= " $fraccion_dist $mix->nombre ";
                     foreach($mix->adicionales as $mix_adicional){
                         // $detalle.= " EXTRA $mix_adicional->nombre";
                         $mix_adicional->valor = floatval($mix_adicional->valor);

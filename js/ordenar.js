@@ -28,6 +28,7 @@ $(function () {
     $("div.contenedor-adicionales-fraccion").hide();
     $('input[name=fraccion]').change(function () {
         var valor = $(this).val();
+        var f3f1 = false;
         if(valor === "1/1"){
             $(this).closest("form.producto").find("div.row.fraccion").hide();
             $(this).closest("form.producto").find("div.row._0").show();
@@ -38,6 +39,10 @@ $(function () {
             var re = /(.*)?\/.*/  ;
             var fraccion = valor.replace(re, "$1");
             fraccion = parseInt(fraccion);
+            if(valor == '3/4+1/4'){
+                fraccion = 2;
+                f3f1 = true;
+            }
             $(this).closest("form.producto").find("div.row.tamano").show();
             $(this).closest("form.producto").find("div.row._0").hide();
             $(this).closest("form.producto").find("div.contenedor-adicionales").hide();
@@ -217,15 +222,26 @@ $("form.producto").submit(function (event) {
     var producto_pedido = JSON.parse('{"ingredientes":[], "adicionales":[], "obs":{"tamano":"", "tipo":"NORMAL", "mix":[], "sin_ingredientes":[]}}');
     
     var fraccion = $(this).find('input[name=fraccion]:checked').val();
+
+    var f3f1 = false;
+    var distribucion = [];
     if(fraccion == null){
         fraccion = "0/0";
     }
-    var re = /(.*)?\/.*/;
-    fraccion = fraccion.replace(re, "$1");
-    fraccion = parseInt(fraccion);
+    else if(fraccion == '3/4+1/4'){
+        fraccion = 2;
+        f3f1 = true;
+        distribucion =['3/4','1/4'];
+    }
+    else{
+        var re = /(.*)?\/.*/;
+        fraccion = fraccion.replace(re, "$1");
+        fraccion = parseInt(fraccion);
+    }
     if(fraccion>1){
         interruptorBotonOcupado($(this).find("button[type=submit]"));
         producto_pedido.obs.tipo = "MIXTA";
+        producto_pedido.obs.dist = distribucion;
         var producto_modelo = 0;
         var valor_max = 0;
         var adicionales_ = [];
@@ -464,9 +480,16 @@ function validarFracciones(form){
     if (typeof fraccion === "undefined") {
         return false;
     }
-    var re = /(.*)?\/.*/;
-    fraccion = fraccion.replace(re, "$1");
-    fraccion = parseInt(fraccion);
+    var f3f1 = false;
+    if(fraccion == '3/4+1/4'){
+        fraccion = 2;
+        f3f1 = true;
+    }
+    else{
+        var re = /(.*)?\/.*/;
+        fraccion = fraccion.replace(re, "$1");
+        fraccion = parseInt(fraccion);
+    }
     var valido = true;
     for (var i = 1; i <= fraccion; i++) {
         if (form.find("select[name=producto-f" + i + "]").val() === "0") {
@@ -865,7 +888,12 @@ function impItemPedido(productos_pedido){
                 var fracciones = obs.mix.length;
                 for(var j = 0; j<fracciones; j++){
                     html+='<span class="detalles">[ ';
-                    html+='1/'+fracciones+' '+obs.mix[j].nombre;
+                    try {
+                        html+=obs.dist[j];
+                    } catch (error) {
+                        html+='1/'+fracciones;
+                    }
+                    html+=' '+obs.mix[j].nombre;
 
                     esCompuesto = obs.mix[j].compuesto != null &&  obs.mix[j].compuesto != '' &&  obs.mix[j].compuesto != '0';
                     if(esCompuesto){

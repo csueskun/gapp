@@ -455,7 +455,9 @@ class PDF{
         ";
                         $ii=1;
         foreach ($documento->detalles as $detalle) {
+            $detalle->detalle = strtoupper($detalle->detalle);
             $detalle->detalle = str_replace(" 1/", "<br/>&nbsp;1/", $detalle->detalle);
+            $detalle->detalle = str_replace(" 3/", "<br/>&nbsp;3/", $detalle->detalle);
             $detalle->detalle = str_replace(" EXTRA", "<br/>&nbsp;&nbsp;EXTRA", $detalle->detalle);
             $html.='
                         <tr>
@@ -749,8 +751,15 @@ class PDF{
             
             if($obs->tipo=="MIXTA"){
                 $html.="<table><tr><td>{$producto_pedido->producto->tipo_producto->descripcion} {$obs->tamano}</td><td class='al-der'>$".number_format($producto_pedido->valor, 0)."</td></tr>";
+                $jj=0;
                 foreach($obs->mix as $fraccion) {
-                    $html.='<tr><td>&nbsp;1/' . count($obs->mix) . ' ' . $fraccion->nombre.'</td><td></td></tr>';
+                    try {
+                        $fraccion_dist=$obs->dist[$jj];
+                    } catch (\Throwable $th) {
+                        $fraccion_dist = "1/ ".count($obs->mix);
+                    }
+                    $jj++;
+                    $html.='<tr><td>&nbsp;' . $fraccion_dist . ' ' . $fraccion->nombre.'</td><td></td></tr>';
                     foreach($fraccion->ingredientes as $ingrediente) {
                         $html.='<tr><td>&nbsp;&nbsp;SIN '.$ingrediente.'</td><td></td></tr>';
                     }
@@ -929,8 +938,15 @@ class PDF{
             if($obs->tipo == "MIXTA"){
                 $html.= "<tr><td class='desc'>&nbsp;$obs->tamano</td><td class='al-der'>".number_format($producto->valor,0)."</td></tr>";
                 $cant_mix = count($obs->mix);
+                $jj=0;
                 foreach($obs->mix as $mix){
-                    $html.="<tr><td class='desc'>&nbsp;&nbsp;1/$cant_mix $mix->nombre</td><td></td></tr>";
+                    try {
+                        $fraccion_dist=$obs->dist[$jj];
+                    } catch (\Throwable $th) {
+                        $fraccion_dist = "1/ ".count($obs->mix);
+                    }
+                    $jj++;
+                    $html.="<tr><td class='desc'>&nbsp;&nbsp;$fraccion_dist $mix->nombre</td><td></td></tr>";
                     foreach($mix->adicionales as $adicional_mix){
                         $val_adicional_fraccion = ceil($adicional_mix->valor/($cant_mix*100))*100;
                         $html.= "<tr><td class='desc'>&nbsp;&nbsp;&nbsp;EXTRA $adicional_mix->nombre</td><td class='al-der'>".number_format($val_adicional_fraccion,0)."</td></tr>";
@@ -1062,9 +1078,16 @@ class PDF{
                                 '.$producto_pedido->producto->tipo_producto->descripcion." ";
             if($obs->tipo == "MIXTA"){
                 $html.=$obs->tamano;
+                $jj= 0;
                 foreach ($obs->mix as $fraccion) {
                     $html.='<br/>&nbsp;';
-                    $html.='1/' . count($obs->mix) . ' ' . $fraccion->nombre;
+                    try {
+                        $fraccion_dist=$obs->dist[$jj];
+                    } catch (\Throwable $th) {
+                        $fraccion_dist = "1/ ".count($obs->mix);
+                    }
+                    $jj++;
+                    $html.=$fraccion_dist . ' ' . $fraccion->nombre;
                     foreach ($fraccion->ingredientes as $ingrediente) {
                         $html.='<br/>&nbsp;&nbsp;SIN ' . $ingrediente;
                     }
