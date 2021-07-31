@@ -56,6 +56,7 @@
                     </div>
                     <div class= "col-md-12">
                     <input type="text" name="domicilio" ng-model="observaciones.domicilio" placeholder="Dirección" id="domicilio" class="w100 form-control">
+                    <span class="text-danger f20" ng-if="observaciones.entregar_en=='DOMICILIO'&&!observaciones.domicilio">La observación es obligatoria para domicilios</span>
                 </div>
             </div>       
         </div>
@@ -63,7 +64,7 @@
                 <input type="hidden" name="cliente_id" id="cliente_id" ng-model="observaciones.cliente_id">
                 <input type="hidden" name="cliente_data" id="cliente_data">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
-                <button type="button" class="btn btn-success" ng-click="saveObs()">Guardar</button>
+                <button type="button" class="btn btn-success" ng-click="saveObs()" ng-disabled="observaciones.entregar_en=='DOMICILIO'&&!observaciones.domicilio">Guardar</button>
                 <button style="display: none" id="loadObservacionesButton" ng-click="loadObservaciones()">obs</button>
                 <button style="display: none" id="loadClienteData" ng-click="loadClienteData()"></button>
             </div>

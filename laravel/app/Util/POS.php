@@ -623,10 +623,11 @@ class POS{
 //        }
 
         if(isset($observaciones->entregar_en) && $observaciones->entregar_en != ''){
-
-            $texto .= 'ENTREGAR EN '.strtoupper($observaciones->entregar_en);
-            $texto.= (": ".strtoupper($observaciones->entregar_obs));
-            $texto.= ("\n");
+            if(isset($observaciones->entregar_obs) && $observaciones->entregar_obs != ''){
+                $texto .= 'ENTREGAR EN '.strtoupper($observaciones->entregar_en);
+                $texto.= (": ".strtoupper($observaciones->entregar_obs));
+                $texto.= ("\n");
+            }
         }
         if(isset($observaciones->observacion)){
             $texto.= (strtoupper($observaciones->observacion));
