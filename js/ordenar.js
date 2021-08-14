@@ -1255,13 +1255,11 @@ function pagarPedido(id){
     });
 }
 function pagarImprimirPedido(id){
-
     var token = $('meta[name=csrf-token]').attr('content');
     $.post("/pedido/pagarImprimir/"+id, {_token: token}, function (data) {
         impPosFactura(id);
         actualizarDivPedido();
-    });
-    
+    });    
 }
 function preFactura(id=false){
     savePropina();
@@ -1442,10 +1440,8 @@ function impPosFactura(id){
             // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
         });
     }
-    mostrarFullLoading();
-    $.post('/documento/'+id+'/patch', {impreso: 1}, function (data) {
-        ocultarFullLoading();
-    })
+    $.post('/documento/'+id+'/patch', {impreso: 1}, function (data) {});
+    ocultarFullLoading();
 }
 function gaveta(){
     imprimiendo();
