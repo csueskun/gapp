@@ -1430,6 +1430,7 @@ function impPosFactura(id){
             servicio_impresion = data;
             $.get("/pedido/factura/"+id+"/pos-stack", function (data) {
                 enviarAServicioImpresionPost(servicio_impresion, data);
+                ocultarFullLoading();
                 // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
             });
         });
@@ -1437,11 +1438,11 @@ function impPosFactura(id){
     else{
         $.get("/pedido/factura/"+id+"/pos-stack", function (data) {
             enviarAServicioImpresionPost(servicio_impresion, data);
+            ocultarFullLoading();
             // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
         });
     }
     $.post('/documento/'+id+'/patch', {impreso: 1}, function (data) {});
-    ocultarFullLoading();
 }
 function gaveta(){
     imprimiendo();
