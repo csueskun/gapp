@@ -567,6 +567,7 @@ class PedidoController extends Controller
         if($documento==null){
             $documento = new Documento;
             $documento->pedido = Pedido::find($id);
+            $documento->pedido->caja_id = Auth::user()->caja_id;
         }
 
         $config = app('App\Http\Controllers\ConfigController')->first();            
