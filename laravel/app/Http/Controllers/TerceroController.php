@@ -207,7 +207,17 @@ class TerceroController extends Controller
         $data = $request->all();
         try {
             if($data['cliente_id']){
-                return response(array('data'=>'Tercero ya registrado'), 201)->header('Content-Type', 'application/json');
+                $tercero = Tercero::find($data['cliente_id']);
+                if($tercero){
+                    $new_tel = isset($data['telefono'])?$data['telefono']:'';
+                    $new_dir = isset($data['domicilio'])?$data['domicilio']:'';
+                    if($new_dir!=$tercero->domicilio || $new_tel!=$tercero->telefono){
+                        $tercero->telefono = $new_tel;
+                        $tercero->direccion = $new_dir;
+                        $tercero->save();
+                    }
+                    return response(array('data'=>'Tercero ya registrado'), 201)->header('Content-Type', 'application/json');
+                }
             }
         } catch (\Throwable $th) {}
         try {

@@ -13,6 +13,7 @@ app.controller('menuController', function($scope, $http) {
         origen: null,
         destino: null,
     };
+    $scope.mesa_id = 0;
     $scope.loadPP = function(){
         $scope.showIntercambiar = false;
         if(productoPedidoId === 0 || isNaN(productoPedidoId)){
@@ -208,10 +209,16 @@ app.controller('menuController', function($scope, $http) {
     }
 
     $scope.loadObservaciones = function(){
+        $scope.mesa_id = getMesaId();
         try {
             $scope.observaciones = getPedidoObservaciones();
             if(!$scope.observaciones.entregar_en){
-                $scope.observaciones.entregar_en = 'DOMICILIO';
+                if($scope.mesa_id==0){
+                    $scope.observaciones.entregar_en = 'DOMICILIO';
+                }
+                else{
+                    $scope.observaciones.entregar_en = 'MESA';
+                }
             }
             try {
                 $scope.observaciones.para_llevar = $scope.observaciones.para_llevar === true;

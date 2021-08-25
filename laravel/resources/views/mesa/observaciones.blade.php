@@ -1,5 +1,5 @@
 <div class="modal fade" id="observacionesModal" tabindex="-1" role="dialog" aria-labelledby="obervacionesModal">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width: 640px">
         <div class="modal-content">
             <div class="modal-body">
                 <div class="row restaurante">
@@ -8,11 +8,10 @@
                     </div>
                 </div>
                 <div class="row domicilio">
-                    <div class= "col-md-6">
-                    <label><input type="radio" ng-model="observaciones.entregar_en" name="entregar-en" value="DOMICILIO" checked> Enviar a domicilio</label>
-                    </div>
-                    <div class= "col-md-6">
-                    <label><input type="radio" ng-model="observaciones.entregar_en" name="entregar-en" value="CAJA"> Recojer en caja</label>
+                    <div class= "col-md-12">
+                    <label ng-if="mesa_id>0" style="margin-right: 20px"><input style="margin-right: 5px" type="radio" ng-model="observaciones.entregar_en" name="entregar-en" value="MESA" checked> Mesa</label>
+                    <label style="margin-right: 20px"><input style="margin-right: 5px" type="radio" ng-model="observaciones.entregar_en" name="entregar-en" value="DOMICILIO" checked> Enviar a domicilio</label>
+                    <label><input style="margin-right: 5px" type="radio" ng-model="observaciones.entregar_en" name="entregar-en" value="CAJA"> Recojer en caja</label>
                     </div>
                 </div>
                 <div class="row">
