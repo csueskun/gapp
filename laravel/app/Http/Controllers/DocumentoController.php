@@ -393,6 +393,12 @@ class DocumentoController extends Controller
             $caja_condicion_f = "and caja_id = $caja_id";
             $caja_condicion_fp = "and {$this->conn}_pedido.caja_id = $caja_id";
         }
+        // var_dump($caja_condicion);
+        // var_dump($caja_condicion_d);
+        // var_dump($caja_condicion_p);
+        // var_dump($caja_condicion_f);
+        // var_dump($caja_condicion_fp);
+        // asdasd;
 
         $cuadre = DB::select("
             Select 'I' as ie, 'BI' as tipo, COALESCE(sum(total),0) as total 

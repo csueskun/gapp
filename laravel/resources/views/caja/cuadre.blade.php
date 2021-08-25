@@ -195,6 +195,7 @@
 
         $('#_caja_id').on('change', function() {
             $("form#cuadre_ input[name=caja_id]").val($(this).val());
+            $("form#cuadre input[name=caja_id]").val($(this).val());
         });
         
         
