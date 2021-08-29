@@ -69,6 +69,7 @@
     <h3 class = "titulo">Datos</h3>
     <!--<br/>-->
     @include('template.status', ['status' => session('status')])
+    
         <br/>
     <form data-toggle = "validator" role = "form" action = "crear" method="POST" id="form-producto">
         {{ csrf_field() }}

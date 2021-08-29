@@ -79,7 +79,7 @@
                                     @foreach($producto->tamanos as $tamano)
                                     {{htmlentities($tamano->tamano)}}="{{$tamano->valor}}"
                                     @endforeach onclick="agregarProductoExpress($(this))">
-                                    <div style="background-image: url('/images/producto/{{$producto->imagen?$producto->imagen:'producto.jpg'}}')"></div>
+                                    <div style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"></div>
                                     <span class="producto-nombre">{{$producto->descripcion}}</span>
                                 </span>
                                 @endforeach
@@ -170,7 +170,7 @@
                                           scroll-to="#ingredientes-{{$tipo->id}}" 
                                           value="{{$producto->id}}">
 
-                                        <div style="background-image: url('/images/producto/{{$producto->imagen?$producto->imagen:'producto.jpg'}}')"></div>
+                                        <div style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"></div>
                                         <span class="producto-nombre">{{$producto->descripcion}}</span>
                                         <span class="producto-grupo">{{$grupo->nombre}}</span>
                                     </span>
@@ -195,7 +195,7 @@
                                         @else
                                             style="display: none; {{$adicional->pivot->tamano!='UNICO'?'position:absolute;z-index:-1':''}}">
                                         @endif
-                                        <img src="/images/ingrediente/{{$adicional->imagen}}" height="80"/><br/>
+                                        <img src="/images/ingrediente/{{$adicional->imagen}}" onerror="if (this.src != '/images/ingrediente/ingrediente.jpg') this.src = '/images/ingrediente/ingrediente.jpg';" height="80"/><br/>
                                         {{$adicional->descripcion}}<br/>$({{number_format($adicional->pivot->valor)}})<br/>
                                         <input value="{'id':'{{$adicional->pivot->id}}','nombre':'{{$adicional->descripcion}}',
                                                 'ingrediente':'{{$adicional->id}}','valor':'{{$adicional->pivot->valor}}',
@@ -239,8 +239,7 @@
                                           valor="{{$producto->valor}}"
                                           scroll-to="#ingredientes-1-{{$tipo->id}}" 
                                           value="{{$producto->id}}">
-                                        {{--<img width="120" height="120" src="/images/producto/{{$producto->imagen?$producto->imagen:'producto.jpg'}}"><br>--}}
-                                        <div style="background-image: url('/images/producto/{{$producto->imagen?$producto->imagen:'producto.jpg'}}')"></div>
+                                        <div style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"></div>
                                         <span class="producto-nombre">{{$producto->descripcion}}</span>
                                         <span class="producto-grupo">{{$grupo->nombre}}</span>
                                     </span>
@@ -261,15 +260,16 @@
                                 <h3 class='h3-ad-in adicionales-header'>Mostrar Adicionales:</h3>
                                 @foreach($tipo->adicionalesg as $key => $grupo)
                                 <div class="ingrediente-grupo-nombre adiciona-grupo" style="display: none">{{$key}}</div>
-                                @foreach($tipo->adicionales as $adicional)
+                                @foreach($grupo as $adicional)
                                 <label class="checkbox-inline adicional-{{$adicional->pivot->tamano}}"
                                      @if($tipo->aplica_tamanos=='1')
                                      style="display: none; {{$adicional->pivot->tamano!='GRANDE'?'position:absolute;z-index:-1':''}}">
                                      @else
                                      style="display: none; {{$adicional->pivot->tamano!='UNICO'?'position:absolute;z-index:-1':''}}">
                                      @endif
-                                    <img src="/images/ingrediente/{{$adicional->imagen}}" height="80"/><br/>
-                                    <input value="{'id':'{{$adicional->pivot->id}}','unidad':'{{$adicional->unidad}}','ingrediente':'{{$adicional->id}}','nombre':'{{$adicional->descripcion}}','valor':'{{$adicional->pivot->valor}}','cantidad':'{{$adicional->pivot->cantidad}}'}" type="checkbox" name="adicional" value="">{{$adicional->descripcion}}<br/>$({{number_format($adicional->pivot->valor)}})
+                                     <img src="/images/ingrediente/{{$adicional->imagen}}" onerror="if (this.src != '/images/ingrediente/ingrediente.jpg') this.src = '/images/ingrediente/ingrediente.jpg';" height="80"/><br/>
+                                    <input value="{'id':'{{$adicional->pivot->id}}','unidad':'{{$adicional->unidad}}','ingrediente':'{{$adicional->id}}','nombre':'{{$adicional->descripcion}}','valor':'{{$adicional->pivot->valor}}','cantidad':'{{$adicional->pivot->cantidad}}'}" type="checkbox" name="adicional" value="">
+                                        {{$adicional->descripcion}} {{$adicional->pivot->tamano}}<br/>$({{number_format($adicional->pivot->valor)}})
                                 </label>
                                 @endforeach
                                 @endforeach
@@ -307,7 +307,7 @@
                                           detalle="{{$producto->detalle}}"
                                           scroll-to="#ingredientes-2-{{$tipo->id}}" 
                                           value="{{$producto->id}}">
-                                        <div style="background-image: url('/images/producto/{{$producto->imagen?$producto->imagen:'producto.jpg'}}')"></div>
+                                        <div style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"></div>
                                         <span class="producto-nombre">{{$producto->descripcion}}</span>
                                         <span class="producto-grupo">{{$grupo->nombre}}</span>
                                     </span>
@@ -327,14 +327,14 @@
                                 <h3 class='h3-ad-in adicionales-header'>Mostrar Adicionales:</h3>
                                 @foreach($tipo->adicionalesg as $key => $grupo)
                                     <div class="ingrediente-grupo-nombre adiciona-grupo" style="display: none">{{$key}}</div>
-                                @foreach($tipo->adicionales as $adicional)
+                                @foreach($grupo as $adicional)
                                 <label class="checkbox-inline adicional-{{$adicional->pivot->tamano}}"
                                      @if($tipo->aplica_tamanos=='1')
                                      style="display: none; {{$adicional->pivot->tamano!='GRANDE'?'position:absolute;z-index:-1':''}}">
                                      @else
                                      style="display: none; {{$adicional->pivot->tamano!='UNICO'?'position:absolute;z-index:-1':''}}">
                                      @endif
-                                    <img src="/images/ingrediente/{{$adicional->imagen}}" height="80"/><br/>
+                                    <img src="/images/ingrediente/{{$adicional->imagen}}" onerror="if (this.src != '/images/ingrediente/ingrediente.jpg') this.src = '/images/ingrediente/ingrediente.jpg';" height="80"/><br/>
                                     <input value="{'id':'{{$adicional->pivot->id}}','unidad':'{{$adicional->unidad}}','ingrediente':'{{$adicional->id}}','nombre':'{{$adicional->descripcion}}','valor':'{{$adicional->pivot->valor}}','cantidad':'{{$adicional->pivot->cantidad}}'}" type="checkbox" name="adicional" value="">{{$adicional->descripcion}}<br/>$({{number_format($adicional->pivot->valor)}})
                                 </label>
                                 @endforeach
@@ -373,7 +373,7 @@
                                           valor="{{$producto->valor}}"
                                           scroll-to="#ingredientes-3-{{$tipo->id}}" 
                                           value="{{$producto->id}}">
-                                          <div style="background-image: url('/images/producto/{{$producto->imagen?$producto->imagen:'producto.jpg'}}')"></div>
+                                          <div style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"></div>
                                           <span class="producto-nombre">{{$producto->descripcion}}</span>
                                           <span class="producto-grupo">{{$grupo->nombre}}</span>
                                     </span>
@@ -390,14 +390,14 @@
                                 <h3 class='h3-ad-in adicionales-header'>Mostrar Adicionales:</h3>
                                 @foreach($tipo->adicionalesg as $key => $grupo)
                                     <div class="ingrediente-grupo-nombre adiciona-grupo" style="display: none">{{$key}}</div>
-                                @foreach($tipo->adicionales as $adicional)
+                                @foreach($grupo as $adicional)
                                 <label class="checkbox-inline adicional-{{$adicional->pivot->tamano}}"
                                      @if($tipo->aplica_tamanos=='1')
                                      style="display: none; {{$adicional->pivot->tamano!='GRANDE'?'position:absolute;z-index:-1':''}}">
                                      @else
                                      style="display: none; {{$adicional->pivot->tamano!='UNICO'?'position:absolute;z-index:-1':''}}">
                                      @endif
-                                <img src="/images/ingrediente/{{$adicional->imagen}}" height="80"/><br/>
+                                    <img src="/images/ingrediente/{{$adicional->imagen}}" onerror="if (this.src != '/images/ingrediente/ingrediente.jpg') this.src = '/images/ingrediente/ingrediente.jpg';" height="80"/><br/>
                                     <input value="{'id':'{{$adicional->pivot->id}}','unidad':'{{$adicional->unidad}}','ingrediente':'{{$adicional->id}}','nombre':'{{$adicional->descripcion}}','valor':'{{$adicional->pivot->valor}}','cantidad':'{{$adicional->pivot->cantidad}}'}" type="checkbox" name="adicional" value="">{{$adicional->descripcion}}<br/>$({{number_format($adicional->pivot->valor)}})
                                 </label>
                                 @endforeach
@@ -436,9 +436,9 @@
                                           valor="{{$producto->valor}}"
                                           detalle="{{$producto->detalle}}"
                                           scroll-to="#ingredientes-4-{{$tipo->id}}" 
-                                          style="background-image: url('/images/producto/{{$producto->imagen?$producto->imagen:'producto.jpg'}}')"
+                                          style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"
                                           value="{{$producto->id}}">
-                                          <div style="background-image: url('/images/producto/{{$producto->imagen?$producto->imagen:'producto.jpg'}}')"></div>
+                                          <div style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"></div>
                                           <span class="producto-nombre">{{$producto->descripcion}}</span>
                                           <span class="producto-grupo">{{$grupo->nombre}}</span>
                                     </span>
@@ -455,14 +455,14 @@
                                 <h3 class='h3-ad-in adicionales-header'>Mostrar Adicionales:</h3>
                                 @foreach($tipo->adicionalesg as $key => $grupo)
                                     <div class="ingrediente-grupo-nombre adiciona-grupo" style="display: none">{{$key}}</div>
-                                @foreach($tipo->adicionales as $adicional)
+                                @foreach($grupo as $adicional)
                                 <label class="checkbox-inline adicional-{{$adicional->pivot->tamano}}"
                                      @if($tipo->aplica_tamanos=='1')
                                      style="display: none; {{$adicional->pivot->tamano!='GRANDE'?'position:absolute;z-index:-1':''}}">
                                      @else
                                      style="display: none; {{$adicional->pivot->tamano!='UNICO'?'position:absolute;z-index:-1':''}}">
                                      @endif
-                                <img src="/images/ingrediente/{{$adicional->imagen}}" height="80"/><br/>
+                                     <img src="/images/ingrediente/{{$adicional->imagen}}" onerror="if (this.src != '/images/ingrediente/ingrediente.jpg') this.src = '/images/ingrediente/ingrediente.jpg';" height="80"/><br/>
                                     <input value="{'id':'{{$adicional->pivot->id}}','unidad':'{{$adicional->unidad}}','ingrediente':'{{$adicional->id}}','nombre':'{{$adicional->descripcion}}','valor':'{{$adicional->pivot->valor}}','cantidad':'{{$adicional->pivot->cantidad}}'}" type="checkbox" name="adicional" value="">{{$adicional->descripcion}}<br/>$({{number_format($adicional->pivot->valor)}})
                                 </label>
                                 @endforeach

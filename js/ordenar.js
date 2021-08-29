@@ -237,6 +237,9 @@ $("form.producto").submit(function (event) {
         var re = /(.*)?\/.*/;
         fraccion = fraccion.replace(re, "$1");
         fraccion = parseInt(fraccion);
+        for (var index = 0; index < fraccion; index++) {
+            distribucion.push((index+1)+'/'+fraccion);
+        }
     }
     if(fraccion>1){
         interruptorBotonOcupado($(this).find("button[type=submit]"));
@@ -883,6 +886,7 @@ function impItemPedido(productos_pedido){
             }
             valorProducto = Math.floor(productos_pedido[i].total);
             if(obs.tipo === "MIXTA"){
+                console.log(obs);
                 html += '       <li class="list-group-item">' +
                         '            <span class="producto">'+ x_cantidad + productos_pedido[i].producto.tipo_producto.descripcion + ' ' + '' + (getTamanosLabelMin(obs.tamano))+  '</span>';
                 var fracciones = obs.mix.length;
@@ -1164,7 +1168,7 @@ function impIngredientesProducto(ingredientes, tamano, compuesto = 0){
         for(var i=0; i<agrupados[key].length; i++){
 
             html+='<label max="'+agrupados[key][i].compuesto+'" class="'+agrupados[key][i].checked+agrupados[key][i].classCompuesto+'" style="margin-right:-1px; '+(agrupados[key][i].invisible?'display: none':'')+' "><img height="80" src="/images/ingrediente/'+
-                agrupados[key][i].imagen+'"/><br/>'+agrupados[key][i].descripcion+'<br/><input value="'+
+                agrupados[key][i].imagen+'" onerror="if (this.src != \'/images/ingrediente/ingrediente.jpg\') this.src = \'/images/ingrediente/ingrediente.jpg\';"/><br/>'+agrupados[key][i].descripcion+'<br/><input value="'+
                 agrupados[key][i].descripcion+'" ingrediente_id="'+agrupados[key][i].id+
                 '"  cantidad="'+agrupados[key][i].pivot.cantidad+'"  unidad="'+agrupados[key][i].unidad+
                 '"  class="checkbox-grande" type="checkbox" '+agrupados[key][i].checked+' name="ingrediente" value=""></label>';

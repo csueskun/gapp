@@ -122,7 +122,7 @@ function guardarNuevoProduto(){
     }
     var producto_json = abstraerProducto();
     mostrarFullLoading();
-    $.get( "/producto/crearCompleto/"+JSON.stringify(producto_json))
+    $.post("/producto/crearCompleto", producto_json)
     .done(function (data) {
         if(data["errors"]==null || data["errors"]==""){
             window.location.href = '/producto/agregar'
@@ -143,7 +143,7 @@ function editarProduto(){
     mostrarFullLoading();
     var producto_json = abstraerProducto();
     producto_json.id = $("input#id").val();
-    $.post("/producto/editarCompleto/"+JSON.stringify(producto_json))
+    $.post("/producto/editarCompleto", producto_json)
     .done(function (data) {
         if(data["errors"]==null || data["errors"]==""){
             $("html, body").animate({ scrollTop: 0 }, "slow");

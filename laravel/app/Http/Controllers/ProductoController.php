@@ -83,16 +83,16 @@ class ProductoController extends Controller
             ->with('status', ["success"=>"Registro Agregado."]);
         }
     }
-    public function crearCompleto($data){
-        $postdata = json_decode($data, true);
+    public function crearCompleto(){
+        $data = Input::all();
         $rules = array(
              'descripcion' => 'required|unique:producto,tipo_producto_id'
         );
-        $validator = Validator::make($postdata, $rules);
+        $validator = Validator::make($data, $rules);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->getMessageBag()->toArray()], 200);
         } else {
-            $data = json_decode($data);
+            $data = json_decode(json_encode($data), FALSE);
             $producto = new Producto;
             $producto->descripcion = $data->descripcion;
             $producto->grupo = $data->grupo;
@@ -107,7 +107,10 @@ class ProductoController extends Controller
             $producto->impco = $data->impco;
             $producto->save();
             
-            
+            $data->sabores = isset($data->sabores)?$data->sabores:[];
+            $data->tamanos = isset($data->tamanos)?$data->tamanos:[];
+            $data->ingredientes = isset($data->ingredientes)?$data->ingredientes:[];
+
             foreach($data->ingredientes as $ingrediente){
                 foreach($ingrediente->inventario as $item_inventario){
                     $productoIngrediente = new ProductoIngrediente;
@@ -138,16 +141,16 @@ class ProductoController extends Controller
         }
     }
     
-    public function editarCompleto($data){
-        $postdata = json_decode($data, true);
+    public function editarCompleto(){
+        $data = Input::all();
         $rules = array(
-             'descripcion' => 'required|unique:producto,descripcion,'.$postdata["id"].',id,tipo_producto_id,'.$postdata["tipo_producto_id"]
+             'descripcion' => 'required|unique:producto,descripcion,'.$data["id"].',id,tipo_producto_id,'.$data["tipo_producto_id"]
         );
-        $validator = Validator::make($postdata, $rules);
+        $validator = Validator::make($data, $rules);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->getMessageBag()->toArray()], 200);
         } else {
-            $data = json_decode($data);
+            $data = json_decode(json_encode($data), FALSE);
             $producto = Producto::find($data->id);
             $producto->descripcion = $data->descripcion;
             $producto->grupo = $data->grupo;
@@ -160,6 +163,10 @@ class ProductoController extends Controller
             $producto->iva = $data->iva;
             $producto->impco = $data->impco;
             $producto->save();
+
+            $data->sabores = isset($data->sabores)?$data->sabores:[];
+            $data->tamanos = isset($data->tamanos)?$data->tamanos:[];
+            $data->ingredientes = isset($data->ingredientes)?$data->ingredientes:[];
 
             $ingredientesIn = [];
             foreach($data->ingredientes as $ingrediente){

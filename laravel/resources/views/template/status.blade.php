@@ -1,44 +1,14 @@
 
 @if (isset($status['success']))
-<div class="alert alert-success" role="alert"> 
-    <strong>
-        <span class="glyphicon glyphicon-ok-sign"></span> Hecho!
-    </strong> 
-    {{ $status['success'] }} 
-</div>
+<script>mostrarSuccess("{{$status['success']}}");</script>
 @elseif (isset($status['warning']))
-<div class="alert alert-warning" role="alert"> 
-    <strong>
-        <span class="fa fa-exclamation-triangle"></span> Atención!
-    </strong> 
-    {{ $status['warning'] }}
-</div>
+<script>mostrarWarning("{{$status['warning']}}");</script>
 @elseif (isset($status['danger']))
-<div class="alert alert-danger" role="alert"> 
-    <strong>
-        <span class="glyphicon glyphicon-remove-sign"></span> Error!
-    </strong> 
-    {{ $status['danger'] }}
-</div>
+<script>mostrarError("{{$status['danger']}}");</script>
 @elseif (isset($status['info']))
-<div class="alert alert-info" role="alert"> 
-    <strong>
-        <span class="glyphicon glyphicon-info-sign"></span> Información!
-    </strong> 
-    {{ $status['info'] }}
-</div>
+<script>mostrarInfo("{{$status['info']}}");</script>
 @elseif (isset($status['success-contenido']))
-<div class="alert alert-success" role="alert"> 
-    <strong>
-        <span class="glyphicon glyphicon-ok-sign"></span>
-    </strong> 
-    {{ $status['success-contenido'] }} 
-</div>
+<script>mostrarSuccess("{{$status['success-contenido']}}");</script>
 @elseif (isset($status['warning-contenido']))
-<div class="alert alert-warning" role="alert"> 
-    <strong>
-        <span class="glyphicon glyphicon-warning-sign"></span>
-    </strong> 
-    {{ $status['warning-contenido'] }}
-</div>
+<script>mostrarWarning("{{$status['warning-contenido']}}");</script>
 @endif

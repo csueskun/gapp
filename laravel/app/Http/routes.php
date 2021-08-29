@@ -476,10 +476,10 @@ Route::get('/producto/editar/{id}', function ($id=null) {
                                     ->with("producto_ingredientes",app('App\Http\Controllers\ProductoIngredienteController')->buscarPorProducto($id));
 })->middleware('auth')->middleware('tiene.rol:Administrador');
 Route::post('/producto/crear', 'ProductoController@crear');
-Route::get('/producto/crearCompleto/{data}', 'ProductoController@crearCompleto');
+Route::post('/producto/crearCompleto', 'ProductoController@crearCompleto');
 Route::get('/producto/crearModal', 'ProductoController@crearModal');
 Route::post('/producto/editar', 'ProductoController@editar');
-Route::post('/producto/editarCompleto/{data}', 'ProductoController@editarCompleto');
+Route::post('/producto/editarCompleto', 'ProductoController@editarCompleto');
 Route::get('/producto/tamanos/{id}', 'ProductoTamanoController@buscarPorProducto');
 Route::post('/producto/borrar', 'ProductoController@borrar');
 Route::post("/producto/{id}", "ProductoController@patchProducto");

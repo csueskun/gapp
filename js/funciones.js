@@ -288,6 +288,14 @@ function mostrarSuccess(mensaje){
     }
     toastr.success(mensaje);
 }
+function mostrarInfo(mensaje){
+    toastr.options = {
+        "positionClass": "toast-bottom-full-width",
+        "newestOnTop": true,
+        "escapeHtml ": false,
+    }
+    toastr.info(mensaje);
+}
 function mostrarError(mensaje){
     toastr.options = {
         "positionClass": "toast-bottom-full-width",
