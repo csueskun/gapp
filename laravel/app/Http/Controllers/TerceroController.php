@@ -227,11 +227,6 @@ class TerceroController extends Controller
         } catch (\Throwable $th) {
             return response(array('data'=>'Datos incompletos'), 201)->header('Content-Type', 'application/json');
         }
-        
-        $tercero = Tercero::where('identificacion', $data['identificacion'])->count();
-        if($tercero){
-            return response(array('data'=>'Identificación ya registrada'), 540)->header('Content-Type', 'application/json');
-        }
         $tercero = new Tercero;
         $tercero->identificacion = $data['identificacion'];
         $tercero->nombrecompleto = $data['cliente'];
