@@ -205,21 +205,25 @@ class TerceroController extends Controller
 
     public function crearIf(Request $request){
         $data = $request->all();
+        $tercero = null;
         try {
-            if($data['cliente_id']){
-                $tercero = Tercero::find($data['cliente_id']);
-                if($tercero){
-                    $new_tel = isset($data['telefono'])?$data['telefono']:'';
-                    $new_dir = isset($data['domicilio'])?$data['domicilio']:'';
-                    if($new_dir!=$tercero->domicilio || $new_tel!=$tercero->telefono){
-                        $tercero->telefono = $new_tel;
-                        $tercero->direccion = $new_dir;
-                        $tercero->save();
-                    }
-                    return response(array('data'=>'Tercero ya registrado'), 201)->header('Content-Type', 'application/json');
-                }
+            $tercero = Tercero::find($data['cliente_id']);
+        } catch (\Throwable $th) {}
+        try {
+            if($tercero==null){
+                $tercero = Tercero::where('identificacion', $data['identificacion'])->first();
             }
         } catch (\Throwable $th) {}
+        if($tercero){
+            $new_tel = isset($data['telefono'])?$data['telefono']:'';
+            $new_dir = isset($data['domicilio'])?$data['domicilio']:'';
+            if($new_dir!=$tercero->domicilio || $new_tel!=$tercero->telefono){
+                $tercero->telefono = $new_tel;
+                $tercero->direccion = $new_dir;
+                $tercero->save();
+            }
+            return response(array('data'=>'Tercero ya registrado'), 201)->header('Content-Type', 'application/json');
+        }
         try {
             if(!$data['identificacion'] || !$data['cliente']){
                 return response(array('data'=>'Datos incompletos'), 201)->header('Content-Type', 'application/json');
