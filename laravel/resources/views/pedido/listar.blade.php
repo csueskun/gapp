@@ -63,10 +63,9 @@
                     <td>{{ $pedido->turno }}</td>
                     <td>{{ $pedido->caja_id }}</td>
                     <td class="">
-                    @if(($pedido->obs != null && $pedido->obs != ''))
-                    {{isset(json_decode($pedido->obs)->para_llevar)?(" ".json_decode($pedido->obs)->para_llevar.". "):""}}
-                    {{isset(json_decode($pedido->obs)->observacion)?(json_decode($pedido->obs)->observacion." "):""}}
-                    @endif
+                    <?php try{ ?> 
+                        {{strtoupper(json_decode($pedido->obs)->observacion)}}<br>
+                    <?php }catch(\Exception $e){} ?>
                     </td>
                     <td class="align-right min-width centrado">{{ count($pedido->productos) }}</td>
                     <td class="align-right">${{ number_format($pedido->total, 0) }}</td>

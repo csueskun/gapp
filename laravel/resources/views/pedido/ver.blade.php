@@ -39,7 +39,7 @@
         <br/>
         @include('template.status', ['status' => session('status')])
         <br/>
-        <table width="100%">
+        <table width="100%" style="">
             <tr>
                 <th width="140"><h4 class="titulo">Número de Orden: </h4></th>
                 <td><h2 class="titulo">{{$pedido->id}}</h2></td>
@@ -51,7 +51,7 @@
                 @endif
             </tr>
         </table>
-        <table width="100%">
+        <table width="100%" style="border-bottom: thin solid #bdbdbd;">
             <tr>
                 <th width="140"><h4 class="titulo">Mesero: </h4></th>
                 <td><h2 class="titulo">{{$pedido->usuario->nombres}} {{$pedido->usuario->apellidos}}</h2></td>
@@ -67,31 +67,24 @@
         </table>
 
         <table width="100%" style="border-bottom: thin solid #bdbdbd;">
-            <tr>
-                @if($pedido->mesa_id == 0)
-                @if(($pedido->obs != null && $pedido->obs != ''))
-                <th width="1"><h4 class="titulo">Entregar en: </h4></th>
+            <?php try{ 
+                $p = json_decode($pedido->obs);
+                if($p->entregar_en){?> 
+                <tr>
+                <th width="140"><h4 class="titulo">Entregar en: </h4></th>
                 <td><h2 class="titulo">
-                @if(($pedido->obs != null && $pedido->obs != ''))
-                @if(isset(json_decode($pedido->obs)->entregar_en))
-                    @if(json_decode($pedido->obs)->entregar_en=='CAJA')
-                    CAJA ({{ isset(json_decode($pedido->obs)->entregar_obs)?json_decode($pedido->obs)->entregar_obs : '' }})
-                    @else
-                    {{ isset(json_decode($pedido->obs)->entregar_obs)?json_decode($pedido->obs)->entregar_obs : '' }}
-                    @endif
-                @endif
-                @endif
-                @endif
-                @else
-                <th width="1"><h4 class="titulo">Observación: </h4></th>
-                <td><h2 class="titulo">
-                @if(($pedido->obs != null && $pedido->obs != ''))
-                {{isset(json_decode($pedido->obs)->para_llevar)?(" ".json_decode($pedido->obs)->para_llevar.". "):""}}
-                {{isset(json_decode($pedido->obs)->observacion)?(json_decode($pedido->obs)->observacion." "):""}}
-                @endif
+                    {{$p->entregar_en=='DOMICILIO'?$p->domicilio:$p->entregar_en}}
                 </h2></td>
-                @endif
-            </tr>
+                </tr>
+            <?php }}catch(\Exception $e){} ?>
+            <?php try{ 
+                $p = json_decode($pedido->obs);
+                if($p->observacion){?> 
+                <tr>
+                <th width="140"><h4 class="titulo">Observación: </h4></th>
+                <td><h2 class="titulo">{{$p->observacion}}</h2></td>
+                </tr>
+            <?php }}catch(\Exception $e){} ?>
         </table>
         <br>
         <br>

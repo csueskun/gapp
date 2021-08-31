@@ -76,19 +76,10 @@
                 <tr>
                     <td>{{ $pedido->id }}</td>
                     <td style="max-width: 200px">
-
-                    @if(($pedido->obs != null && $pedido->obs != ''))
-
-                    @if(isset(json_decode($pedido->obs)->entregar_en))
-                        @if(json_decode($pedido->obs)->entregar_en=='CAJA')
-                        CAJA ({{ isset(json_decode($pedido->obs)->entregar_obs)?json_decode($pedido->obs)->entregar_obs : '' }})
-                        @else
-                        {{ isset(json_decode($pedido->obs)->entregar_obs)?json_decode($pedido->obs)->entregar_obs : '' }}
-                        @endif
-                    @endif
-
-                    @endif
-
+                    <?php try{ ?> 
+                        {{strtoupper(json_decode($pedido->obs)->entregar_en)}}
+                    <?php }catch(\Exception $e){} ?>
+                    </td>
                     </td>
                     <td>{{ date_format(date_create($pedido->fecha), 'd/m/Y g:i A') }}</td>
                     <td>{{ $pedido->turno }}</td>
