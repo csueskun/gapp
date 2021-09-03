@@ -565,11 +565,6 @@
                     <h1 class="modal-title" id="exampleModalLabel">Observaciones</h1>
                 </div> -->
                 <div class="modal-body">
-                    <label class="checkbox-inline grande"><input type="radio" name="domicilio-caja" checked value="DOMICILIO"> ENTREGAR EN DOMICILIO</label>
-                    <label class="checkbox-inline grande"><input type="radio" name="domicilio-caja" value="CAJA"> ENTREGAR EN CAJA</label>
-                    <input type='hidden' id='entregar_en_' value='DOMICILIO'/>
-                    <textarea id="observacion-domicilio"></textarea>
-                    <br/>
                     <br/>
                     <div class="form-group" id='hora-programa-cont'>
                         <table style='width: 100%; margin: auto'>
