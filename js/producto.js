@@ -72,8 +72,8 @@ function abstraerProducto(){
     producto_json.detalle = form_producto.find("#detalle").val();
     producto_json.imagen = form_producto.find("input[name=imagen]").val();
     producto_json.tipo_producto_id = $("select#tipo_producto_id").val();
-    producto_json.terminado = $("input#terminado").is(":checked");
-    producto_json.comanda = $("input#imprime").is(":checked");
+    producto_json.terminado = $("input#terminado").is(":checked")?1:0;
+    producto_json.comanda = $("input#imprime").is(":checked")?1:0;
     producto_json.compuesto = $("select#compuesto").val();
     producto_json.iva = $("input#iva").val();
     producto_json.impco = $("input#impco").val();
