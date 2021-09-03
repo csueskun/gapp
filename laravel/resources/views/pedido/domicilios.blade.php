@@ -75,10 +75,29 @@
                 @foreach($pedido_lista as $pedido)
                 <tr>
                     <td>{{ $pedido->id }}</td>
-                    <td style="max-width: 200px">
-                    <?php try{ ?> 
-                        {{strtoupper(json_decode($pedido->obs)->entregar_en)}}
-                    <?php }catch(\Exception $e){} ?>
+                    <td style="max-width: 300px">
+                    <?php try{ 
+                        if(strtoupper(json_decode($pedido->obs)->cliente)){?> 
+                        <strong>Cliente: </strong>{{strtoupper(json_decode($pedido->obs)->cliente)}}<br>
+                    <?php }}catch(\Exception $e){}
+                    try{ 
+                        if(strtoupper(json_decode($pedido->obs)->identificacion)){?> 
+                        <strong>Documento: </strong>{{strtoupper(json_decode($pedido->obs)->identificacion)}}<br>
+                    <?php }}catch(\Exception $e){}
+                    try{
+                        if(strtoupper(json_decode($pedido->obs)->entregar_en)!='DOMICILIO'){
+                        if(strtoupper(json_decode($pedido->obs)->entregar_en)){?> 
+                        <strong>Entregar en: </strong>{{strtoupper(json_decode($pedido->obs)->entregar_en)}}<br>
+                    <?php }}}catch(\Exception $e){}
+                    try{
+                        if(strtoupper(json_decode($pedido->obs)->entregar_en)=='DOMICILIO'){
+                        if(strtoupper(json_decode($pedido->obs)->domicilio)){?> 
+                        <strong>Dirección: </strong>{{strtoupper(json_decode($pedido->obs)->domicilio)}}<br>
+                    <?php }}}catch(\Exception $e){}
+                    try{
+                        if(strtoupper(json_decode($pedido->obs)->observacion)){?> 
+                        <strong>Observación: </strong>{{strtoupper(json_decode($pedido->obs)->observacion)}}<br>
+                    <?php }}catch(\Exception $e){} ?>
                     </td>
                     </td>
                     <td>{{ date_format(date_create($pedido->fecha), 'd/m/Y g:i A') }}</td>

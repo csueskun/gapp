@@ -63,9 +63,28 @@
                     <td>{{ $pedido->turno }}</td>
                     <td>{{ $pedido->caja_id }}</td>
                     <td class="">
-                    <?php try{ ?> 
-                        {{strtoupper(json_decode($pedido->obs)->observacion)}}<br>
-                    <?php }catch(\Exception $e){} ?>
+                    <?php try{ 
+                        if(strtoupper(json_decode($pedido->obs)->cliente)){?> 
+                        <strong>Cliente: </strong>{{strtoupper(json_decode($pedido->obs)->cliente)}}<br>
+                    <?php }}catch(\Exception $e){}
+                    try{ 
+                        if(strtoupper(json_decode($pedido->obs)->identificacion)){?> 
+                        <strong>Documento: </strong>{{strtoupper(json_decode($pedido->obs)->identificacion)}}<br>
+                    <?php }}catch(\Exception $e){}
+                    try{
+                        if(strtoupper(json_decode($pedido->obs)->entregar_en)!='DOMICILIO'){
+                        if(strtoupper(json_decode($pedido->obs)->entregar_en)){?> 
+                        <strong>Entregar en: </strong>{{strtoupper(json_decode($pedido->obs)->entregar_en)}}<br>
+                    <?php }}}catch(\Exception $e){}
+                    try{
+                        if(strtoupper(json_decode($pedido->obs)->entregar_en)=='DOMICILIO'){
+                        if(strtoupper(json_decode($pedido->obs)->domicilio)){?> 
+                        <strong>Dirección: </strong>{{strtoupper(json_decode($pedido->obs)->domicilio)}}<br>
+                    <?php }}}catch(\Exception $e){}
+                    try{
+                        if(strtoupper(json_decode($pedido->obs)->observacion)){?> 
+                        <strong>Observación: </strong>{{strtoupper(json_decode($pedido->obs)->observacion)}}<br>
+                    <?php }}catch(\Exception $e){} ?>
                     </td>
                     <td class="align-right min-width centrado">{{ count($pedido->productos) }}</td>
                     <td class="align-right">${{ number_format($pedido->total, 0) }}</td>
