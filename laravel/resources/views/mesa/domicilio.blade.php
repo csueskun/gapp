@@ -1,5 +1,5 @@
 <div class="modal fade" tabindex="-1" role="dialog" id='modal_pagar' aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="width: 670px;">
+    <div class="modal-dialog" role="document">
         <div class="modal-content" id='content-pagar'>
             <!-- <div class="modal-header" style="">
                 <h1 class="modal-title" id="exampleModalLabel">Observaciones</h1>
@@ -20,7 +20,7 @@
                             </tr>
 
                             <tr>
-                                <td colspan="2" class="label" style='width: 170px;display: inline-block; text-align: left'>
+                                <td width="130" colspan="2" class="label" style='display: inline-block; text-align: left'>
                                     Ver otros medios de pago
                                     <input style="height: 25px;width: 25px;margin-left: 25px;" width="auto" onchange="toggleOtrosMedios($(this).is(':checked'))" type="checkbox" name="ver-otros-medios">
                                 </td>
@@ -60,15 +60,15 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="label" style='width: 170px;display: inline-block; text-align: left'>Cambio</td>
+                                <td class="label" style='display: inline-block; text-align: left'>Cambio</td>
                                 <td id='cambio_cambio'><input readonly class="form-control curr"/></td>
                             </tr>
                             <tr>
-                                <td class="label" style='width: 170px;display: inline-block; text-align: left'>Descuento</td>
+                                <td class="label" style='display: inline-block; text-align: left'>Descuento</td>
                                 <td id='descuento'>
                                     <table>
                                         <tr>
-                                            <td width="150">
+                                            <td>
                                                 <input onClick="this.select();" onkeyup="calcularDescuento()" value="0" typeof="number" max="100" min="0" class="form-control percent"/>
                                             </td>
                                             <td>
@@ -79,11 +79,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="label" style='width: 170px;display: inline-block; text-align: left'>Propina</td>
+                                <td class="label" style='display: inline-block; text-align: left'>Propina</td>
                                 <td id='propina'>
                                     <table>
                                         <tr>
-                                            <td width="150">
+                                            <td>
                                                 <input disabled nonClick="this.select();" value="0" onkeyup="calcularPropina()" typeof="number" max="100" min="0" class="form-control percent"/>
                                             </td>
                                             <td>
@@ -123,8 +123,10 @@
                     @endif
                     <!--@if(Auth::user()->rol=='Administrador')
                     @endif -->
-                    <button style="font-size:30px;padding: 4px 6px;" type="button" class="btn btn-default btn-lg fuente bebas" data-dismiss="modal"><span class="fa fa-close"></span> Salir</button>
                 </div>
+                <br>
+                <br>
+                <button style="font-size:30px;padding: 4px 6px;" type="button" class="btn btn-default btn-lg fuente bebas" data-dismiss="modal"><span class="fa fa-close"></span> Salir</button>
             </div>
         </div>
         <div class="modal-content" id='content-domicilio' style="display: none;">

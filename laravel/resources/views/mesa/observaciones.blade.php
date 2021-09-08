@@ -1,5 +1,5 @@
 <div class="modal fade" id="observacionesModal" tabindex="-1" role="dialog" aria-labelledby="obervacionesModal">
-    <div class="modal-dialog" role="document" style="width: 640px">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <div class="row restaurante">
@@ -29,23 +29,17 @@
                       <input type="hidden" id="cliente_id">
                     </div>
                     <div class= "col-md-12">
-                      <input type="text" ng-keyup="autocompleteCliente($event)" ng-model="observaciones.cliente" name="cliente" placeholder="Nombres" id="cliente" class="w100 form-control" value="VARIOS" autocomplete="off">
+                      <input type="text" ng-keyup="autocompleteCliente($event)" ng-model="observaciones.cliente" name="cliente" placeholder="" id="cliente" class="w100 form-control" value="VARIOS" autocomplete="off">
                     </div>
                 </div>
                 <div class="row">
                     <div class= "col-md-6">
-                    <label >Identificación</label>
+                        <label >Identificación</label>
+                        <input type="text" ng-model="observaciones.identificacion" name="identificacion" id="identificacion" class="w100 form-control" autocomplete="off" placeholder="" >
                     </div>
                     <div class= "col-md-6">
-                    <label >Teléfono</label>
-                    </div>   
-                </div>
-                <div class="row">
-                    <div class= "col-md-6">
-                    <input type="text" ng-model="observaciones.identificacion" name="identificacion" id="identificacion" class="w100 form-control" autocomplete="off">
-                    </div>
-                    <div class= "col-md-6">
-                    <input type="text" ng-model="observaciones.telefono" name="telefono" id="telefono" class="w100 form-control" autocomplete="off">                
+                        <label >Teléfono</label>
+                        <input type="text" ng-model="observaciones.telefono" name="telefono" id="telefono" class="w100 form-control" autocomplete="off" placeholder="" >                
                     </div>
                 </div>
                 
@@ -54,7 +48,7 @@
                     <label >Dirección</label>
                     </div>
                     <div class= "col-md-12">
-                    <input type="text" name="domicilio" ng-model="observaciones.domicilio" placeholder="Dirección" id="domicilio" class="w100 form-control">
+                    <input type="text" name="domicilio" ng-model="observaciones.domicilio" placeholder="" id="domicilio" class="w100 form-control">
                     <span class="text-danger f20" ng-if="observaciones.entregar_en=='DOMICILIO'&&!observaciones.domicilio">La observación es obligatoria para domicilios</span>
                 </div>
             </div>       
