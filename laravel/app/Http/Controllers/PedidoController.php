@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App;
 use App\Pedido;
 use App\Producto;
+use App\ProductoPedido;
 use App\Documento;
 use App\DetalleDocumento;
 use App\Tercero;
@@ -575,6 +576,7 @@ class PedidoController extends Controller
     }
     
     public function calcularValor($id){
+        $this->actualizarTotales($id);     
         return DB::table("pedido")
                 ->select(DB::raw(
                         "COALESCE((
@@ -583,6 +585,10 @@ class PedidoController extends Controller
                         ),0) as total"
                         ))
                 ->where('id', $id)->first();
+    }
+    
+    public function actualizarTotales($id){
+        DB::select("UPDATE pizza_producto_pedido set total = cant * valor WHERE pedido_id = {$id}");        
     }
 
     public function crear(){
@@ -800,6 +806,7 @@ class PedidoController extends Controller
     public function precomandaPosStack($id, $re = false){
         $pedido = $this->buscar($id);
         if($pedido != null){
+            $this->actualizarTotales($id);
             $controller = app('App\Http\Controllers\ProductoPedidoController');
 
             $productos_pedido = $controller->buscarPorPedido($pedido->id);
@@ -983,6 +990,7 @@ class PedidoController extends Controller
             $producto_pedido_json = json_encode($pp);
             try {
                 $res = $this->agregarProductoPedido($producto_pedido_json, $mesa, $pedido, false);
+                return $res;
                 if(!$pedido_id){
                     $pedido_id = json_decode($res);
                     $pedido_id = $pedido_id->id;
@@ -991,6 +999,7 @@ class PedidoController extends Controller
                 try {
                     ProductoPedido::where("id", $pedido_id)->delete();
                 } catch (\Throwable $th) {
+                    return $th;
                 }
             }
         }
