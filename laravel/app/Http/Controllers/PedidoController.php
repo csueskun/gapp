@@ -381,6 +381,7 @@ class PedidoController extends Controller
         return 1;
     }
     public function preFacturar($id) {
+        Pedido::where('id', $id)->update(['prefacturado'=>1]);
         return $this->prefacturaPosStack($id,true, Input::get('propina'), Input::get('descuento'));
     }
 

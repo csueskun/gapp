@@ -49,7 +49,7 @@ class ConfigController extends Controller
     }
     
     public function estado_mesas() {
-        return DB::table('pedido')->where('estado',1)->orWhere('estado',4)->get(["estado", "mesa_id", "created_at", "entregado"]);
+        return DB::table('pedido')->where('estado',1)->orWhere('estado',4)->get(["estado", "mesa_id", "created_at", "entregado", "prefacturado"]);
     }
     
     public function servicioImpresion() {
@@ -75,7 +75,12 @@ class ConfigController extends Controller
             if(isset($mesa->entregado) && $mesa->entregado != null){
                 $clase = "btn btn-primary";
             }
-            $estado_mesas[$mesa->mesa_id] = array("clase"=>$clase, "fecha"=>$mesa->created_at);
+            $estado_mesas[$mesa->mesa_id] = array(
+                "clase"=>$clase, 
+                "fecha"=>$mesa->created_at, 
+                "entregado"=>$mesa->entregado, 
+                "prefacturado"=>$mesa->prefacturado
+            );
         }
         return $estado_mesas;
     }

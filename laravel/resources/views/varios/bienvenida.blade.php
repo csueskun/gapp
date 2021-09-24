@@ -48,8 +48,13 @@
         </a>
         @for($i = 1; $i<=$config->cantidad_mesas;$i++)
         <a href="/mesa/{{$i}}" id="mesa{{$i}}" class="{{ isset($estado_mesas[$i]) ? $estado_mesas[$i]['clase'] : 'btn btn-success'}} cuadrado boton-grande mesa">
+            @if(isset($estado_mesas[$i]))
+            @if($estado_mesas[$i]['prefacturado'])
+                <i class="fa fa-wpforms prefacturado"></i>
+            @endif
+            @endif
             <span>&nbsp;</span>
-            <i class="glyphicon glyphicon-cutlery"></i>
+            <i class="fa fa-cutlery"></i>
             <span>&nbsp;</span>
             <h2 class="no-margin">{{$i}}</h2>
             <span style="height: 16px">
@@ -71,19 +76,12 @@
     <br/>
     <div class="container_ centrado">
         <div class="row" style="background-color: white;">
-            <div class="col-xs-12 col-sm-3">
-                <h4 class="titulo no-margin-padding"><button class="btn btn-success"></button> Disponible</h4>
-            </div>
-            <div class="col-xs-12 col-sm-3">
-                <h4 class="titulo no-margin-padding"><button class="btn btn-danger"></button> Con Pedido</h4>
-            </div>
-            <div class="col-xs-12 col-sm-3">
-                <h4 class="titulo no-margin-padding"><button class="btn btn-warning"></button> Con Pedido Entregado</h4>
-            </div>
-            <div class="col-xs-12 col-sm-3">
-                <h4 class="titulo no-margin-padding"><button class="btn btn-default"></button> No Disponible</h4>
-            </div>
-            <br>
+            <h4 class="titulo no-margin-padding">
+                <i class="fa fa-square ml-2" style="color: #5cb85c;"></i> Disponible
+                <i class="fa fa-square ml-2" style="color: #d9534f;"></i> Con Pedido Entregado
+                <i class="fa fa-square-o ml-2"></i> No Disponible
+                <i class="fa fa-wpforms ml-2"></i> Prefacturado
+            </h4>
         </div>
     </div>
     <br/>

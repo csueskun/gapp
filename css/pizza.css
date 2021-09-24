@@ -462,6 +462,7 @@ div#cambio .label, label.xl{
     color: #5f5f5f;
     height: 50px;
     margin-bottom: 5px;
+    padding-left: 0;;
 }
 
 ul>a.usuario{
@@ -802,4 +803,8 @@ h3.adicionales-header.showing{
 }
 .bg-success{
     background-color:#5cb85c;
+}
+i.fa.prefacturado{
+    position: absolute;
+    margin: 2px 0 0 28px;
 }
