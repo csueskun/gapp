@@ -980,7 +980,7 @@ function impItemPedido(productos_pedido){
             if(pedido_activo){
                 html+= '        <span onclick="'+editarItemPedido+';" class="btn btn-warning total fa fa-pencil"></span>';
             }
-            if(pedido_activo && (isAdmin() || isCajero() || productos_pedido[i].comanda === 0)){
+            if(pedido_activo && (isAdmin() || productos_pedido[i].comanda === 0)){
                 html+= '        <span onclick="'+funcionCancelar+';" class="btn btn-danger total fa fa-trash boton-cancelar"></span>';
             }
             html+= '        <span class="btn btn-success valor" valor="'+valorProducto+'">'+accounting.formatMoney(valorProducto, '$ ', 0)+'</span></div>'+
@@ -1398,14 +1398,14 @@ function impPos(id){
             servicio_impresion = data;
             $.get("/pedido/comanda/"+id+"/pos-stack", function (data) {
                 enviarAServicioImpresionPost(servicio_impresion, data);
-                // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
+                actualizarDivPedido();
             });
         });
     }
     else{
         $.get("/pedido/comanda/"+id+"/pos-stack", function (data) {
-            // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
             enviarAServicioImpresionPost(servicio_impresion, data);
+            actualizarDivPedido();
         });
     }
 }
@@ -1416,6 +1416,7 @@ function reImprimirComanda (id){
             servicio_impresion = data;
             $.get("/pedido/re-comanda/"+id+"/pos-stack", function (data) {
                 enviarAServicioImpresionPost(servicio_impresion, data);
+                actualizarDivPedido();
                 // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
             });
         });
@@ -1423,6 +1424,7 @@ function reImprimirComanda (id){
     else{
         $.get("/pedido/re-comanda/"+id+"/pos-stack", function (data) {
             enviarAServicioImpresionPost(servicio_impresion, data);
+            actualizarDivPedido();
             // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
         });
     }
