@@ -573,6 +573,7 @@ function actualizarDivPedido() {
 function addComboProductoPedido(productos, form, force=false){
     mostrarFullLoading();
     var postdata = {
+        pedido: getPedidoId(),
         productos: productos,
         alias: $('meta[name=mesa_alias]').attr('content'),
         _token: $('meta[name=csrf-token]').attr('content'),
