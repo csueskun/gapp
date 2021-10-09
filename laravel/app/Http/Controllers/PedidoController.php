@@ -1002,7 +1002,7 @@ class PedidoController extends Controller
                 }
             }
         }
-        return $res;
+        return $pedido;
     }
     public function agregarProductoPedido($producto_pedido_json = null, $mesa = null, $pedido = null, $es_combo = false){
         $controller = app('App\Http\Controllers\PedidoController');
