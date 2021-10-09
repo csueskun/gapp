@@ -995,9 +995,8 @@ class PedidoController extends Controller
                     $pedido = $pedido->id;
                 }
             } catch (\Throwable $th) {
-                return $th;
                 try {
-                    // ProductoPedido::where("id", $pedido)->delete();
+                    ProductoPedido::where("id", $pedido)->delete();
                 } catch (\Throwable $th) {
                     return $th;
                 }
