@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use Pusher;
 
 class ConfigController extends Controller
 {
@@ -367,5 +368,14 @@ class ConfigController extends Controller
             'config'=>$config,
             'pedido'=>$pedido
         ]);
+    }
+
+    public function push(){
+        try {
+            $pusher = new Pusher\Pusher("APP_KEY", "APP_SECRET", "APP_ID", array('cluster' => 'APP_CLUSTER'));
+            $pusher->trigger('my-channel', 'my-event', array('message' => 'hello world'));
+        } catch (\Throwable $th) {
+            var_dump($th);
+        }
     }
 }

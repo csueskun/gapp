@@ -1,3 +1,4 @@
+const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 $(function() {
 
     
@@ -384,4 +385,12 @@ function getTamanosLabelMin(tamano='unico', toUpper=false){
         tamano = tamano.toUpperCase();
     }
     return tamano;
+}
+function diaDelMesActual(day){
+    var date = new Date();
+    date.setDate(day);
+    return diaDeLaSemana(date);
+}
+function diaDeLaSemana(date){
+    return diasSemana[date.getDay()];
 }

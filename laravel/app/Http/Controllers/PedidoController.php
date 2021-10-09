@@ -978,7 +978,6 @@ class PedidoController extends Controller
                 $pedido = $pedido->id;
             }
         }
-        $pedido_id = 0;
         foreach($pps as $pp){
             $pp['force'] = true;
             $pp['adicionales'] = [];
@@ -991,14 +990,13 @@ class PedidoController extends Controller
             $producto_pedido_json = json_encode($pp);
             try {
                 $res = $this->agregarProductoPedido($producto_pedido_json, $mesa, $pedido, false);
-                return $res;
-                if(!$pedido_id){
-                    $pedido_id = json_decode($res);
-                    $pedido_id = $pedido_id->id;
+                if(!$pedido){
+                    $pedido = json_decode($res);
+                    $pedido = $pedido->id;
                 }
             } catch (\Throwable $th) {
                 try {
-                    ProductoPedido::where("id", $pedido_id)->delete();
+                    ProductoPedido::where("id", $pedido)->delete();
                 } catch (\Throwable $th) {
                     return $th;
                 }
@@ -1135,5 +1133,52 @@ class PedidoController extends Controller
         else{
             return response()->json(array('code'=>401,'msg'=>'NO OK.'));
         }
+    }
+    public function dashboardInfo(){
+        $hoy = date('Y-m-d 00:00:00');
+        $fecha_inicio = "DATE_ADD('".$hoy."', INTERVAL 3 hour)";
+        $hoy = date('Y-m-d 23:59:59');
+        $fecha_fin = "DATE_ADD('".$hoy."', INTERVAL 3 hour)";
+        $hoy = DB::select("
+            SELECT count(id) as total
+            FROM pizza_pedido 
+            WHERE created_at >= $fecha_inicio 
+            AND created_at <= $fecha_fin
+        ");
+        $activos = DB::select("
+            SELECT count(id) as total
+            FROM pizza_pedido 
+            WHERE created_at >= $fecha_inicio 
+            AND created_at <= $fecha_fin
+            AND estado in (1, 4, 5)
+            AND mesa_id != 0
+        ");
+        $domicilios = DB::select("
+            SELECT count(id) as total
+            FROM pizza_pedido 
+            WHERE created_at >= $fecha_inicio 
+            AND created_at <= $fecha_fin
+            AND estado in (3, 4, 5)
+            AND mesa_id = 0
+        ");
+        $mesas = DB::select("
+            SELECT mesa_id
+            FROM pizza_pedido 
+            WHERE estado in (1, 4)
+            AND mesa_id != 0
+        ");
+        $mesas_ocupadas = [];
+        foreach ($mesas as $mesa){
+            $mesa_id = $mesa->mesa_id;
+            if(in_array($mesa_id, $mesas_ocupadas)){
+            }
+            else{
+                $mesas_ocupadas[] = $mesa_id;
+            }
+        }
+        $cantidad_mesas = app('App\Http\Controllers\ConfigController')->first();
+        $cantidad_mesas = $cantidad_mesas->cantidad_mesas;
+        $mesas = ['ocupadas'=>$mesas_ocupadas, 'total'=>$cantidad_mesas];
+        return response()->json(array('hoy'=>$hoy[0],'activos'=>$activos[0],'domicilios'=>$domicilios[0],'mesas'=>$mesas));
     }
 }

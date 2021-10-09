@@ -5,9 +5,7 @@ use Illuminate\Support\Facades\Redirect;
 
 
 Route::get('/', 'UsuarioController@inicio');
-Route::get('/xxxx', function () {
-    return 'hola';
-});
+Route::get('/push', 'ConfigController@push');
 
 Route::post('/hash', 'UsuarioController@hash');
 Route::get('/id', 'LoginController@doAuthLogin');
@@ -20,6 +18,16 @@ Route::get('/caja/cuadre', function () {
     return view("caja.cuadre");
 })->middleware('auth')->middleware('tiene.roles:Administrador.Cajero');
 
+Route::get('/dashboard', function () {
+    return view("varios.dashboard");
+})->middleware('auth')->middleware('tiene.roles:Administrador.Cajero');
+
+Route::get('/dashboard/report0/data', 'DocumentoController@getMonthData');
+Route::get('/dashboard/report1/data', 'DocumentoController@getMonthFV');
+Route::get('/dashboard/report2/data', 'DocumentoController@getMonthExpenses');
+Route::get('/dashboard/pedidos/data', 'PedidoController@dashboardInfo');
+Route::get('/dashboard/vendedores/data', 'DocumentoController@getVenderores');
+
 Route::get('/menu2', function () {
     return view("mesa.menu2");
 });
@@ -29,7 +37,6 @@ Route::post('/caja/cuadre', 'DocumentoController@cuadre');
 Route::post('/caja/reporte-tipodoc', 'DocumentoController@reporteTipodoc');
 Route::get('/caja/reporte-ventas', 'DocumentoController@preReporteVentas');
 Route::post('/caja/cuadre-post', 'DocumentoController@preCuadrePos');
-Route::get('/push', 'DocumentoController@push');
 Route::post('/documento/print-post', 'DocumentoController@posPrint');
 
 Route::get('/producto/buscarConTamano/{buscar}', 'ProductoTamanoController@todosConProducto');

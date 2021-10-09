@@ -24,10 +24,6 @@ class DocumentoController extends Controller
     public function todos() {
         return Documento::orderBy("id","desc")->get();
     }
-    public function push() {
-        $data['message'] = 'Hello world desde H-Software.co';
-        \App\Util\PushService::push("my-channel","my-event", $data);
-    }
     
     public function encontrar($id) {
         return Documento::with("detalles.producto")->where("id", $id)->first();
@@ -1009,5 +1005,52 @@ class DocumentoController extends Controller
             var_dump($th);
             return [];
         }
+    }
+
+    public function getMonthFV(){
+        $data = DB::select("
+            SELECT sum(total) as total, DAY(created_at) as day 
+            FROM pizza_documento 
+            WHERE tipodoc = 'FV'
+            and month(created_at) = 8
+            and year(created_at) = year(CURRENT_DATE())
+            group by 2
+        ");
+        return $data;
+    }
+
+    public function getVenderores(){
+        $data = DB::select("
+            SELECT sum(d.total) as total, u.usuario as usuario
+            FROM pizza_documento as d
+            inner JOIN pizza_pedido as p
+            on p.id = d.pedido_id
+            inner JOIN pizza_users as u
+            on u.id = p.user_id
+            WHERE tipodoc = 'FV'
+            and month(d.created_at) = 8
+            and year(d.created_at) = year(CURRENT_DATE())
+            group by 2
+            order by 1 desc
+        ");
+        return response()->json($data);
+    }
+
+    public function getMonthExpenses(){
+        $data = DB::select("
+            SELECT sum(total) as total, DAY(created_at) as day 
+            FROM pizza_documento 
+            WHERE tipodoc in ('RT', 'CE', 'PN', 'FC','NI')
+            and month(created_at) = 8
+            and year(created_at) = year(CURRENT_DATE())
+            group by 2
+        ");
+        return response()->json($data);
+    }
+
+    public function getMonthData(){
+        $fv = $this->getMonthFV();
+        $egresos = $this->getMonthExpenses();
+        return response()->json(['ventas'=>$fv, 'gastos'=>$egresos]);
     }
 }

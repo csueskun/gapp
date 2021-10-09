@@ -38,7 +38,11 @@ class LoginController extends Controller
                 if(true){
                     $configController = new ConfigController;
                     $configController->resetTurno();
-                    return Redirect::to('/')->with('status', ["success-contenido" => "Bienvenido ".Auth::user()->nombres." ".Auth::user()->apellidos]);
+                    $redir = '/';
+                    if(Auth::user()->rol=='Administrador'){
+                        $redir = '/dashboard';
+                    }
+                    return Redirect::to($redir)->with('status', ["success-contenido" => "Bienvenido ".Auth::user()->nombres." ".Auth::user()->apellidos]);
                 }
             }
             $validator->getMessageBag()->add('password', "Usuario no asociado a H-Software");
