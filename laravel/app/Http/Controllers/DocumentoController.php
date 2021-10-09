@@ -1012,7 +1012,7 @@ class DocumentoController extends Controller
             SELECT sum(total) as total, DAY(created_at) as day 
             FROM pizza_documento 
             WHERE tipodoc = 'FV'
-            and month(created_at) = 8
+            and month(created_at) = month(CURRENT_DATE())
             and year(created_at) = year(CURRENT_DATE())
             group by 2
         ");
@@ -1028,7 +1028,7 @@ class DocumentoController extends Controller
             inner JOIN pizza_users as u
             on u.id = p.user_id
             WHERE tipodoc = 'FV'
-            and month(d.created_at) = 8
+            and month(d.created_at) = month(CURRENT_DATE())
             and year(d.created_at) = year(CURRENT_DATE())
             group by 2
             order by 1 desc
@@ -1041,7 +1041,7 @@ class DocumentoController extends Controller
             SELECT sum(total) as total, DAY(created_at) as day 
             FROM pizza_documento 
             WHERE tipodoc in ('RT', 'CE', 'PN', 'FC','NI')
-            and month(created_at) = 8
+            and month(created_at) = month(CURRENT_DATE())
             and year(created_at) = year(CURRENT_DATE())
             group by 2
         ");
