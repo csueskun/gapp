@@ -135,6 +135,7 @@
                 <span>Gestión</span>
             </h2>
             <ul class="nav flex-column">
+                <li class="nav-item"><a href="/dashboard" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tachometer" aria-hidden="true"></i> Tablero</a></li>
                 <li class="nav-item"><a href="/documento/listar" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Documentos</a></li>
                 <li class="nav-item"><a href="/cocina" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-television" aria-hidden="true"></i> Cocina</a></li>
                 <li class="nav-item"><a href="/caja/cuadre" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-money" aria-hidden="true"></i> Cuadre de Caja</a></li>

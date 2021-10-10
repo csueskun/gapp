@@ -1007,19 +1007,30 @@ class DocumentoController extends Controller
         }
     }
 
-    public function getMonthFV(){
+    public function getMonthFV(Request $request){
+        $month = "month(CURRENT_DATE())";
+        $month_ = Input::get("mes");
+        if($month_){
+            $month = $month_;
+        }
+
         $data = DB::select("
             SELECT sum(total) as total, DAY(created_at) as day 
             FROM pizza_documento 
             WHERE tipodoc = 'FV'
-            and month(created_at) = month(CURRENT_DATE())
+            and month(created_at) = $month
             and year(created_at) = year(CURRENT_DATE())
             group by 2
         ");
         return $data;
     }
 
-    public function getVenderores(){
+    public function getVenderores(Request $request){
+        $month = "month(CURRENT_DATE())";
+        $month_ = Input::get("mes");
+        if($month_){
+            $month = $month_;
+        }
         $data = DB::select("
             SELECT sum(d.total) as total, u.usuario as usuario
             FROM pizza_documento as d
@@ -1028,7 +1039,7 @@ class DocumentoController extends Controller
             inner JOIN pizza_users as u
             on u.id = p.user_id
             WHERE tipodoc = 'FV'
-            and month(d.created_at) = month(CURRENT_DATE())
+            and month(d.created_at) = $month
             and year(d.created_at) = year(CURRENT_DATE())
             group by 2
             order by 1 desc
@@ -1036,12 +1047,17 @@ class DocumentoController extends Controller
         return response()->json($data);
     }
 
-    public function getMonthExpenses(){
+    public function getMonthExpenses(Request $request){
+        $month = "month(CURRENT_DATE())";
+        $month_ = Input::get("mes");
+        if($month_){
+            $month = $month_;
+        }
         $data = DB::select("
             SELECT sum(total) as total, DAY(created_at) as day 
             FROM pizza_documento 
             WHERE tipodoc in ('RT', 'CE', 'PN', 'FC','NI')
-            and month(created_at) = month(CURRENT_DATE())
+            and month(created_at) = $month
             and year(created_at) = year(CURRENT_DATE())
             group by 2
         ");

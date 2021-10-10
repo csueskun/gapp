@@ -172,7 +172,6 @@
     };
 
 
-
     $(function(){
         loadReport1Data();
         loadReport2Data();
@@ -246,11 +245,19 @@
             loadReport0(report0Config(data));
         });
     }
+
+    function getMesParam(){
+        var mes = getParameterByName('mes');
+        if(!mes){
+            return '';
+        }
+        return '?mes='+mes;
+    }
     
     function loadReport1Data(){
         var days = [];
         var totals = [];
-        $.get('/dashboard/report1/data', function (data) {
+        $.get('/dashboard/report1/data'+getMesParam(), function (data) {
             var sum = 0;
             try {
                 data.forEach(function(r){
@@ -277,7 +284,7 @@
     function loadReport2Data(){
         var days = [];
         var totals = [];
-        $.get('/dashboard/report2/data', function (data) {
+        $.get('/dashboard/report2/data'+getMesParam(), function (data) {
             var sum = 0;
             try {
                 data.forEach(function(r){
@@ -303,7 +310,7 @@
     function loadVendedoresData(){
         var users = [];
         var total = [];
-        $.get('/dashboard/vendedores/data', function (data) {
+        $.get('/dashboard/vendedores/data'+getMesParam(), function (data) {
             var sum = 0;
             try {
                 data.forEach(function(r){
