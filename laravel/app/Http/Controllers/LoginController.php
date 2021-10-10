@@ -47,11 +47,13 @@ class LoginController extends Controller
             }
             $validator->getMessageBag()->add('password', "Usuario no asociado a H-Software");
             return Redirect::to('/login')
+                ->with('status', ["error-contenido" => "Usuario no asociado a H-Software"])
                 ->withErrors($validator)
                 ->withInput(Input::except('password'));
         } else {
             $validator->getMessageBag()->add('password', 'Nombre De Usuario o Password Incorrectos');
             return Redirect::to('/login')
+                ->with('status', ["error-contenido" => "Nombre De Usuario o Password Incorrectos"])
                 ->withErrors($validator)
                 ->withInput(Input::except('password'));
         }
