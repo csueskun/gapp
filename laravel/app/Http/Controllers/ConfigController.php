@@ -36,6 +36,7 @@ class ConfigController extends Controller
             $config->encabezado_comanda = '';
             $config->servicio_impresion = '';
             $config->pie_pos = 'Gracias por preferirnos';
+            $config->pie_prefactura = '';
             $config->iva = 0;
             $config->impcon = 0;
             $config->propina = 0;
@@ -243,6 +244,7 @@ class ConfigController extends Controller
             $config->encabezado_pos = Input::get('encabezado_pos');
             $config->encabezado_comanda = Input::get('encabezado_comanda');
             $config->pie_pos = Input::get('pie_pos');
+            $config->pie_prefactura = Input::get('pie_prefactura');
             $config->valida_inventario = Input::get('valida_inventario');
             $config->propina = Input::get('propina');
             $config->fvcodprefijo = Input::get('fvcodprefijo');
@@ -288,8 +290,14 @@ class ConfigController extends Controller
         $config->encabezado_comanda = '';
         $pie = $config->pie_pos;
         $config->pie_pos = '';
+        $pie_prefactura = $config->pie_prefactura;
+        $config->pie_prefactura = '';
         return view('config.editar')
-        ->with("config",$config)->with("encabezado",$encabezado)->with("encabezado_comanda",$encabezado_comanda)->with("pie",$pie);
+        ->with("config",$config)
+        ->with("encabezado",$encabezado)
+        ->with("encabezado_comanda",$encabezado_comanda)
+        ->with("pie",$pie)
+        ->with("pie_prefactura",$pie_prefactura);
     }
 
     public function configInitPrinter(){
@@ -311,8 +319,14 @@ class ConfigController extends Controller
             $config->encabezado_comanda = '';
             $pie = $config->pie_pos;
             $config->pie_pos = '';
+            $pie_prefactura = $config->pie_prefactura;
+            $config->pie_prefactura = '';
             return view('config.editar')
-                ->with("config",$config)->with("encabezado",$encabezado)->with("encabezado_comanda",$encabezado_comanda)->with("pie",$pie);
+                ->with("config",$config)
+                ->with("encabezado",$encabezado)
+                ->with("encabezado_comanda",$encabezado_comanda)
+                ->with("pie_prefactura",$pie_prefactura)
+                ->with("pie",$pie);
         }
         else{
 
@@ -358,6 +372,7 @@ class ConfigController extends Controller
         $config->encabezado_comanda = '';
         $config->encabezado_pos = '';
         $config->pie_pos = '';
+        $config->pie_prefactura = '';
         $config->propina = 0;
         $config->valida_inventario = $config->valida_inventario == 1;
         $config->subtotales_factura = $config->subtotales_factura == 1;

@@ -129,6 +129,13 @@
                     <div class = "help-block with-errors">{{ $errors->first('pie_pos') }}</div>
                 </div>
             </div>
+            <div class = "col-md-6">
+                <div class = "form-group has-feedback {{ ($errors->first('pie_prefactura')) ? 'has-error'  :''}}">
+                    <label for = "pie_prefactura" class = "control-label">Pie PreFactura POS</label><br/>
+                    <textarea name='pie_prefactura' style='font-family: monospace; height: 100px' cols='40'>{{ old('pie_prefactura')?old('pie_prefactura'):$pie_prefactura }}</textarea>
+                    <div class = "help-block with-errors">{{ $errors->first('pie_prefactura') }}</div>
+                </div>
+            </div>
                 <hr>
                 <div class = "col-md-12" style="padding: 0">
                     <div class="col-md-3">
