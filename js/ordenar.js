@@ -629,6 +629,10 @@ function addComboProductoPedido(productos, form, force=false){
             actualizarDivPedido();
             terminarAgregarPedido(form);
         }
+    })
+    .fail(function() {
+        mostrarError('No se pudo agregar el producto al pedido. Intente de nuevo');
+        ocultarFullLoading();
     });
 
 }
@@ -710,6 +714,10 @@ function addProductoPedido(producto, form, last = true, first = true, multi=fals
                 addProductoPedido(otrosProductos, form, false, first = false, multi=true);
             }
         }
+    })
+    .fail(function() {
+        mostrarError('No se pudo agregar el producto al pedido. Intente de nuevo');
+        ocultarFullLoading();
     });
 }
 
@@ -723,11 +731,19 @@ function getPedido(callback) {
     if(pedido_id==""||pedido_id==null||pedido_id==0){
         $.post("/pedidos/mesa/"+mesa, {_token: token}, function (data) {
             callback(data);
+        }).fail(function() {
+            setTimeout(function(){
+                getPedido(callback)
+            }, 2000);
         });
     }
     else{
         $.post("/pedidos/pedido/"+pedido_id, {_token: token}, function (data) {
             callback(data);
+        }).fail(function() {
+            setTimeout(function(){
+                getPedido(callback)
+            }, 2000);
         });
     }
 }
@@ -744,7 +760,10 @@ function cancelarItemPedido(itemId) {
             $('ul#ul-pedido.items_pedido>li#'+itemId).fadeOut(function(){
                 $('ul#ul-pedido.items_pedido>li#'+itemId).remove();
             });
-		});
+        }).fail(function() {
+            ocultarFullLoading();
+            mostrarError('Error al borrar el producto del pedido. Por favor intente de nuevo.')
+        });
     }
     else{
         cancelarPedido();
@@ -755,7 +774,7 @@ function sumarTotalPedido(suma){
     var total = $('ul#total.items_pedido span.total.valor');
     var valor = parseFloat(total.attr("total"))+suma;
     total.attr("total",valor);
-    total.html(accounting.formatMoney(valor));
+    total.html(accounting.formatMoney(valor, '$', 0));
 }
 
 function impItemPedido(productos_pedido){
@@ -1251,12 +1270,18 @@ function cancelarPedido(){
             actualizarDivPedido();
         }
         ocultarFullLoading();
+    }).fail(function() {
+        ocultarFullLoading();
+        mostrarError('Error al cancelar el pedido. Por favor intente de nuevo.')
     });
 }
 function pagarPedido(id){
     var token = $('meta[name=csrf-token]').attr('content');
     $.post("/pedido/pagar/"+id, {_token: token}, function (data) {
         actualizarDivPedido();
+    }).fail(function() {
+        ocultarFullLoading();
+        mostrarError('Error al pagar. Intente de nuevo.')
     });
 }
 function pagarImprimirPedido(id){
@@ -1264,6 +1289,9 @@ function pagarImprimirPedido(id){
     $.post("/pedido/pagarImprimir/"+id, {_token: token}, function (data) {
         impPosFactura(id);
         actualizarDivPedido();
+    }).fail(function() {
+        ocultarFullLoading();
+        mostrarError('Error al pagar. Intente de nuevo.')
     });    
 }
 function preFactura(id=false){
@@ -1449,7 +1477,10 @@ function impPosFactura(id){
             // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
         });
     }
-    $.post('/documento/'+id+'/patch', {impreso: 1}, function (data) {});
+    $.post('/documento/'+id+'/patch', {impreso: 1}, function (data) {}).fail(function() {
+        ocultarFullLoading();
+        mostrarError('Error al imprimir. Intente de nuevo.')
+    });
 }
 function gaveta(){
     imprimiendo();
@@ -1524,6 +1555,7 @@ function enviarAServicioImpresionPost(url,data, drawer=0){
         },
         error: function (xhr, status) {
             doneImprimiendo();
+            mostrarError('Error al intentar imprimir. Intente de nuevo.')
         }
     });
 }
@@ -1658,6 +1690,9 @@ function guardarObservacion_(campo,para_llevar){
     $.post("/pedido/guardar-observacion/"+pedido_id+"/"+campo, {_token: token}, function (data) {
         ocultarFullLoading();
         mostrarSuccess('<strong>Listo!</strong> Observación Guardada');
+    }).fail(function() {
+        ocultarFullLoading();
+        mostrarError('Error al guardar la observación. Intente de nuevo.')
     });
     
 }
@@ -1821,6 +1856,9 @@ function saveObs() {
         $('#observacionesModal').modal('hide');
         ocultarFullLoading();
         mostrarSuccess('Guardado');
+    }).fail(function() {
+        ocultarFullLoading();
+        mostrarError('Error al guardar observación. Intente de nuevo.')
     })
 }
 
@@ -1842,6 +1880,9 @@ function savePropina(){
                 if(data.code == 200){
                     $('input[name=old_propina]').val(propina);
                 }
+            }).fail(function() {
+                ocultarFullLoading();
+                mostrarError('Error al guardar. Intente de nuevo.')
             })
     }
 }
