@@ -4,6 +4,7 @@ var role = $('meta[name=rol]').attr('content');
 var esDomicilio = $('meta[name=mesa]').attr('content');
 var propinaDefault = $('meta[name=propina]').attr('content');
 var validaInventario = $('meta[name=valida_inventario]').attr('content') == '1';
+var cajero_borra = $('meta[name=cajero_borra]').attr('content') == '1';
 esDomicilio = (esDomicilio==""||esDomicilio==null||esDomicilio==0||esDomicilio=="0");
 var altDown = false;
 
@@ -1000,7 +1001,7 @@ function impItemPedido(productos_pedido){
             if(pedido_activo){
                 html+= '        <span onclick="'+editarItemPedido+';" class="btn btn-warning total fa fa-pencil"></span>';
             }
-            if(pedido_activo && (isAdmin() || productos_pedido[i].comanda === 0)){
+            if(pedido_activo && ((isAdmin() || productos_pedido[i].comanda === 0) || (isCajero()&&cajero_borra))){
                 html+= '        <span onclick="'+funcionCancelar+';" class="btn btn-danger total fa fa-trash boton-cancelar"></span>';
             }
             html+= '        <span class="btn btn-success valor" valor="'+valorProducto+'">'+accounting.formatMoney(valorProducto, '$ ', 0)+'</span></div>'+
@@ -1014,7 +1015,7 @@ function impItemPedido(productos_pedido){
             '            <span class="producto">Total Pedido:</span>'+
             '            <div class="btn-group">';
     if(!vacio){
-        if(pedido_activo && (isAdmin() || isCajero())){
+        if(pedido_activo && (isAdmin() || (isCajero()&&cajero_borra))){
             html += "<button style='padding: 2px 8px' class='btn btn-danger' onclick='preCancelarPedido(cancelarPedido)'><span style='font-size: 32px' class='fa fa-trash'></span></button>"
         }
     }

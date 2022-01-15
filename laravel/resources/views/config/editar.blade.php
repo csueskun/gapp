@@ -180,6 +180,7 @@
                             <div class = "help-block with-errors">{{ $errors->first('propina') }}</div>
                         </div>
                     </div>
+                    <div class="col-md-6" style='height: 92px'>&nbsp;</div>
                     <div class="col-md-3">
                         <div class = "form-group has-feedback">
                             <label for = "valida_inventario" class = "control-label">&nbsp;</label><br/>
@@ -193,6 +194,14 @@
                             <label for = "subtotales_factura" class = "control-label">&nbsp;</label><br/>
                             <label class="radio-inline" style="margin-bottom: 10px">
                                 <input type="checkbox" value="1" name="subtotales_factura" {{ $config->subtotales_factura == '1'?'checked':'' }}><strong>Subtotales en factura</strong>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class = "form-group has-feedback">
+                            <label for = "cajero_borra" class = "control-label">&nbsp;</label><br/>
+                            <label class="radio-inline" style="margin-bottom: 10px">
+                                <input type="checkbox" value="1" name="cajero_borra" {{ $config->cajero_borra == '1'?'checked':'' }}><strong>Cajero puede borrar pedidos</strong>
                             </label>
                         </div>
                     </div>

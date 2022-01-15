@@ -193,6 +193,7 @@ class ConfigController extends Controller
             $config->propina = Input::get('propina');
             $config->fvcodprefijo = Input::get('fvcodprefijo');
             $config->subtotales_factura = Input::get('subtotales_factura');
+            $config->cajero_borra = Input::get('cajero_borra');
             $config->save();
         
             return Redirect::to('config/crear')
@@ -249,6 +250,7 @@ class ConfigController extends Controller
             $config->propina = Input::get('propina');
             $config->fvcodprefijo = Input::get('fvcodprefijo');
             $config->subtotales_factura = Input::get('subtotales_factura');
+            $config->cajero_borra = Input::get('cajero_borra');
             $config->save();
         
             return Redirect::to('config/editar/')
@@ -376,6 +378,7 @@ class ConfigController extends Controller
         $config->propina = 0;
         $config->valida_inventario = $config->valida_inventario == 1;
         $config->subtotales_factura = $config->subtotales_factura == 1;
+        $config->cajero_borra = $config->cajero_borra == 1;
 
         $pedidoController = new PedidoController();
         $pedido = $pedidoController->entrarMesa($mesa);
