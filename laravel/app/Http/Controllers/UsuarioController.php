@@ -40,7 +40,11 @@ class UsuarioController extends Controller
         if(Auth::check()){
             $controller = app('App\Http\Controllers\ConfigController');
             $estadomesas = $controller->estado_mesas2();
-            return view("varios.bienvenida")->with("estado_mesas", $estadomesas)->with("config", $controller->first());
+            $meseros = Usuario::where('rol', 'Mesero')->get();
+            return view("varios.bienvenida")
+                ->with("estado_mesas", $estadomesas)
+                ->with("meseros", $meseros)
+                ->with("config", $controller->first());
         }
         else {
             return Redirect('/login');

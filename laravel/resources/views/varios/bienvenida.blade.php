@@ -15,7 +15,7 @@
 </section>
 
 <section class="borde-inferior lista fondo-comun">
-    <br>
+        <br>
     <div class="col-xs-12" style="text-align: center">
         @include('template.status', ['status' => session('status')])
         <div class="input-group">
@@ -36,6 +36,24 @@
     </div>
     <br>
     <br>
+    <div class="container centrado" style="margin: auto">
+        @if(Auth::user()->rol=='Administrador')
+        <br>
+        <div class="row">
+            <label for="mesero">Filtrar por mesero:</label> 
+            <select class = "form-control" name = "mesero" onchange="filtrarMesero(event)" style="margin: auto; max-width: 250px; display: inline">
+                <option value="">Todos</option>
+                @foreach($meseros as $mesero)
+                <option value="{{ $mesero->id }}">{{ $mesero->nombres }} {{ $mesero->apellidos }}</option>
+                @endforeach
+            </select>
+        </div>
+        @endif
+        <div class="sin-mesas" style='display: none'>
+            <br>
+            <div class="alert alert-danger">El mesero no tiene mesas abiertas</div>
+        </div>
+    </div>
     <div class="container_ centrado" style="margin: auto">
         <br/>
         <a href="/mesa/0" class="btn btn-warning cuadrado boton-grande mesa">
@@ -244,14 +262,27 @@
     }
 
     function limpiarColoresMesas(mesa, clase){
+        mesa.removeClass (function (index, className) {
+            return (className.match (/\bmesero-\S+/g) || []).join(' ');
+        });
         mesa.removeClass('btn').removeClass('btn-success').removeClass('btn-warning').removeClass('btn-danger').addClass(clase);
     }
 
     $(function(){
         cargarEstadoMesas();
         calcularTiempo();
+        if("{{Auth::user()->rol}}" == 'Mesero'){
+            vistaMesero("{{Auth::user()->id}}");
+        }
         var x = setInterval(function() {
+            if("{{Auth::user()->rol}}" == 'Administrador'){
+                filtrarMesero({target:{value:$('select[name=mesero]').val()}});
+            }
+            if("{{Auth::user()->rol}}" == 'Mesero'){
+                vistaMesero("{{Auth::user()->id}}");
+            }
             calcularTiempo();
+            
         }, 5000);
 
         $("ul#mesas_ocupadas_cambiar").on('click', 'button', function(){
@@ -338,6 +369,26 @@
             }
             $("ul#mesas_libres_cambiar").html(html);
         });
+    }
+
+    function filtrarMesero(event){
+        $('a.mesa').show();
+        $('.sin-mesas').hide();
+        if(!event.target.value){
+            return false;
+        }
+        $('a.mesa:not(.mesero-'+event.target.value+')').hide();
+        if($('a.mesero-'+event.target.value).length){
+        }
+        else{
+            $('.sin-mesas').show();
+        }
+    }
+
+    function vistaMesero(id){
+        $('a.mesa.btn-success').show();
+        $('a.mesa').removeClass('disabled');
+        $('a.mesa.btn-danger:not(.mesero-'+id+')').addClass('disabled');
     }
 
 
