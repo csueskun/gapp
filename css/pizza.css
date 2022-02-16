@@ -824,9 +824,10 @@ div.jconfirm-content span.valor{
 div.jconfirm-content div.img{
     border: thin solid #c5c5c5;
     padding: 4px;
+    text-align: center;
 }
 div.jconfirm-content div.img img{
-    max-width: 250px;
+    max-width: 150px;
 }
 div.jconfirm-content span.detalle{
     font-family: 'bebas_neuebold';
