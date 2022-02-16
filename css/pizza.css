@@ -827,7 +827,7 @@ div.jconfirm-content div.img{
     text-align: center;
 }
 div.jconfirm-content div.img img{
-    max-width: 150px;
+    max-width: 150px !important;
 }
 div.jconfirm-content span.detalle{
     font-family: 'bebas_neuebold';
