@@ -808,3 +808,30 @@ i.fa.prefacturado{
     position: absolute;
     margin: 2px 0 0 28px;
 }
+span.jconfirm-title{
+    font-family: 'bebas_neuebold' !important;
+}
+div.jconfirm-content{
+    font-family: 'bebas_neuebold';
+}
+div.jconfirm-content span.valor{
+    font-family: 'bebas_neuebold';
+    font-weight: bold;    
+    display: inherit;
+    text-align: right;
+    color: #3c763d;
+}
+div.jconfirm-content div.img{
+    border: thin solid #c5c5c5;
+    padding: 4px;
+}
+div.jconfirm-content div.img img{
+    max-width: 250px;
+}
+div.jconfirm-content span.detalle{
+    font-family: 'bebas_neuebold';
+    color: #666666;
+}
+div.jconfirm-buttons{
+    font-family: 'bebas_neuebold';
+}

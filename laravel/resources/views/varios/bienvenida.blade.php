@@ -20,6 +20,11 @@
         @include('template.status', ['status' => session('status')])
         <div class="input-group">
             <span class="input-group-btn"  style="font-family: 'bebas_neuebold';">
+                @if(Auth::user()->rol=='Mesero')
+                <button id='mis-mesas' state='off' class="btn btn-default" type="button" style="font-size: 20px;" onclick="misMesas()">
+                    <i class="fa fa-cutlery"></i> <span>Ver mis mesas</span>
+                </button>
+                @endif
                 @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Cajero')
                 <a class="btn btn-success" data-toggle="modal" data-target="#modal_pagar" type="button" style="font-size: 20px">
                     <i class="fa fa-usd"></i> Pagos/Compras
@@ -29,7 +34,7 @@
                     <span class="fa fa-eye"></span> Tiempo
                 </button>
                 <button class="btn btn-warning" type="button"  data-toggle="modal" data-target="#modal_cambiar_mesa"  style="font-size: 20px" onclick="cargarOcupadas()">
-                    <i class="glyphicon glyphicon-random"></i> Traslados
+                    <i class="fa fa-random"></i> Traslados
                 </button>
             </span>
         </div>
@@ -279,7 +284,12 @@
                 filtrarMesero({target:{value:$('select[name=mesero]').val()}});
             }
             if("{{Auth::user()->rol}}" == 'Mesero'){
-                vistaMesero("{{Auth::user()->id}}");
+                if($("#mis-mesas").attr('state') == 'off'){
+                    vistaMesero("{{Auth::user()->id}}");
+                }
+                else{
+                    filtrarMesero({target:{value:"{{Auth::user()->id}}"}});
+                }
             }
             calcularTiempo();
             
@@ -391,9 +401,19 @@
         $('a.mesa.btn-danger:not(.mesero-'+id+')').addClass('disabled');
     }
 
-
-
-
+    function misMesas(){
+        var isOn = $("#mis-mesas").attr('state') == 'off';
+        $("#mis-mesas").attr('state', isOn?'on':'off');
+        if(isOn){
+            $("#mis-mesas span").html('Ver todas las mesas');
+            filtrarMesero({target:{value:"{{Auth::user()->id}}"}});
+        }
+        else{
+            filtrarMesero({target:{value:""}});
+            $("#mis-mesas span").html('Ver mis mesas');
+            vistaMesero("{{Auth::user()->id}}");
+        }
+    }
 
 </script>
 

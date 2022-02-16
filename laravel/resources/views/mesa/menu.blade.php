@@ -79,7 +79,7 @@
                                     @foreach($producto->tamanos as $tamano)
                                     {{htmlentities($tamano->tamano)}}="{{$tamano->valor}}"
                                     @endforeach onclick="agregarProductoExpress($(this))">
-                                    <div style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"></div>
+                                    <div style="background-image: url('/images/producto/{{$producto->imagen}}')"></div>
                                     <span class="producto-nombre">{{$producto->descripcion}}</span>
                                 </span>
                                 @endforeach
@@ -170,7 +170,7 @@
                                           scroll-to="#ingredientes-{{$tipo->id}}" 
                                           value="{{$producto->id}}">
 
-                                        <div style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"></div>
+                                        <div style="background-image: url('/images/producto/{{$producto->imagen}}')"></div>
                                         <span class="producto-nombre">{{$producto->descripcion}}</span>
                                         <span class="producto-grupo">{{$grupo->nombre}}</span>
                                     </span>
@@ -239,7 +239,7 @@
                                           valor="{{$producto->valor}}"
                                           scroll-to="#ingredientes-1-{{$tipo->id}}" 
                                           value="{{$producto->id}}">
-                                        <div style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"></div>
+                                        <div style="background-image: url('/images/producto/{{$producto->imagen}}')"></div>
                                         <span class="producto-nombre">{{$producto->descripcion}}</span>
                                         <span class="producto-grupo">{{$grupo->nombre}}</span>
                                     </span>
@@ -307,7 +307,7 @@
                                           detalle="{{$producto->detalle}}"
                                           scroll-to="#ingredientes-2-{{$tipo->id}}" 
                                           value="{{$producto->id}}">
-                                        <div style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"></div>
+                                        <div style="background-image: url('/images/producto/{{$producto->imagen}}')"></div>
                                         <span class="producto-nombre">{{$producto->descripcion}}</span>
                                         <span class="producto-grupo">{{$grupo->nombre}}</span>
                                     </span>
@@ -373,7 +373,7 @@
                                           valor="{{$producto->valor}}"
                                           scroll-to="#ingredientes-3-{{$tipo->id}}" 
                                           value="{{$producto->id}}">
-                                          <div style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"></div>
+                                          <div style="background-image: url('/images/producto/{{$producto->imagen}}')"></div>
                                           <span class="producto-nombre">{{$producto->descripcion}}</span>
                                           <span class="producto-grupo">{{$grupo->nombre}}</span>
                                     </span>
@@ -436,9 +436,9 @@
                                           valor="{{$producto->valor}}"
                                           detalle="{{$producto->detalle}}"
                                           scroll-to="#ingredientes-4-{{$tipo->id}}" 
-                                          style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"
+                                          style="background-image: url('/images/producto/{{$producto->imagen}}')"
                                           value="{{$producto->id}}">
-                                          <div style="background-image: url('/images/producto/{{$producto->imagen}}'), url('/images/producto/producto.jpg')"></div>
+                                          <div style="background-image: url('/images/producto/{{$producto->imagen}}')"></div>
                                           <span class="producto-nombre">{{$producto->descripcion}}</span>
                                           <span class="producto-grupo">{{$grupo->nombre}}</span>
                                     </span>
@@ -769,12 +769,38 @@
 
         $( ".producto-express" ).contextmenu(function(e) {
             e.preventDefault();
+            var content = '';
+            if($(this).hasClass('reflejar-select-producto')){
+                var option = $(this).closest('div').find('option[value='+$(this).attr('value')+']');
+                try{
+                    content += '<span class="valor">';
+                    content += accounting.formatMoney(option.attr('unico'), '$', 0);
+                    content += '</span>';
+                }catch (error) {}
+            }
+            else{
+                try{
+                    content += '<span class="valor">';
+                    content += accounting.formatMoney($(this).attr('unico'), '$', 0);
+                    content += '</span>';
+                }catch (error) {}
+            }
+            try{
+                var bg = $(this).find('div').css('background-image');
+                bg = bg.split('url(')[1].split(')')[0].replace('"', '');
+                content += '<div class="img"><img src="';
+                content += bg;
+                content += '"/></div>';
+            }catch (error) {}
+            content += '<span class="detalle">';
+            content += $(this).attr('detalle');
+            content += '</span>';
             $.alert({
                 title: $(this).attr('nombre'),
                 icon: 'fa fa-info',
                 type: 'blue',
-                typeAnimated: true,
-                content: $(this).attr('detalle'),
+                typeAnimated: false,
+                content: content
             });
         });
 
