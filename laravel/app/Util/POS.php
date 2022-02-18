@@ -406,9 +406,7 @@ class POS{
         $cantidad_productos = 0;
         $iva_grupos = [];
         $ico_grupos = [];
-
         $columns = [3, 6, 7]; //AYUDA: ancho en chars de las columnas UNIDAD VALOR Y TOTAL
-
         $combos = self::buildCombos($productos);
         if(count($combos)>0){
             $productos = array_merge($productos, $combos);
@@ -498,17 +496,19 @@ class POS{
             $iva = (floatval($producto->iva)?:0)/100;
             $ico = (floatval($producto->impco)?:0)/100;
             $base = floatval($producto->total)/(1+$iva+$ico);
-            if(isset($iva_grupos[$producto->iva])){
-                $iva_grupos[$producto->iva] += $base;
+            $iva_key = strval($producto->iva);
+            if(isset($iva_grupos[$iva_key])){
+                $iva_grupos[$iva_key] += $base;
             }
             else{
-                $iva_grupos[$producto->iva] = $base;
+                $iva_grupos[$iva_key] = $base;
             }
-            if(isset($ico_grupos[$producto->impco])){
-                $ico_grupos[$producto->impco] += $base;
+            $impco_key = strval($producto->impco);
+            if(isset($ico_grupos[$impco_key])){
+                $ico_grupos[$impco_key] += $base;
             }
             else{
-                $ico_grupos[$producto->impco] = $base;
+                $ico_grupos[$impco_key] = $base;
             }
             $tipo_producto_a = $tipo_producto;
         }
@@ -575,9 +575,10 @@ class POS{
         }
         foreach($ico_grupos as $key=>$value){
             if($key!="0.00" && $key!=""){
+                $key_ = substr($key, 0, 5);
                 $texto = ("\n");
                 $texto.= self::impLinea("Valor Base", ' $'.number_format($value, 2), $caracteres);
-                $texto.= self::impLinea("Imp.Consumo $key%", ' $'.number_format($value*(floatval($key))/100, 2), $caracteres, false);
+                $texto.= self::impLinea("Imp.Consumo $key_%", ' $'.number_format($value*(floatval($key))/100, 2), $caracteres, false);
                 $texto.= ("\n");
                 $texto.= (str_repeat("-", $caracteres));
                 $stack[] = ["i"=>"texto","v"=>$texto];
@@ -1078,14 +1079,12 @@ class POS{
         $combos = [];
         $added_combos = [];
         $combos_obs = [];
-
         for($i = 0; $i<count($pp); $i++){
             $p = $pp[$i];
             $combo_info = $p->combo;
             if($combo_info && $combo_info != ''){
                 $combo_info = json_decode($combo_info);
                 $combo_info = json_decode($combo_info);
-                $combo_info->producto = $p;
                 $pp_obs = json_decode($p->obs);
                 $combo_obs = [];
                 $add_obs = false;
@@ -1106,10 +1105,22 @@ class POS{
                     }
                     $combos_obs[$combo_info->ref][] = $combo_obs;
                 }
+                $prod = new \stdClass;
+                $prod->nombre = $p->descripcion;
+                $prod->iva = $p->iva;
+                $prod->impco = $p->impco;
+                $prod->valor = $p->valor;
+                $prod->cant = $p->cant;
                 if(in_array($combo_info->ref, $added_combos)){
+                    foreach ($combos as $combo){
+                        if($combo->ref == $combo_info->ref){
+                            $combo->productos[] = $prod;
+                        }
+                    }
                 }
                 else{
                     $added_combos[] = $combo_info->ref;
+                    $combo_info->productos = [$prod];
                     $combos[] = $combo_info;
                 }
             }
@@ -1120,13 +1131,23 @@ class POS{
         foreach ($combos as $combo){
             $combo->tipo_producto = 'COMBO';
             $combo->descripcion= strtoupper($combo->nombre_combo);
-            $combo->producto->descripcion= strtoupper($combo->nombre_combo);
+            $combo->producto = new \stdClass;
+            $combo->producto->descripcion= $combo->descripcion;
             $combo->valor= $combo->precio;
             $combo->total= $combo->precio * $combo->cantidad;
             $combo->cant= $combo->cantidad;
+            $aux_iva = 0;
+            $aux_impco = 0;
+            $aux_total = 0;
+            foreach ($combo->productos as $producto){
+                $valor = floatval($producto->cant?:0) * floatval($producto->valor?:0);
+                $aux_iva += $valor * floatval($producto->iva?:0)/100;
+                $aux_impco += $valor * floatval($producto->impco?:0)/100;
+                $aux_total += $valor;
+            }
+            $combo->iva = $aux_iva * 100 / $aux_total;
+            $combo->impco = $aux_impco * 100 / $aux_total;
             $combo->obs= [];
-            $combo->impco= 0;
-            $combo->iva= 0;
             $combo->adicionales= null;
             if(isset($combos_obs[$combo->ref])){
                 $combo->obs = $combos_obs[$combo->ref];
