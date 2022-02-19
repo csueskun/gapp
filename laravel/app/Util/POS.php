@@ -497,6 +497,7 @@ class POS{
             $ico = (floatval($producto->impco)?:0)/100;
             $base = floatval($producto->total)/(1+$iva+$ico);
             $iva_key = strval($producto->iva);
+           $iva_key = preg_replace('/.00$/', '',$iva_key);
             if(isset($iva_grupos[$iva_key])){
                 $iva_grupos[$iva_key] += $base;
             }
@@ -504,6 +505,7 @@ class POS{
                 $iva_grupos[$iva_key] = $base;
             }
             $impco_key = strval($producto->impco);
+            $impco_key = preg_replace('/.00$/', '', $impco_key);
             if(isset($ico_grupos[$impco_key])){
                 $ico_grupos[$impco_key] += $base;
             }
