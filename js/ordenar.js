@@ -1478,10 +1478,7 @@ function impPosFactura(id){
             // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
         });
     }
-    $.post('/documento/'+id+'/patch', {impreso: 1}, function (data) {
-    }).done(function(){
-        ocultarFullLoading();
-    }).fail(function() {
+    $.post('/documento/'+id+'/patch', {impreso: 1}, function (data) {}).fail(function() {
         ocultarFullLoading();
         mostrarError('Error al imprimir. Intente de nuevo.')
     });
