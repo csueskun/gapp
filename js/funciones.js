@@ -394,3 +394,40 @@ function diaDelMesActual(day){
 function diaDeLaSemana(date){
     return diasSemana[date.getDay()];
 }
+function enviarAServicioImpresionPost(url,data,drawer=0){
+    var np = url=='NP';
+    var fullUrl = url+'/post.php?drawer='+drawer;
+    if(np){
+        fullUrl = '/np.php?drawer='+drawer;
+    }
+    $.ajax({
+        url: fullUrl,
+        headers: {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Credentials":"true"},
+        type: 'POST',
+        crossDomain: true,
+        dataType: np?"html":"json",
+        data: {stack: data},
+        xhrFields: {
+            withCredentials: true,
+        },
+        success: function (response) {
+            doneImprimiendo();
+            if(np){
+                var newWindow = window.open("", "new window", "width=500, height=600");
+                try {
+                    var tagsToDestroy = newWindow.document.querySelector('html');
+                    newWindow.document.removeChild(tagsToDestroy);
+                } catch (error) {}
+                newWindow.document.write(response);
+            }
+        },
+        error: function (xhr, status) {
+            doneImprimiendo();
+        }
+    });
+}
+function doneImprimiendo(){
+    $(".busy").attr('disabled',false);
+    $('.imprimir').removeAttr("disabled").removeClass('disabled');
+    $('.imprimir .fa').removeClass('fa-spin');
+}

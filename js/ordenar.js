@@ -1506,59 +1506,56 @@ function gaveta(){
 
     }
 }
+// function enviarAServicioImpresion(url){
+//     $.ajax({
+//         url: url,
+//         headers: {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Credentials":"true"},
+//         type: 'GET',
+//         // This is the important part
+//         crossDomain: true,
+//         dataType: "jsonp",
+//         xhrFields: {
+//             withCredentials: true,
+            
+//         },
+//         // This is the important part
+//         success: function (response) {
+//             mostrarSuccess('Comanda enviada');
+//             doneImprimiendo();
+//             // handle the response
+//         },
+//         error: function (xhr, status) {
+//             // handle errors
+//             // mostrarError('Error al intentar imprimir');
+//             doneImprimiendo();
+//         }
+//     });
+// }
+// function enviarAServicioImpresionPost(url,data, drawer=0){
+//     $.ajax({
+//         url: url+'/post.php?drawer='+drawer,
+//         headers: {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Credentials":"true"},
+//         type: 'POST',
+//         crossDomain: true,
+//         dataType: "json",
+//         data: {stack: data, servicio: servicio_impresion},
+//         xhrFields: {
+//             withCredentials: true,
+//         },
+//         success: function (response) {
+//             mostrarSuccess('Comanda enviada');
+//             doneImprimiendo();
+//         },
+//         error: function (xhr, status) {
+//             doneImprimiendo();
+//             mostrarError('Error al intentar imprimir. Intente de nuevo.')
+//         }
+//     });
+// }
 function imprimiendo(){
+    $(".busy").attr('disabled',false);
     $('.imprimir').attr("disabled", "disabled");
     $('.imprimir .fa').addClass('fa-spin');
-}
-function doneImprimiendo(){
-    $('.imprimir').removeAttr("disabled").removeClass('disabled');
-    $('.imprimir .fa').removeClass('fa-spin');
-}
-function enviarAServicioImpresion(url){
-    $.ajax({
-        url: url,
-        headers: {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Credentials":"true"},
-        type: 'GET',
-        // This is the important part
-        crossDomain: true,
-        dataType: "jsonp",
-        xhrFields: {
-            withCredentials: true,
-            
-        },
-        // This is the important part
-        success: function (response) {
-            mostrarSuccess('Comanda enviada');
-            doneImprimiendo();
-            // handle the response
-        },
-        error: function (xhr, status) {
-            // handle errors
-            // mostrarError('Error al intentar imprimir');
-            doneImprimiendo();
-        }
-    });
-}
-function enviarAServicioImpresionPost(url,data, drawer=0){
-    $.ajax({
-        url: url+'/post.php?drawer='+drawer,
-        headers: {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Credentials":"true"},
-        type: 'POST',
-        crossDomain: true,
-        dataType: "json",
-        data: {stack: data, servicio: servicio_impresion},
-        xhrFields: {
-            withCredentials: true,
-        },
-        success: function (response) {
-            mostrarSuccess('Comanda enviada');
-            doneImprimiendo();
-        },
-        error: function (xhr, status) {
-            doneImprimiendo();
-            mostrarError('Error al intentar imprimir. Intente de nuevo.')
-        }
-    });
 }
 
 function preEnviarFormPagar(){

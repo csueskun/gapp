@@ -7,6 +7,7 @@ class POS{
         $texto = '';
 
         $caracteres = $config->num_impresora_comanda;
+        $stack[] = ["i"=>"chars","v"=>$caracteres];
         $stack[] = ["i"=>"impresora","v"=>$config->impresora_comanda];
         $fecha = date("d/m/Y h:ia");
         $fechaPedido = date_create($pedido->created_at);
@@ -292,6 +293,7 @@ class POS{
             $caracteres = $config->num_impresora;
             $stack[] = ["i"=> "impresora", "v"=> $config->impresora];
         }
+        $stack[] = ["i"=> "chars", "v"=> $characters];
         $stack[] = ["i"=> "logo", "v"=> 0];
 
         $text=[];
@@ -337,6 +339,7 @@ class POS{
         if($post){
             $stack[] = ["i"=> "logo", "v"=> 0];
         }
+        $stack[] = ["i"=> "chars", "v"=> $caracteres];
 
         $observaciones = self::getObservationArray($pedido->obs);
         $fecha = date("d/m/Y h:ia");
@@ -736,6 +739,7 @@ class POS{
             $stack[] = ["i"=> "impresora", "v"=> $config->impresora];
         }
 
+        $stack[] = ["i"=>"chars","v"=>$caracteres];
         $stack[] = ["i"=>"logo","v"=>0];
 
         
@@ -882,6 +886,7 @@ class POS{
 
         $caracteres = $config->num_impresora;
 
+        $stack[] = ["i"=>"chars","v"=>$caracteres];
         $stack[] = ["i"=>"impresora","v"=>$config->impresora];
         $stack[] = ["i"=>"logo","v"=>0];
 
