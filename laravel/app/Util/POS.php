@@ -275,7 +275,6 @@ class POS{
     }
     public static function printDocumento($config, $documento, $caja){
         $stack = [];
-        var_dump($documento);
         $fecha = date_create($documento->created_at);
         $fecha = date_format($fecha, "d/m/Y h:ia");
 
