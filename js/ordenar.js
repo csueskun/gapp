@@ -1301,18 +1301,19 @@ function preFactura(id=false){
         var id = $('meta[name=pedido_id]').attr('content');
     }
     var propina = $('td#propina .percent').inputmask('unmaskedvalue');
+    var val_propina = $('td#propina .curr').inputmask('unmaskedvalue');
     var descuento = $('td#descuento .percent').inputmask('unmaskedvalue');
     if(servicio_impresion=="" || servicio_impresion==null){
         $.get('/config/servicio-impresion', function (data) {
             servicio_impresion = data;
-            $.get("/pedido/preFactura/"+id+"?propina="+propina+"&descuento="+descuento, function (data) {
+            $.get("/pedido/preFactura/"+id+"?propina="+propina+"&val_propina="+val_propina+"&descuento="+descuento, function (data) {
                 enviarAServicioImpresionPost(servicio_impresion, data);
                 // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
             });
         });
     }
     else{
-        $.get("/pedido/preFactura/"+id+"?propina="+propina+"&descuento="+descuento, function (data) {
+        $.get("/pedido/preFactura/"+id+"?propina="+propina+"&val_propina="+val_propina+"&descuento="+descuento, function (data) {
             enviarAServicioImpresionPost(servicio_impresion, data);
             // enviarAServicioImpresion(servicio_impresion+"?stack="+encodeURIComponent(JSON.stringify(data)));
         });

@@ -382,7 +382,7 @@ class PedidoController extends Controller
     }
     public function preFacturar($id) {
         Pedido::where('id', $id)->update(['prefacturado'=>1]);
-        return $this->prefacturaPosStack($id,true, Input::get('propina'), Input::get('descuento'));
+        return $this->prefacturaPosStack($id,true, Input::get('propina'), Input::get('val_propina'), Input::get('descuento'));
     }
 
     public function entrarMesa($mesa) {
@@ -525,7 +525,7 @@ class PedidoController extends Controller
         return App\Util\POS::gaveta(app('App\Http\Controllers\ConfigController')->first());
     }
 
-    public function prefacturaPosStack($id, $pre=false, $propina = 10, $descuento = 0) {
+    public function prefacturaPosStack($id, $pre=false, $propina = 10, $val_propina = 0, $descuento = 0) {
 
         $documento = Documento::where('pedido_id',$id)->with('pedido')->first();
         $sql = DB::select("
@@ -573,7 +573,7 @@ class PedidoController extends Controller
         }
 
         $config = app('App\Http\Controllers\ConfigController')->first();            
-        return (App\Util\POS::facturaPosStack($documento,$sql,$config,$pre, floatval($propina), floatval($descuento)));
+        return (App\Util\POS::facturaPosStack($documento,$sql,$config,$pre, floatval($propina), floatval($val_propina), floatval($descuento)));
     }
     
     public function calcularValor($id){

@@ -237,11 +237,14 @@ class POS{
             $obs = json_decode("{}");
         }
         else{
-            $obs = json_decode($pedido->obs);
+            $obs = json_decode($pedido->obs);         
             if(isset($obs->para_llevar)){
-                $texto.= ($obs->para_llevar);
-                $texto.= ("\n");
-            }
+                if($obs->para_llevar){
+                    $stack[] = ["i"=>"doble","v"=>2];
+                    $stack[] = self::textoI('PARA LLEVAR');
+                    $stack[] = ["i"=>"sencilla","v"=>1];
+                }
+            }     
             if(isset($obs->entregar_en) && $obs->entregar_en != ''){
                 if(strtoupper($obs->entregar_en)!='DOMICILIO'&&strtoupper($obs->entregar_en)!='MESA'){
                     $texto .= 'ENTREGAR EN '.strtoupper($obs->entregar_en);
@@ -251,8 +254,7 @@ class POS{
                         }
                     $texto.= ("\n");
                 }
-            }
-            
+            }          
             if(isset($obs->observacion)){
                 $texto.= (strtoupper($obs->observacion));
                 $texto.= ("\n");
@@ -293,7 +295,7 @@ class POS{
             $caracteres = $config->num_impresora;
             $stack[] = ["i"=> "impresora", "v"=> $config->impresora];
         }
-        $stack[] = ["i"=> "chars", "v"=> $characters];
+        $stack[] = ["i"=> "chars", "v"=> $caracteres];
         $stack[] = ["i"=> "logo", "v"=> 0];
 
         $text=[];
@@ -318,7 +320,7 @@ class POS{
         return $stack;
     }
 
-    public static function facturaPosStack($documento,$productos,$config,$pre=false,$propina=10,$descuento=10){
+    public static function facturaPosStack($documento,$productos,$config,$pre=false,$propina=10,$val_propina=0,$descuento=10){
         $post = !$pre;
         $stack = [];
 
@@ -545,12 +547,12 @@ class POS{
             if($descuento>0){
                 $texto .= (self::impLinea('-Descuento', ' $' . number_format($total*$descuento/100, 0), floor($caracteres)));
             }
-            $texto .= (self::impLinea('+Propina sugerida', ' $' . number_format($total*$propina/100, 0), floor($caracteres)));
+            $texto .= (self::impLinea('+Propina sugerida', ' $' . number_format($val_propina, 0), floor($caracteres)));
             $stack[] = ["i"=>"texto","v"=>$texto];
             $stack[] = ["i"=>"doble","v"=>2];
             $stack[] = ["i"=>"texto","v"=>'Total'];
             $stack[] = ["i"=>"sencilla","v"=>1];
-            $total_val = number_format($total*(1+$propina/100-$descuento/100));
+            $total_val = number_format($val_propina+$total*(1-$descuento/100));
         }
         $stack[] = ["i"=>"texto","v"=>str_pad('$', $caracteres - ceil((5+strlen($total_val))*1.5), " ", STR_PAD_LEFT)];
         $stack[] = ["i"=>"doble","v"=>2];
