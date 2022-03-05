@@ -907,7 +907,6 @@ function impItemPedido(productos_pedido){
             }
             valorProducto = Math.floor(productos_pedido[i].total);
             if(obs.tipo === "MIXTA"){
-                console.log(obs);
                 html += '       <li class="list-group-item">' +
                         '            <span class="producto">'+ x_cantidad + productos_pedido[i].producto.tipo_producto.descripcion + ' ' + '' + (getTamanosLabelMin(obs.tamano))+  '</span>';
                 var fracciones = obs.mix.length;
@@ -997,6 +996,7 @@ function impItemPedido(productos_pedido){
             html+='<span class="detalles">'+(obs.sabor?obs.sabor:"")+'</span>';
             
             html+='            <br/><div class="spaceholder-valor-item">&nbsp;</div><div class="btn-group items">';
+            html+= '        <span title="'+(productos_pedido[i].comanda?'Ya impreso':'Aún no impreso')+' en comanda" class="btn comandado fa fa-print text-'+(productos_pedido[i].comanda?'success':'danger')+' btn-default"></span>';
 
             if(pedido_activo){
                 html+= '        <span onclick="'+editarItemPedido+';" class="btn btn-warning total fa fa-pencil"></span>';

@@ -836,3 +836,21 @@ div.jconfirm-content span.detalle{
 div.jconfirm-buttons{
     font-family: 'bebas_neuebold';
 }
+
+span.comandado{
+    border: none;
+    cursor: help;
+}
+span.comandado.text-danger{
+    color: red;
+}
+span.comandado.text-success{
+    color: green;
+}
+span.comandado:hover,
+span.comandado:active,
+span.comandado:visited
+{
+    background-color: white;
+    
+}

@@ -30,7 +30,7 @@
                     <label for = "cantidad_mesas" class = "control-label">Cantidad de mesas *</label>
                     <!--<input type = "number" min="1" max="99" class = "form-control" id = "cantidad_mesas" name = "cantidad_mesas" required value = "{{ old('cantidad_mesas')?old('cantidad_mesas'):$config->cantidad_mesas }}">-->
                     <select  class = "form-control" id = "cantidad_mesas" name = "cantidad_mesas">
-                        @for($i=1;$i<151;$i++)
+                        @for($i=1;$i<201;$i++)
                         <option>{{$i}}</option>
                         @endfor
                     </select>

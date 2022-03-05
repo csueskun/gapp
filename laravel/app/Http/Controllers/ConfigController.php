@@ -54,7 +54,7 @@ class ConfigController extends Controller
         return DB::table('pedido')
             ->where('estado',1)
             ->orWhere('estado',4)
-            ->get(["estado", "mesa_id", "created_at", "entregado", "prefacturado", "user_id"]);
+            ->get(["id", "estado", "mesa_id", "created_at", "entregado", "prefacturado", "user_id"]);
     }
     
     public function servicioImpresion() {
@@ -76,6 +76,17 @@ class ConfigController extends Controller
         $mesas = $this->estado_mesas();
         $estado_mesas = Array();
         foreach ($mesas as $mesa) {
+            $comandas = DB::select('
+            SELECT 
+            count(id) as total, sum(comanda) as imp
+            FROM pizza_producto_pedido
+            where pedido_id = '.$mesa->id);
+            try {
+                $comandas = $comandas[0];
+                $comandas = $comandas->imp.'/'.$comandas->total;
+            } catch (\Throwable $th) {
+                $comandas = '';
+            }
             $clase = "btn btn-danger";
             if(isset($mesa->entregado) && $mesa->entregado != null){
                 $clase = "btn btn-primary";
@@ -85,7 +96,8 @@ class ConfigController extends Controller
                 "clase"=>$clase, 
                 "fecha"=>$mesa->created_at, 
                 "entregado"=>$mesa->entregado, 
-                "prefacturado"=>$mesa->prefacturado
+                "prefacturado"=>$mesa->prefacturado,
+                "comandas"=>$comandas
             );
         }
         return $estado_mesas;

@@ -71,19 +71,22 @@
         </a>
         @for($i = 1; $i<=$config->cantidad_mesas;$i++)
         <a href="/mesa/{{$i}}" id="mesa{{$i}}" class="{{ isset($estado_mesas[$i]) ? $estado_mesas[$i]['clase'] : 'btn btn-success'}} cuadrado boton-grande mesa">
-            @if(isset($estado_mesas[$i]))
-            @if($estado_mesas[$i]['prefacturado'])
-                <i class="fa fa-wpforms prefacturado"></i>
-            @endif
-            @endif
             <span>&nbsp;</span>
-            <i class="fa fa-cutlery"></i>
+            <h2 class="no-margin"><i class="fa fa-cutlery"></i> {{$i}}</h2>
             <span>&nbsp;</span>
-            <h2 class="no-margin">{{$i}}</h2>
             <span style="height: 16px">
                 <span style="" class="no-margin fecha_ {{ isset($estado_mesas[$i]) ? 'fecha_toma_pedido' : ''}}" fecha="{{ isset($estado_mesas[$i]) ? $estado_mesas[$i]['fecha'] : ''}}">&nbsp;</span>
             </span>
             <span>&nbsp;</span>
+            <span style="height: 16px">
+            @if(isset($estado_mesas[$i]))
+            <i class="fa fa-wpforms @if(!$estado_mesas[$i]['prefacturado']) hidden @endif es_prefacturado"></i>
+            <span class='comandas'><i class="fa fa-print"></i> {{$estado_mesas[$i]['comandas']}}</span>
+            @else
+            &nbsp;
+            @endif
+            </span>
+            <span>&nbsp;</span> 
         </a>
         @endfor
         
@@ -224,6 +227,7 @@
         
         setTimeout(function () {
             $.get( "/estadomesas", function( data ) {
+                console.log(data);
                 if(estado==""){
                     estado= data;
                 }
@@ -251,8 +255,16 @@
         // console.log({data});
         for(var i=1;i<=cant_mesas;i++){
             if(mesas.includes(i+"")){
+                var mesa = $("a#mesa"+i);
                 limpiarColoresMesas($("a#mesa"+i),data[i].clase);
-                $("a#mesa"+i).find(".fecha_").addClass('fecha_toma_pedido').attr('fecha', data[i].fecha);
+                mesa.find(".fecha_").addClass('fecha_toma_pedido').attr('fecha', data[i].fecha);
+                mesa.find("span.comandas").html('<i class="fa fa-print"></i> '+data[i].comandas);
+                if(data[i].prefacturado){
+                    mesa.find("i.es_prefacturado").removeClass('hidden');
+                }
+                else{
+                    mesa.find("i.es_prefacturado").addClass('hidden');
+                }
             }
             else{
                 if($("a#mesa"+i).hasClass("btn-default") || $("a#mesa"+i).hasClass("btn-success")){
