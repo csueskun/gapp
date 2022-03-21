@@ -394,11 +394,22 @@ function diaDelMesActual(day){
 function diaDeLaSemana(date){
     return diasSemana[date.getDay()];
 }
-function enviarAServicioImpresionPost(url,data,drawer=0){
+function enviarAServicioImpresionPost(url,data,drawer=0, prepared=false){
     var np = url=='NP';
     var fullUrl = url+'/post.php?drawer='+drawer;
     if(np){
         fullUrl = '/np.php?drawer='+drawer;
+    }
+    var comanda = false;
+    if(prepared){
+        comanda = true;
+    }
+    else{
+        comanda = isComanda(data);
+    }
+    if(comanda&&!prepared){
+        printDedicadas(url, data, drawer);
+        return false;
     }
     $.ajax({
         url: fullUrl,
@@ -425,6 +436,42 @@ function enviarAServicioImpresionPost(url,data,drawer=0){
             doneImprimiendo();
         }
     });
+}
+function printDedicadas(url, data, drawer){
+    var comandas = prepareDedicadas(data);
+    comandas.forEach(function(p){
+        setTimeout(function () {
+            for (var i = 0; i < data.length; i++) {
+                var ins = data[i];
+                if(ins.i == 'impresora'){
+                    ins.v = p;
+                }            
+            }
+            enviarAServicioImpresionPost(url, data, drawer, true);
+        }, 200)
+    });
+}
+function isComanda(data){
+    var isComanda = false;
+    data.forEach(function(i){
+        try {
+            if(i.i=='producto_pedido'){
+                isComanda = true;
+            }
+        } catch (error) {}
+    });
+    return isComanda;
+}
+function prepareDedicadas(data){
+    var impresoras = [];
+    data.forEach(function(i){
+        if(i.i=='producto_pedido'){
+            if(!impresoras.includes(i.impresora)){
+                impresoras.push(i.impresora);
+            }
+        }
+    });
+    return impresoras;
 }
 function doneImprimiendo(){
     $(".busy").attr('disabled',false);
