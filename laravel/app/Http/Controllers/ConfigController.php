@@ -78,7 +78,7 @@ class ConfigController extends Controller
         foreach ($mesas as $mesa) {
             $comandas = DB::select('
             SELECT 
-            count(id) as total, sum(comanda) as imp
+            count(id) as total, sum(if(comanda > 0, 1, 0)) as imp
             FROM pizza_producto_pedido
             where pedido_id = '.$mesa->id);
             try {

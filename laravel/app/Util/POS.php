@@ -649,6 +649,10 @@ class POS{
             $texto.= ($config->pie_pos);
             $texto.= ("\n");
         }
+        if($pre && isset($config->pie_prefactura) && $config->pie_prefactura != ''){
+            $texto.= ($config->pie_prefactura);
+            $texto.= ("\n");
+        }
         $texto.= ("Fecha Imp: $fecha");
         $texto.= ("\n");
         $texto.= ("Impreso por www.h-software.co");
