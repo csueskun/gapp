@@ -8,7 +8,7 @@ class POS{
 
         $caracteres = $config->num_impresora_comanda;
         $stack[] = ["i"=>"chars","v"=>$caracteres];
-        $stack[] = ["i"=>"impresora","v"=>$config->impresora_comanda];
+        $stack[] = ["i"=>"impresora","v"=>$config->impresora_comanda, "comanda"=>true];
         $fecha = date("d/m/Y h:ia");
         $fechaPedido = date_create($pedido->created_at);
         $fechaPedido = date_format($fechaPedido, "d/m/Y h:ia");
@@ -74,9 +74,9 @@ class POS{
                 continue;
             }
             try {
-                $impresora_dedicada = $producto_pedido->producto->tipo_producto->impresora != null?($producto_pedido->producto->tipo_producto->impresora):('');
+                $impresora_dedicada = $producto_pedido->producto->tipo_producto->impresora != null?($producto_pedido->producto->tipo_producto->impresora):$config->impresora_comanda;
             } catch (\Throwable $th) {
-                $impresora_dedicada = '';
+                $impresora_dedicada = $config->impresora_comanda;
             }
             $x_cantidad = ' x'.$producto_pedido->cant;
             $subtotal = 0;

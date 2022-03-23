@@ -450,13 +450,16 @@ function printDedicadas(url, data, drawer){
             enviarAServicioImpresionPost(url, data, drawer, true);
         }, 200)
     });
+    if(comandas.length<1){
+        mostrarWarning('Todos los productos ya fueron impresos. Imprima la comanda completa para ver productos ya impresos.');
+    }
 }
 function isComanda(data){
     var isComanda = false;
     data.forEach(function(i){
         try {
-            if(i.i=='producto_pedido'){
-                isComanda = true;
+            if(i.i=='impresora'){
+                isComanda = i.comanda == true;
             }
         } catch (error) {}
     });
