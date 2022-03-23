@@ -28,13 +28,14 @@ foreach($stack as $instruccion){
     if($instruccion->i == 'producto_pedido'){
         if($instruccion->impresora == '' || $instruccion->impresora == $impresora){
             $printer -> text($instruccion->v);
-            array_unshift($quitar,$i);
+            // array_unshift($quitar,$i);
         }
-        else{
-            if (!in_array($instruccion->impresora, $dedicadas)){
-                $dedicadas[] = $instruccion->impresora;
-            }
-        }
+        // else{
+        //     if (!in_array($instruccion->impresora, $dedicadas)){
+        //         $dedicadas[] = $instruccion->impresora;
+        //     }
+        // }
+        // $dedicadas[] = $instruccion->impresora;
     }
     else if($instruccion->i == 'imagen'){
         $imagen = EscposImage::load('./img/'.$instruccion->v, false);
@@ -92,14 +93,15 @@ $printer->cut();
 $printer->close();
 
 
-foreach($dedicadas as $impresora_dedicada){
-    $stack[0] = ["i"=>"impresora","v"=>$impresora_dedicada];
-    foreach ($quitar as $i){
-        unset($stack[$i]);
-    }
-    header("Location: ".$servicio."?stack=".json_encode($stack));
-    die();
-}
+// foreach($dedicadas as $impresora_dedicada){
+//     $stack[0] = ["i"=>"impresora","v"=>$impresora_dedicada];
+//     foreach ($quitar as $i){
+//         unset($stack[$i]);
+//     }
+//     $stack[1] = ["i"=>"texto","v"=>'hola'];
+//     header("Location: ".$servicio."?stack=".json_encode($stack));
+//     die();
+// }
 
 //}
 

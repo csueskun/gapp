@@ -14,6 +14,11 @@ class POS{
         $fechaPedido = date_format($fechaPedido, "d/m/Y h:ia");
 
         $texto.= ($config->encabezado_comanda)."\n";
+
+        if($re){
+            $stack[] = ["i"=>"texto","v"=>'*** COMANDA COMPLETA ***'."\n"];
+            $stack[] = ["i"=>"texto","v"=>'(Verificar con el cajero)'."\n"];
+        }
         $stack[] = ["i"=>"texto","v"=>$texto];
         $texto = ("Orden Nro: $pedido->id")."\n";
         $stack[] = ["i"=>"texto","v"=>$texto];
@@ -243,6 +248,7 @@ class POS{
                     $stack[] = ["i"=>"doble","v"=>2];
                     $stack[] = self::textoI('PARA LLEVAR');
                     $stack[] = ["i"=>"sencilla","v"=>1];
+                    $texto.= ("\n");
                 }
             }     
             if(isset($obs->entregar_en) && $obs->entregar_en != ''){
