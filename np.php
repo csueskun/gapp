@@ -20,8 +20,9 @@ foreach($stack as $instruccion){
         $chars = intval($instruccion->v);
     }
     if($instruccion->i == 'impresora'){
+        $impresora = $instruccion->v;
     }
-    if($instruccion->i == 'texto' || $instruccion->i == 'producto_pedido'){
+    if($instruccion->i == 'texto' || ($instruccion->i == 'producto_pedido'&&$impresora==$instruccion->impresora)){
         $res.='<div '.$font.'>';
         $text = preg_replace("/\r|\n/", "&lb;", $instruccion->v);
         $aux = explode("&lb;", $text);

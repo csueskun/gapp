@@ -45,8 +45,10 @@ class POS{
 
         if($pedido->turno){
             $texto = ("Turno: $pedido->turno");
-            $stack[] = ["i"=>"texto","v"=>$texto];
+            $stack[] = ["i"=>"texto","v"=>$texto."\n"];
         }
+        $stack[] = ["i"=>"sencilla","v"=>1];
+        // $stack[] = ["i"=>"texto","v"=>str_repeat("-", $caracteres)."\n"];
         $texto = '';
         
         $pp_aux = [];
@@ -92,8 +94,7 @@ class POS{
                 $obs = json_decode($producto_pedido->obs);
                 $obs->sabor = isset($obs->sabor) ? $obs->sabor : "";
             }
-            $texto.= ("\n");
-            $texto.= (str_repeat("-", ($caracteres/2))."\n");
+            // $texto.= (str_repeat("-", ($caracteres))."\n");
             //No mostrar tipo en la comanda
             // $tipoProducto = $producto_pedido->producto->tipo_producto->descripcion;
             // $texto.= (isset($producto_pedido->combo) && $producto_pedido->combo && $producto_pedido->combo != null)?"COMBO ": "";
@@ -126,7 +127,7 @@ class POS{
                     }
                     if(isset($observaciones['sabor'])){
                         $texto.= ("\n");
-                        $texto.= '  SABOR '.$observaciones['sabor'];
+                        $texto.= ' SABOR '.$observaciones['sabor'];
                     }
                 }
                 
@@ -228,13 +229,17 @@ class POS{
             if(isset($obs->obs) && $obs->obs && $obs->obs != ''){
                 $texto.= " *".$obs->obs;
             }
+            $texto = preg_replace('!\s+!', ' ', $texto)."\n";
+            $stack[] = ["i"=>"doble","v"=>2];
             $stack[] = ["i"=>"producto_pedido","v"=>$texto, "impresora"=>$impresora_dedicada];
+            $stack[] = ["i"=>"sencilla","v"=>1];
+            $stack[] = ["i"=>"texto","v"=>str_repeat("-", $caracteres)."\n"];
             $texto = '';
         }
-        $stack[] = ["i"=>"sencilla","v"=>1];
-        $texto.= ("\n");
-        $texto.= (str_repeat("-", $caracteres)."\n");
-        $stack[] = ["i"=>"texto","v"=>$texto];
+        // $stack[] = ["i"=>"sencilla","v"=>1];
+        // $texto.= ("\n");
+        // $texto.= (str_repeat("-", $caracteres)."\n");
+        // $stack[] = ["i"=>"texto","v"=>$texto];
         $texto = '';
         $stack[] = ["i"=>"doble","v"=>2];
         $cliente = '';
@@ -1163,6 +1168,7 @@ class POS{
                 $aux_impco += $valor * floatval($producto->impco?:0)/100;
                 $aux_total += $valor;
             }
+            $combo->producto->valor= $aux_total;
             $combo->iva = $aux_iva * 100 / $aux_total;
             $combo->impco = $aux_impco * 100 / $aux_total;
             $combo->obs= [];
