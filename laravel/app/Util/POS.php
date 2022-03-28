@@ -71,6 +71,7 @@ class POS{
             $pedido->productos_pedido = array_merge($pedido->productos_pedido, $combos);
         }
         $pedido->productos_pedido = self::reagruparProductosPedido($pedido->productos_pedido);
+        $first = true;
         foreach ($pedido->productos_pedido as $producto_pedido) {
             if(isset($producto_pedido->combo) && $producto_pedido->combo!=''){
                 continue;
@@ -229,11 +230,18 @@ class POS{
             if(isset($obs->obs) && $obs->obs && $obs->obs != ''){
                 $texto.= " *".$obs->obs;
             }
+            // return $texto;
+            if($first){
+                $stack[] = ["i"=>"sencilla","v"=>1];
+                $stack[] = ["i"=>"texto","v"=>str_repeat("-", $caracteres)."\n"];
+                $first = false;
+            }
             $texto = preg_replace('!\s+!', ' ', $texto)."\n";
             $stack[] = ["i"=>"doble","v"=>2];
             $stack[] = ["i"=>"producto_pedido","v"=>$texto, "impresora"=>$impresora_dedicada];
             $stack[] = ["i"=>"sencilla","v"=>1];
-            $stack[] = ["i"=>"texto","v"=>str_repeat("-", $caracteres)."\n"];
+            $stack[] = ["i"=>"producto_pedido","v"=>str_repeat("-", $caracteres)."\n", "impresora"=>$impresora_dedicada];
+            // $stack[] = ["i"=>"texto","v"=>str_repeat("-", $caracteres)."\n"];
             $texto = '';
         }
         // $stack[] = ["i"=>"sencilla","v"=>1];
