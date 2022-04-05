@@ -1,9 +1,9 @@
-<a data-toggle="collapse" href="#collapse-combos" class="titulo btn btn-default" role="button">
+<a tipo_producto_id='combo' href="#collapse-combos" class="tipo_producto titulo btn btn-default" role="button">
     Combos
-    <span class="fa fa-caret-down"></span>
-    <span class="fa fa-caret-up"></span>
+    <!-- <span class="fa fa-caret-right"></span>
+    <span class="fa fa-caret-left"></span> -->
 </a>
-<div id="collapse-combos" class="panel-collapse collapse" style="padding-top: 10px">
+<div id="collapse-combos" tipo_producto_id='combo' class="tipo_producto panel-collapse collapse" style="padding-top: 10px">
     @foreach($combos as $combo)
         @if($combo->estado != 1)
             @continue

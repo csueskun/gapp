@@ -10,6 +10,7 @@
     <script src="/js/jquery.inputmask.bundle.js"></script>
     <meta name="csrf-token" content="{{ Session::token() }}"> 
     <meta name="mesa" content="{{$mesa}}"> 
+    <meta name="version" content="2"> 
     <meta name="valida_inventario" content="{{$valida_inventario}}">
     <meta name="propina" content="{{$propina}}">
     <meta name="pedido_id" content="{{isset($pedido_id)?($pedido_id?$pedido_id:0):0}}">
@@ -20,6 +21,7 @@
     {{ Html::style('css/bootstrap-datetimepicker.css') }}
     {{ Html::style('css/jquery-confirm.min.css') }}
     {{ Html::style('css/menu.css') }}
+    {{ Html::style('css/menu-v2.css') }}
     {{ Html::style('css/combos.css') }}
     {{ Html::script('js/moment-with-locales.js') }}
     {{ Html::script('js/bootstrap-datetimepicker.js') }}
@@ -27,6 +29,7 @@
     {{ Html::script('js/typeahead.min.js') }}
     {{ Html::script('js/combos.js') }}
     {{ Html::script('/controller/menu.js') }}
+    {{ Html::script('js/menu-v2.js') }}
     <!-- {{ Html::script('/controller/domicilio.js') }} -->
 
 @endsection
@@ -59,8 +62,11 @@
                         @if($tipo->codigo=='00')
                         @continue
                         @endif
-                        <a data-toggle="collapse" href="#collapse{{$tipo->id}}" class="titulo btn btn-default" role="button">{{$tipo->descripcion}}  <span class="fa fa-caret-down"></span><span class="fa fa-caret-up"></span></a>
-                        <div id="collapse{{$tipo->id}}" class="panel-collapse collapse" valor-editable="{{$tipo->valor_editable}}">
+                        <a tipo_producto_id='{{$tipo->id}}' href="#collapse{{$tipo->id}}" class="tipo_producto titulo btn btn-default" role="button">{{$tipo->descripcion}}  
+                            <!-- <span class="fa fa-caret-right"></span>
+                            <span class="fa fa-caret-left"></span> -->
+                        </a>
+                        <div id="collapse{{$tipo->id}}" tipo_producto_id='{{$tipo->id}}' class="tipo_producto panel-collapse collapse" valor-editable="{{$tipo->valor_editable}}">
                             <form class="producto" tipo_producto_id='{{$tipo->id}}'>
                                 @if($tipo->aplica_tamanos!=1 && $tipo->aplica_sabores!=1 && $tipo->aplica_ingredientes!=1 && $tipo->valor_editable!=1 )
                                 <br/>
@@ -533,7 +539,10 @@
             <div id="navCuenta">
             <!-- <h1 class="titulo fondo-rojo" id="tit-mov"><i class="fa fa-motorcycle" aria-hidden="true"></i> <span onclick="openNavCuenta()">abrir</span><span onclick="closeNavCuenta()">cerrar</span></h1> -->
                 <div class="col-md-12 btn-group-vertical _100pc sub-menu-comidas" role="group" aria-label="..." style='padding: 2px;'>
-                    <a class="titulo btn btn-default no-tipo" data-toggle="collapse" href="#ul-pedido" aria-expanded="true"><font id="tit">Detalles del Pedido   </font><span class="fa fa-caret-down"></span><span class="fa fa-caret-up"></span></a>
+                    <a class="titulo btn btn-default no-tipo" data-toggle="collapse" href="#ul-pedido" aria-expanded="true"><font id="tit">Detalles del Pedido   </font>
+                        <!-- <span class="fa fa-caret-right"></span>
+                        <span class="fa fa-caret-left"></span> -->
+                    </a>
                 </div>
                 <div class="col-md-12" id="otros" style='padding: 2px'>
                     @if($mesa == 0)

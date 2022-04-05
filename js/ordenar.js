@@ -7,6 +7,7 @@ var validaInventario = $('meta[name=valida_inventario]').attr('content') == '1';
 var cajero_borra = $('meta[name=cajero_borra]').attr('content') == '1';
 esDomicilio = (esDomicilio==""||esDomicilio==null||esDomicilio==0||esDomicilio=="0");
 var altDown = false;
+var showingIngedienteAdicional = null;
 
 $(function () {
     $(document).keydown(function(e) {
@@ -390,6 +391,11 @@ $("form.producto").submit(function (event) {
     event.preventDefault();
 });
 
+// function hideIngredientesAdicionales(form){
+//     form.find('.row.ing-adic').hide();
+//     form.find('.row.ingredientes').hide();
+// }
+
 function getValorUpdated($form){
     var valor = $form.find('.input-group.number-spinner-valor input').val();
     try{
@@ -441,6 +447,14 @@ function terminarAgregarPedido(form){
 
     form.find('.row.tamano input[value='+tamano_selected+']').trigger('click');
     form.find('.row.fracciones input[value="'+fraccion_selected+'"]').trigger('click');
+
+    var version = $('meta[name=rol]').attr('content');
+    if(version=='0'){
+        $('.sub-menu-comidas a[aria-expanded=true]').trigger('click');
+    }
+    if(showingIngedienteAdicional){
+        showingIngedienteAdicional.hide();
+    }
     validarFormAgregarProducto(form);
 }
 
@@ -557,7 +571,8 @@ function validarFormAgregarProducto(form, cssClass='row'){
     }
 }
 function mostrarIngredientesAdicionales(form,clase){
-    form.find(clase).show();
+    showingIngedienteAdicional = form.find(clase);
+    showingIngedienteAdicional.show();
 }
 function esconderIngredientesAdicionales(form, clase, loading){
     form.find(clase).hide();

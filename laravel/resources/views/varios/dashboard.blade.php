@@ -28,35 +28,37 @@
     <div class="col-md-6">
         <canvas id="canvas2"></canvas>
     </div>
-    <div class="col-md-3 ficha-db mb-2">
-        <div class="col-md-12 centrado fuente bebas" style="background-color: #5cb85c;">
-            <h3>TOTAL PEDIDOS HOY</h3>
-            <h1></h1>
-        </div>
-    </div>
-    <div class="col-md-3 ficha-db mb-2">
-        <div class="col-md-12 centrado fuente bebas" style="background-color: #337ab7">
-            <h3>TOTAL PEDIDOS ACTIVOS</h3>
-            <h1></h1>
-        </div>
-    </div>
-    <div class="col-md-3 ficha-db mb-2">
-        <div class="col-md-12 centrado fuente bebas" style="background-color: rgb(255, 159, 64)">
-            <h3>TOTAL DOMICILIOS ACTIVOS</h3>
-            <h1></h1>
-        </div>
-    </div>
-    <div class="col-md-3 ficha-db mb-2">
-        <div class="col-md-12 centrado fuente bebas" style="background-color: #d9534f">
-            <h3>OCUPACIÓN DE MESAS</h3>
-            <h1></h1>
-        </div>
-    </div>
     <div class="col-md-6">
         <canvas id="canvas3"></canvas>
     </div>
     <div class="col-md-6">
-        <canvas id="canvas4"></canvas>
+        <div class="row">
+            <div class="col-md-6 ficha-db mb-2">
+                <div class="col-md-12 centrado fuente bebas" style="background-color: #5cb85c;">
+                    <h3>TOTAL PEDIDOS HOY</h3>
+                    <h1></h1>
+                </div>
+            </div>
+            <div class="col-md-6 ficha-db mb-2">
+                <div class="col-md-12 centrado fuente bebas" style="background-color: #337ab7">
+                    <h3>TOTAL PEDIDOS ACTIVOS</h3>
+                    <h1></h1>
+                </div>
+            </div>
+            <div class="col-md-6 ficha-db mb-2">
+                <div class="col-md-12 centrado fuente bebas" style="background-color: rgb(255, 159, 64)">
+                    <h3>TOTAL DOMICILIOS ACTIVOS</h3>
+                    <h1></h1>
+                </div>
+            </div>
+            <div class="col-md-6 ficha-db mb-2">
+                <div class="col-md-12 centrado fuente bebas" style="background-color: #d9534f">
+                    <h3>OCUPACIÓN DE MESAS</h3>
+                    <h1></h1>
+                </div>
+            </div>
+        </div>
+        <!-- <canvas id="canvas4"></canvas> -->
     </div>
     <br/>
 </section>

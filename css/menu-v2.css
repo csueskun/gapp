@@ -1,0 +1,21 @@
+div.panel-collapse.tipo_producto{
+    width: calc(100% - 202px);
+    /* float: right; */
+    position: absolute;
+    top: 0;
+    left: 200px;
+    border-top: thin solid #d4d4d4;
+    z-index: 1;
+}
+a.tipo_producto.titulo[aria-expanded=true]{
+    background-color: #337ab7 !important;
+    color: white;
+}
+a.tipo_producto.titulo{
+    /* background-color: white !important; */
+    width: 198px;
+    display: block;
+    white-space: initial;
+    line-height: 24px;
+    padding: 8px 2px;
+}

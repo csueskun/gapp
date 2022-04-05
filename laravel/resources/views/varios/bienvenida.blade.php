@@ -59,7 +59,7 @@
             <div class="alert alert-danger">El mesero no tiene mesas abiertas</div>
         </div>
     </div>
-    <div class="container_ centrado" style="margin: auto">
+    <div class="container_ centrado mesas-container" style="margin: auto">
         <br/>
         <a href="/mesa/0" class="btn btn-warning cuadrado boton-grande mesa">
             <span>&nbsp;</span>
@@ -227,7 +227,6 @@
         
         setTimeout(function () {
             $.get( "/estadomesas", function( data ) {
-                console.log(data);
                 if(estado==""){
                     estado= data;
                 }
@@ -252,7 +251,6 @@
         var dat = {data};
         var cant_mesas = parseInt('{{$config->cantidad_mesas}}');
         var mesas = Object.keys(data);
-        // console.log({data});
         for(var i=1;i<=cant_mesas;i++){
             if(mesas.includes(i+"")){
                 var mesa = $("a#mesa"+i);
@@ -324,7 +322,17 @@
                 window.location.href = '/';
             });
         });
+
+        $("div.mesas-container").on('click', 'a.mesa', function(e){
+            var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+            if(width>799){
+                e.preventDefault();
+                var target = $(e.currentTarget).attr('href').replace('/mesa/', '/mesa-v2/');
+                window.location.href = target;
+            }
+        });
         $.get('/borrar-sesion', function (data) {});
+
     });
     function cargarEstadoMesas(){
         var json = "{{json_encode($config->mesas)}}".replace(/&quot;/g,'"');

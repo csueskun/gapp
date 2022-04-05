@@ -67,6 +67,21 @@ Route::post('usuario/editarpass', 'UsuarioController@editarpass');
 Route::post('usuario/borrar', 'UsuarioController@borrar');
 
 
+Route::get('/mesa-v2/{id}', function ($id = 0) {
+    $propina = 0;
+    if($id!=0){
+        $propina = app('App\Http\Controllers\ConfigController')->getPropina();
+    }
+    return view("mesa.menu-v2")->with('mesa', $id)
+                            ->with('tipos_producto', app('App\Http\Controllers\TipoProductoController')->mostrarMenu())
+                            ->with('mesa_alias', app('App\Http\Controllers\ConfigController')->getMesaAlias($id))
+                            ->with('valida_inventario', app('App\Http\Controllers\ConfigController')->getValidaInventario())
+                            ->with('propina', $propina)
+                            ->with('conn', app('App\Http\Controllers\TipoProductoController')->mesaMenu())
+                            ->with('combos', app('App\Http\Controllers\ComboController')->menu());
+})->middleware('auth')->middleware('tiene.roles:Mesero.Administrador.Cajero');
+
+
 Route::get('/mesa/{id}', function ($id = 0) {
     $propina = 0;
     if($id!=0){
