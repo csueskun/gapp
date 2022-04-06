@@ -671,8 +671,7 @@
         btn.closest('.number-spinner-valor').find('input').val(newVal);
     });
     $(function(){
-
-
+        $("a[tipo_producto_id=combo]").removeClass('hidden');
         $('form').each(function(rowE) {
             var grupoNombre = '9156';
             var row = $(this);

@@ -1,5 +1,6 @@
 
 $(function () {
+    $("button[tipo_producto_id=combo]").removeClass('hidden');
     setTimeout(function(){
         try {
             $($('button.tipo_producto.titulo')[1]).trigger('click');
