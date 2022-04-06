@@ -62,10 +62,10 @@
                         @if($tipo->codigo=='00')
                         @continue
                         @endif
-                        <a tipo_producto_id='{{$tipo->id}}' href="#collapse{{$tipo->id}}" class="tipo_producto titulo btn btn-default" role="button">{{$tipo->descripcion}}  
+                        <button tipo_producto_id='{{$tipo->id}}' href="#collapse{{$tipo->id}}" class="tipo_producto titulo btn btn-default" role="button">{{$tipo->descripcion}}  
                             <!-- <span class="fa fa-caret-right"></span>
                             <span class="fa fa-caret-left"></span> -->
-                        </a>
+                        </button>
                         <div id="collapse{{$tipo->id}}" tipo_producto_id='{{$tipo->id}}' class="tipo_producto panel-collapse collapse" valor-editable="{{$tipo->valor_editable}}">
                             <form class="producto" tipo_producto_id='{{$tipo->id}}'>
                                 @if($tipo->aplica_tamanos!=1 && $tipo->aplica_sabores!=1 && $tipo->aplica_ingredientes!=1 && $tipo->valor_editable!=1 )
@@ -540,8 +540,8 @@
             <!-- <h1 class="titulo fondo-rojo" id="tit-mov"><i class="fa fa-motorcycle" aria-hidden="true"></i> <span onclick="openNavCuenta()">abrir</span><span onclick="closeNavCuenta()">cerrar</span></h1> -->
                 <div class="col-md-12 btn-group-vertical _100pc sub-menu-comidas" role="group" aria-label="..." style='padding: 2px;'>
                     <a class="titulo btn btn-default no-tipo" data-toggle="collapse" href="#ul-pedido" aria-expanded="true"><font id="tit">Detalles del Pedido   </font>
-                        <!-- <span class="fa fa-caret-right"></span>
-                        <span class="fa fa-caret-left"></span> -->
+                        <span class="fa fa-caret-right"></span>
+                        <span class="fa fa-caret-left"></span>
                     </a>
                 </div>
                 <div class="col-md-12" id="otros" style='padding: 2px'>

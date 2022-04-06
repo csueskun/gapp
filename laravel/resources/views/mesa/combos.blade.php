@@ -1,8 +1,8 @@
-<a tipo_producto_id='combo' href="#collapse-combos" class="tipo_producto titulo btn btn-default" role="button">
+<button tipo_producto_id='combo' href="#collapse-combos" class="tipo_producto titulo btn btn-default" role="button">
     Combos
     <!-- <span class="fa fa-caret-right"></span>
     <span class="fa fa-caret-left"></span> -->
-</a>
+</button>
 <div id="collapse-combos" tipo_producto_id='combo' class="tipo_producto panel-collapse collapse" style="padding-top: 10px">
     @foreach($combos as $combo)
         @if($combo->estado != 1)

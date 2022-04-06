@@ -1,21 +1,42 @@
 div.panel-collapse.tipo_producto{
-    width: calc(100% - 202px);
+    width: calc(100% - 154px);
     /* float: right; */
     position: absolute;
     top: 0;
-    left: 200px;
+    left: 152px;
     border-top: thin solid #d4d4d4;
     z-index: 1;
 }
-a.tipo_producto.titulo[aria-expanded=true]{
+button.tipo_producto.titulo:focus{
+    outline: none;
+}
+button.tipo_producto.titulo[aria-expanded=true]{
     background-color: #337ab7 !important;
     color: white;
 }
-a.tipo_producto.titulo{
-    /* background-color: white !important; */
-    width: 198px;
+button.tipo_producto.titulo{
+    width: 150px;
     display: block;
     white-space: initial;
-    line-height: 24px;
-    padding: 8px 2px;
+    line-height: 18px;
+    padding: 6px 2px;
+    font-size: 20px !important;
+    color: #616161;
+    background-color: #e6e6e6;
+}
+div.ingredientes>label, div[class*="adicional"],
+span.producto-express span.producto-nombre{
+    color: #616161;
+    font-size:18px;
+}
+span.producto-express span.producto-grupo {
+    writing-mode: tb;
+    -webkit-transform: rotate(180deg);
+    padding: 6px 4px;
+    margin-left: -16px;
+    top: -145px;
+}
+span.producto-express{
+    width: 110px;
+    height: 130px;
 }

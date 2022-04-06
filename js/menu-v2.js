@@ -2,18 +2,18 @@
 $(function () {
     setTimeout(function(){
         try {
-            $($('a.tipo_producto.titulo')[1]).trigger('click');
+            $($('button.tipo_producto.titulo')[1]).trigger('click');
         } catch (error) {        
-            $($('a.tipo_producto.titulo')[0]).trigger('click');
+            $($('button.tipo_producto.titulo')[0]).trigger('click');
         }
     }, 500);
-    $('a.tipo_producto.titulo').on('click', function(e){
+    $('button.tipo_producto.titulo').on('click', function(e){
         // if($(e.currentTarget).attr('aria-expanded')){
         //     return false;
         // }
         $('.sub-menu-comidas div.panel-collapse.tipo_producto.in').toggle();
         $('.sub-menu-comidas div.panel-collapse.tipo_producto.in').removeClass('in');
-        $('a.tipo_producto.titulo[aria-expanded=true]').attr('aria-expanded', false);
+        $('button.tipo_producto.titulo[aria-expanded=true]').attr('aria-expanded', false);
         $(e.currentTarget).attr('aria-expanded', true);
         var target = $(e.currentTarget).attr('href');
         $(target).toggle();
