@@ -885,13 +885,13 @@
     function filtrarTipos(filtro){
         filtro = filtro.val().toUpperCase();
         if(filtro == ''){
-            $("a.btn.titulo").not('.no-tipo').each(function(){
+            $(".btn.titulo").not('.no-tipo').each(function(){
                 var divid = $(this).attr('href');
                 mostrarTipo(divid);
             });
             return false;
         }
-        $("a.btn.titulo").not('.no-tipo').each(function(){
+        $(".btn.titulo").not('.no-tipo').each(function(){
             var divid = $(this).attr('href');
             var t = $(this).text().toUpperCase();
             if(t.includes(filtro)){
@@ -921,11 +921,11 @@
 
 
     function ocultarTipo(id){
-        $("a.btn.titulo[href='"+id+"']").attr('aria-expanded', false).hide();
+        $(".btn.titulo[href='"+id+"']").attr('aria-expanded', false).hide();
         $(id).removeClass('in').attr('aria-expanded', false);
     }
     function mostrarTipo(id){
-        $("a.btn.titulo[href='"+id+"']").attr('aria-expanded', false).show();
+        $(".btn.titulo[href='"+id+"']").attr('aria-expanded', false).show();
     }
 
 </script>

@@ -16,31 +16,37 @@ class CocinaController extends Controller
         DB::setDefaultConnection(Auth::user()->conn);
     }*/
     public function vistaCocina() {
-        $hora = date("H");
-        if($hora < '06'){
-            $desde = date('Y-m-d 00:00:00',strtotime("-1 days"));
-        }
-        else{
-            $desde = date('Y-m-d 00:00:00');
-        }
-        $pedidos = Pedido::with("productos")
-        ->whereIn("estado", array(1,2,3))
-        ->orderBy('created_at', 'desc')
-        ->where('created_at', '>', $desde)
-        ->get();
-
-        return view('cocina.pedidos')->with('pedido_lista', $pedidos);
+        // $hora = date("H");
+        // if($hora < '06'){
+        //     $desde = date('Y-m-d 00:00:00',strtotime("-1 days"));
+        // }
+        // else{
+        //     $desde = date('Y-m-d 00:00:00');
+        // }
+        // $pedidos = Pedido::with("productos")
+        // ->whereIn("estado", array(1,2,3))
+        // ->orderBy('created_at', 'desc')
+        // ->where('created_at', '>', $desde)
+        // ->get();
+        return view('cocina.pedidos')->with('pedido_lista', []);
     }
     public function nuevosPedidos($date) {
-
-        $date = str_replace('_', ' ', $date);
+        if($date == '0'){
+            $date = date('Y-m-d 00:00:00',strtotime("-1 days"));
+        }
+        else{
+            $date = str_replace('_', ' ', $date);
+        }
         $pedidosQ = Pedido::select('pedido.*')
         ->join('producto_pedido', 'producto_pedido.pedido_id', '=', 'pedido.id')
         ->whereIn("pedido.estado", array(1,2,3))
+        // ->where(function($query) use($date){
+        //     $query->where('producto_pedido.updated_at', '>', $date)
+        //     ->orWhere('pedido.updated_at', '>', $date);
+        // })
         ->where('producto_pedido.updated_at', '>', $date)
         ->with("productos.tipo_producto")
         ->orderBy('pedido.updated_at', 'asc')->get();
-
         $hora = date("H");
         if($hora < '06'){
             $desde = date('Y-m-d 00:00:00',strtotime("-1 days"));
@@ -48,15 +54,19 @@ class CocinaController extends Controller
         else{
             $desde = date('Y-m-d 00:00:00');
         }
-        $productosPedidoQ = ProductoPedido::select('producto_pedido.id', 'pedido_id')
+        $productosPedidoQ = ProductoPedido::select('producto_pedido.id', 'pedido_id', 'producto_pedido.updated_at')
         ->join('pedido', 'pedido.id', '=', 'producto_pedido.pedido_id')
         ->whereIn("pedido.estado", array(1,2,3))
-        ->where('producto_pedido.created_at', '>', $desde)
+        ->where('producto_pedido.updated_at', '>', $desde)
         ->get();
 
         $pedidos = [];
         $productosPedidos = [];
+        $max = '';
         foreach($productosPedidoQ as $pp){
+            if($pp->updated_at>$max){
+                $max = $pp->updated_at;
+            }
             if(in_array($pp->pedido_id, $pedidos)){
             }
             else{
@@ -69,6 +79,6 @@ class CocinaController extends Controller
             }
         }
 
-        return response()->json(array('code'=>200,'msg'=>'OK.','novedades'=>$pedidosQ, 'pedidos'=>$pedidos, 'productos'=>$productosPedidos));
+        return response()->json(array('code'=>200,'msg'=>'OK.','novedades'=>$pedidosQ, 'pedidos'=>$pedidos, 'productos'=>$productosPedidos, 'max'=>$max));
     }
 }

@@ -793,7 +793,12 @@ function sumarTotalPedido(suma){
     total.html(accounting.formatMoney(valor, '$', 0));
 }
 
+function setEntregado(val){
+    $('#entregado-checkbox').attr('checked', val!=null);
+}
+
 function impItemPedido(productos_pedido){
+    setEntregado(productos_pedido.entregado);
     mostrarFullLoading();
     $('#propina input.percent').val(propinaDefault);
     var descuento = productos_pedido.descuento;
@@ -1011,6 +1016,9 @@ function impItemPedido(productos_pedido){
             html+='<span class="detalles">'+(obs.sabor?obs.sabor:"")+'</span>';
             
             html+='            <br/><div class="spaceholder-valor-item">&nbsp;</div><div class="btn-group items">';
+            if(productos_pedido[i].preparado){
+                html+= '        <span title="Preparado" class="btn comandado fa fa-cutlery text-success btn-default"></span>';
+            }
             html+= '        <span title="'+(productos_pedido[i].comanda?'Ya impreso':'Aún no impreso')+' en comanda" class="btn comandado fa fa-print text-'+(productos_pedido[i].comanda?'success':'danger')+' btn-default"></span>';
 
             if(pedido_activo){

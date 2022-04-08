@@ -21,8 +21,8 @@
     {{ Html::style('css/bootstrap-datetimepicker.css') }}
     {{ Html::style('css/jquery-confirm.min.css') }}
     {{ Html::style('css/menu.css') }}
-    {{ Html::style('css/menu-v2.css') }}
     {{ Html::style('css/combos.css') }}
+    {{ Html::style('css/menu-v2.css') }}
     {{ Html::script('js/moment-with-locales.js') }}
     {{ Html::script('js/bootstrap-datetimepicker.js') }}
     {{ Html::script('js/jquery-confirm.min.js') }}
@@ -540,16 +540,13 @@
             <!-- <h1 class="titulo fondo-rojo" id="tit-mov"><i class="fa fa-motorcycle" aria-hidden="true"></i> <span onclick="openNavCuenta()">abrir</span><span onclick="closeNavCuenta()">cerrar</span></h1> -->
                 <div class="col-md-12 btn-group-vertical _100pc sub-menu-comidas" role="group" aria-label="..." style='padding: 2px;'>
                     <a class="titulo btn btn-default no-tipo" data-toggle="collapse" href="#ul-pedido" aria-expanded="true"><font id="tit">Detalles del Pedido   </font>
-                        <span class="fa fa-caret-right"></span>
-                        <span class="fa fa-caret-left"></span>
                     </a>
                 </div>
-                <div class="col-md-12" id="otros" style='padding: 2px'>
+                <div class="col-md-12" id="otros" style='padding: 4px'>
                     @if($mesa == 0)
                     @else
                     <label class="checkbox-inline"><input type="checkbox" id="llevar-mesa"> PARA LLEVAR</label>
                     @endif
-                    
                 </div>
                 <img id='loading-pedido' class="button-loading" src=""/>
                 <div class="col-md-12" id="pedido" style='padding: 2px'>
@@ -829,92 +826,6 @@
         });
     });
 
-
-
-    function openNavCuenta() {
-        document.getElementById("navCuenta").style.right = "0px";
-        //$(".moverconnavcuenta").css("padding-right","320px");
-        $("#botonescerrarabrir").css("padding-right","320px");
-        $("#content-fix").css("padding-right","320px");
-        $(".moverconnavcuenta_margin").css("margin-right","320px");
-        $("ul>a.usuario").css("padding-right","320px");
-        $("ul>a.usuario").addClass("openCuenta");
-        $("#botonescerrarabrir").css("z-index","1033");
-    }
-
-    /* Set the width of the side navigation to 0 */
-    function closeNavCuenta() {
-        document.getElementById("navCuenta").style.width = "320px";
-        document.getElementById("navCuenta").style.right = "-320px";
-        $(".moverconnavcuenta").css("padding-right","0px");
-        $("#content-fix").css("padding-right","0px");
-        $("#botonescerrarabrir").css("padding-right","0px");
-        $("#botonescerrarabrir").css("z-index","1");
-        $(".moverconnavcuenta_margin").css("margin-right","0px");
-        $("#botonescerrarabrir").css("right","0px");
-        $("ul>a.usuario").css("padding-right","0px");
-        setTimeout(() => {
-            $("ul>a.usuario").removeClass("openCuenta");
-        }, 500);
-    }
-    function abrirCerrarNavCuenta(){
-        if($("#botonescerrarabrir").attr("estado")=="0"){
-            openNavCuenta();
-            $("#botonescerrarabrir").attr("estado","1");
-        }
-        else{
-            closeNavCuenta();
-            $("#botonescerrarabrir").attr("estado","0");
-        }
-    }
-
-    function filtrarTipos(filtro){
-        filtro = filtro.val().toUpperCase();
-        if(filtro == ''){
-            $("a.btn.titulo").not('.no-tipo').each(function(){
-                var divid = $(this).attr('href');
-                mostrarTipo(divid);
-            });
-            return false;
-        }
-        $("a.btn.titulo").not('.no-tipo').each(function(){
-            var divid = $(this).attr('href');
-            var t = $(this).text().toUpperCase();
-            if(t.includes(filtro)){
-                mostrarTipo(divid);
-            }
-            else{
-                var productos = $(divid).find('.producto-nombre');
-                var done = false;
-                var match = false;
-                productos.each(function(e){
-                    if(!done){
-                        var t = $(this).text().toUpperCase();
-                        if(t.includes(filtro)){
-                            mostrarTipo(divid);
-                            done=true;
-                            match=true;
-                        }
-                    }
-                });
-                if(!match){
-                    ocultarTipo(divid);
-                }
-            }
-        });
-
-    }
-
-
-
-    function ocultarTipo(id){
-        $("a.btn.titulo[href='"+id+"']").attr('aria-expanded', false).hide();
-        $(id).removeClass('in').attr('aria-expanded', false);
-    }
-    function mostrarTipo(id){
-        $("a.btn.titulo[href='"+id+"']").attr('aria-expanded', false).show();
-    }
-
 </script>
 <style>
     .moverconnavcuenta,ul>a.usuario {
@@ -933,11 +844,11 @@
         padding: 0px; 
         background-color: #f2f7f8;
         height: 100%; /* 100% Full-height */
-        width: 320px; /* 0 width - change this with JavaScript */
+        width: 280px; /* 0 width - change this with JavaScript */
         position: fixed; /* Stay in place */
         z-index: 1; /* Stay on top */
         top: 0px;
-        right: -320px;
+        right: -280px;
         overflow-x: hidden; /* Disable horizontal scroll */
         overflow-y: auto; /* Disable horizontal scroll */
         transition: 0.5s;

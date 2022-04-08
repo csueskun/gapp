@@ -67,4 +67,85 @@ function getY(){
     }
     return vertical_position - headerHeight;
 }
+
+
+function filtrarTipos(filtro){
+    filtro = filtro.val().toUpperCase();
+    if(filtro == ''){
+        $(".btn.titulo").not('.no-tipo').each(function(){
+            var divid = $(this).attr('href');
+            mostrarTipo(divid);
+        });
+        return false;
+    }
+    $(".btn.titulo").not('.no-tipo').each(function(){
+        var divid = $(this).attr('href');
+        var t = $(this).text().toUpperCase();
+        if(t.includes(filtro)){
+            mostrarTipo(divid);
+        }
+        else{
+            var productos = $(divid).find('.producto-nombre');
+            var done = false;
+            var match = false;
+            productos.each(function(e){
+                if(!done){
+                    var t = $(this).text().toUpperCase();
+                    if(t.includes(filtro)){
+                        mostrarTipo(divid);
+                        done=true;
+                        match=true;
+                    }
+                }
+            });
+            if(!match){
+                ocultarTipo(divid);
+            }
+        }
+    });
+}
+function ocultarTipo(id){
+    $(".btn.titulo[href='"+id+"']").hide();
+}
+function mostrarTipo(id){
+    $(".btn.titulo[href='"+id+"']").show();
+}
+
+
+function openNavCuenta() {
+    document.getElementById("navCuenta").style.right = "0px";
+    //$(".moverconnavcuenta").css("padding-right","280px");
+    $("#botonescerrarabrir").css("padding-right","280px");
+    $("#content-fix").css("padding-right","280px");
+    $(".moverconnavcuenta_margin").css("margin-right","280px");
+    $("ul>a.usuario").css("padding-right","280px");
+    $("ul>a.usuario").addClass("openCuenta");
+    $("#botonescerrarabrir").css("z-index","1033");
+}
+
+/* Set the width of the side navigation to 0 */
+function closeNavCuenta() {
+    document.getElementById("navCuenta").style.width = "280px";
+    document.getElementById("navCuenta").style.right = "-280px";
+    $(".moverconnavcuenta").css("padding-right","0px");
+    $("#content-fix").css("padding-right","0px");
+    $("#botonescerrarabrir").css("padding-right","0px");
+    $("#botonescerrarabrir").css("z-index","1");
+    $(".moverconnavcuenta_margin").css("margin-right","0px");
+    $("#botonescerrarabrir").css("right","0px");
+    $("ul>a.usuario").css("padding-right","0px");
+    setTimeout(() => {
+        $("ul>a.usuario").removeClass("openCuenta");
+    }, 500);
+}
+function abrirCerrarNavCuenta(){
+    if($("#botonescerrarabrir").attr("estado")=="0"){
+        openNavCuenta();
+        $("#botonescerrarabrir").attr("estado","1");
+    }
+    else{
+        closeNavCuenta();
+        $("#botonescerrarabrir").attr("estado","0");
+    }
+}
   

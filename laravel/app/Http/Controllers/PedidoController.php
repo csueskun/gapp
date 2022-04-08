@@ -1043,6 +1043,9 @@ class PedidoController extends Controller
             $pedido->turno = app('App\Http\Controllers\ConfigController')->asignarTurno();
             $pedido = $this->guardar($pedido);
         }
+        else{
+            Pedido::where('id',$pedido->id)->update(['entregado'=>null]);
+        }
         $producto_pedido = new stdClass();
         $producto_pedido->pedido_id = $pedido->id;
         $producto_pedido->producto_id = $producto_pedido_json->producto->id;
