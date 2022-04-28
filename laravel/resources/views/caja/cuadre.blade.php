@@ -20,6 +20,11 @@
 
 <section class="borde-inferior form fondo-comun">
     <div class="container">
+        <h3 class="titulo">Día operativo:</h3>
+        <h1 class="titulo" style='display: inline'>{{$active}}</h1>
+        <h1 class="titulo" style='display: inline'>{{$dia_operativo}}</h1>
+        <h2 class="titulo" style='display: inline'>( {{$dia_operativo_desde}} am - {{$dia_operativo_hasta}} am )</h2>
+        <br>
         <h2 class="titulo">Seleccione la caja
             <br/>
             <div class = "col-md-6" style='padding: 0'>
