@@ -370,7 +370,7 @@ class POS{
         $texto.= ($config->encabezado_pos);
         $texto.= ("\n");
         if($post){
-            $texto.= ("Nro: $documento->numdoc");
+            $texto.= ("Nro: FV $config->fvcodprefijo $documento->numdoc");
             $texto.= ("\n");
         }
         else{
@@ -875,10 +875,10 @@ class POS{
         
         $linea = '';
         foreach ($totalq as $t){
-            $linea = self::impLinea('**Resumen Impuestos**','',$caracteres);
-            $linea = self::impLinea('IVA','$'.number_format($t->impiva,0),$caracteres);
+            $linea.= self::impLinea('Resumen Impuestos','',$caracteres);
+            $linea.= self::impLinea('IVA','$'.number_format($t->impiva,0),$caracteres);
             $linea.= self::impLinea('IMP.CONSUMO','$'.number_format($t->impcon,0),$caracteres);
-            $linea = self::impLinea('**Formas de Pago**','',$caracteres);
+            $linea.= self::impLinea('Formas de Pago','',$caracteres);
             $linea.= self::impLinea('EFECTIVO','$'.number_format($t->efectivo,0),$caracteres);
             $linea.= self::impLinea('DÉBITO','$'.number_format($t->debito,0),$caracteres);
             $linea.= self::impLinea('CRÉDITO','$'.number_format($t->tcredito,0),$caracteres);

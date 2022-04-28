@@ -13,10 +13,10 @@ Route::get('/cmd', 'ConfigController@vistaListar');
 
 
 Route::get('/estadomesas', 'ConfigController@estado_mesas2');
-
-Route::get('/caja/cuadre', function () {
-    return view("caja.cuadre");
-})->middleware('auth')->middleware('tiene.roles:Administrador.Cajero');
+Route::get('/caja/cuadre', 'DocumentoController@cuadreView')->middleware('tiene.roles:Administrador.Cajero');
+// Route::get('/caja/cuadre', function () {
+//     return view("caja.cuadre");
+// })->middleware('auth')->middleware('tiene.roles:Administrador.Cajero');
 
 Route::get('/dashboard', function () {
     return view("varios.dashboard");

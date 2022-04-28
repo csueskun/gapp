@@ -37,7 +37,8 @@ class LoginController extends Controller
 //                if(strcmp(str_replace(" ", "",$sql[0]->valor), str_replace(" ","",preg_replace( "/\r|\n/", "", trim($this->doAuthLogin())))) === 0){
                 if(true){
                     $configController = new ConfigController;
-                    $configController->resetTurno();
+                    $configController->prepareApp();
+                    // $configController->resetTurno();
                     $redir = '/';
                     if(Auth::user()->rol=='Administrador'){
                         $redir = '/dashboard';

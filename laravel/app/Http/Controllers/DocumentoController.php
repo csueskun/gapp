@@ -1069,4 +1069,23 @@ class DocumentoController extends Controller
         $egresos = $this->getMonthExpenses();
         return response()->json(['ventas'=>$fv, 'gastos'=>$egresos]);
     }
+
+    public function cuadreView(){
+        $config = app('App\Http\Controllers\ConfigController')->first();
+        $date = strtotime($config->dia_operativo);
+        $dia_operativo = date('d/m/Y', $date);
+        $dia_operativo_desde = date('d/m/Y 03:00:00', $date);
+        $dia_operativo_hasta = date('d/m/Y 02:59:59', strtotime('+1 days', $date));
+
+        $active = 0;
+        if(date('Y-m-d H:i:s')>date('Y-m-d 03:00:00', $date)){
+            $active = 1;
+        }
+
+        return view("caja.cuadre")
+            ->with('active',$active)
+            ->with('dia_operativo',$dia_operativo)
+            ->with('dia_operativo_desde',$dia_operativo_desde)
+            ->with('dia_operativo_hasta',$dia_operativo_hasta);
+    }
 }

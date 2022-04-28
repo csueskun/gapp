@@ -43,6 +43,7 @@ class ConfigController extends Controller
             $config->fvcodprefijo = '00';
             $config->valida_inventario = 0;
             $config->subtotales_factura = 1;
+            $config->dia_operativo = null;
             $config->save();
             return $this->first();
         }
@@ -110,6 +111,14 @@ class ConfigController extends Controller
             'mesas'=>$mesas,
             'turno'=>$config->turno
         ]);
+    }
+
+    public function prepareApp(){
+        $config = $this->first();
+        if($config->dia_operativo==null){
+            Config::find($config->id)->update(['dia_operativo'=>date('Y-m-d 12:00:00')]);
+        }
+        $this->resetTurno();
     }
     
     public function resetTurno() {
@@ -210,6 +219,7 @@ class ConfigController extends Controller
             $config->fvcodprefijo = Input::get('fvcodprefijo');
             $config->subtotales_factura = Input::get('subtotales_factura');
             $config->cajero_borra = Input::get('cajero_borra');
+            $config->dia_operativo = null;
             $config->save();
         
             return Redirect::to('config/crear')
