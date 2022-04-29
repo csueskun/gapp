@@ -37,6 +37,7 @@ Route::post('/caja/cuadre', 'DocumentoController@cuadre');
 Route::post('/caja/reporte-tipodoc', 'DocumentoController@reporteTipodoc');
 Route::get('/caja/reporte-ventas', 'DocumentoController@preReporteVentas');
 Route::post('/caja/cuadre-post', 'DocumentoController@preCuadrePos');
+Route::post('/caja/siguiente-dia-operativo', 'DocumentoController@setSiguienteDiaOperativo');
 Route::post('/documento/print-post', 'DocumentoController@posPrint');
 
 Route::get('/producto/buscarConTamano/{buscar}', 'ProductoTamanoController@todosConProducto');

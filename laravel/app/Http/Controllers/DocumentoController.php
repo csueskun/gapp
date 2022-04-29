@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Documento;
 use App\DetalleDocumento;
 use App\Pedido;
+use App\Config;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
@@ -1071,21 +1072,54 @@ class DocumentoController extends Controller
     }
 
     public function cuadreView(){
+        $updated = Input::get("updated");
+        if($updated){
+            return Redirect::to('/caja/cuadre')
+                ->with('status', ["success-contenido" => 'Día operativo establecido']);
+        }
         $config = app('App\Http\Controllers\ConfigController')->first();
         $date = strtotime($config->dia_operativo);
         $dia_operativo = date('d/m/Y', $date);
         $dia_operativo_desde = date('d/m/Y 03:00:00', $date);
         $dia_operativo_hasta = date('d/m/Y 02:59:59', strtotime('+1 days', $date));
+        $activo = $this->esDiaOperativoActivo($date);
+        $activo = $activo ? 1: 0;
+        $view = view("caja.cuadre")
+        ->with('activo',$activo)
+        ->with('dia_operativo',$dia_operativo)
+        ->with('dia_operativo_desde',$dia_operativo_desde)
+        ->with('dia_operativo_hasta',$dia_operativo_hasta);
+        return $view;
+    }
 
-        $active = 0;
-        if(date('Y-m-d H:i:s')>date('Y-m-d 03:00:00', $date)){
-            $active = 1;
+    public function esDiaOperativoActivo($date=false){
+        if(!$date){
+            $config = app('App\Http\Controllers\ConfigController')->first();
+            $date = strtotime($config->dia_operativo);
         }
+        $desde = date('Y-m-d 03:00:00', $date);
+        $hasta = date('Y-m-d 02:59:59', strtotime('+1 days', $date));
+        $now = date('Y-m-d H:i:s');
+        return $now>=$desde && $now <= $hasta;
+    }
 
-        return view("caja.cuadre")
-            ->with('active',$active)
-            ->with('dia_operativo',$dia_operativo)
-            ->with('dia_operativo_desde',$dia_operativo_desde)
-            ->with('dia_operativo_hasta',$dia_operativo_hasta);
+    public function getSiguienteDiaOperativo(){
+        $now = date('Y-m-d 12:00:00');
+        $now = strtotime($now);
+        return date('Y-m-d 12:00:00', strtotime('+1 days', $now));
+    }
+
+    public function setSiguienteDiaOperativo(){
+        try {
+            $dia_operativo = $this->getSiguienteDiaOperativo();
+            $config = app('App\Http\Controllers\ConfigController')->first();
+            if($config->dia_operativo == $dia_operativo){
+                return response()->json(['code'=>201]);
+            }
+            Config::where('id', $config->id)->update(['dia_operativo'=>$dia_operativo]);
+            return response()->json(['code'=>200]);
+        } catch (\Throwable $th) {
+            return response()->json(['code'=>500]);
+        }
     }
 }

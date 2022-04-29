@@ -15,8 +15,7 @@
     <meta name="pedido_id" content="{{isset($pedido_id)?($pedido_id?$pedido_id:0):0}}">
     <meta name="mesa_alias" content="{{$mesa_alias}}">
     <meta name="rol" content="{{Auth::user()->rol}}">
-    {{ Html::script('bootstrap-3.3.6-dist/js/confirmation.js') }}
-    
+    {{ Html::script('bootstrap-3.3.6-dist/js/confirmation.js') }}    
     {{ Html::style('css/bootstrap-datetimepicker.css') }}
     {{ Html::style('css/jquery-confirm.min.css') }}
     {{ Html::style('css/menu.css') }}

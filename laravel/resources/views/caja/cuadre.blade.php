@@ -3,10 +3,14 @@
 @section('titulo', 'Cuadre de Caja')
 
 @section('lib')
-{{ Html::script('js/validator.min.js') }}
 {{ Html::style('css/bootstrap-datetimepicker.min.css') }}
+{{ Html::style('css/jquery-confirm.min.css') }}
+{{ Html::script('js/validator.min.js') }}
 {{ Html::script('js/bootstrap-datetimepicker.min.js') }}
 {{ Html::script('js/bootstrap-datetimepicker.es.js') }}
+{{ Html::script('bootstrap-3.3.6-dist/js/confirmation.js') }}
+{{ Html::script('js/jquery-confirm.min.js') }}
+{{ Html::script('js/caja.js') }}
 
 @endsection
 @section('contenido')
@@ -20,10 +24,23 @@
 
 <section class="borde-inferior form fondo-comun">
     <div class="container">
-        <h3 class="titulo">Día operativo:</h3>
-        <h1 class="titulo" style='display: inline'>{{$active}}</h1>
-        <h1 class="titulo" style='display: inline'>{{$dia_operativo}}</h1>
+        @include('template.status', ['status' => session('status')])
+        <h3 class="titulo">Día operativo 
+            <span style="font-size: 0.9em; vertical-align: middle" class="label label-{{$activo?'success':'danger'}}">
+            {{$activo?'Vigente':'No vigente'}}
+            </span>&nbsp;:
+        </h3>
+        <h1 class="titulo" style='display: inline;'>
+            <span class="{{$activo?'text-success':'text-danger'}}">{{$dia_operativo}}</span>
+        </h1>
         <h2 class="titulo" style='display: inline'>( {{$dia_operativo_desde}} am - {{$dia_operativo_hasta}} am )</h2>
+        <br>
+        <h2 class="titulo">
+            <button type='button' class='btn btn-{{$activo?"danger":"success"}}' onclick='preSiguienteDiaOperativo({{$activo}})'>
+                <i class="fa fa-{{$activo?'times':'check'}}"></i> 
+                {{$activo?'Cerrar día operativo':'Abrir siguiente día operativo'}}
+            </button>
+        </h2>
         <br>
         <h2 class="titulo">Seleccione la caja
             <br/>

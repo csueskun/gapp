@@ -116,7 +116,7 @@ class ConfigController extends Controller
     public function prepareApp(){
         $config = $this->first();
         if($config->dia_operativo==null){
-            Config::find($config->id)->update(['dia_operativo'=>date('Y-m-d 12:00:00')]);
+            Config::where('id', $config->id)->update(['dia_operativo'=>date('Y-m-d 12:00:00')]);
         }
         $this->resetTurno();
     }
