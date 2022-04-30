@@ -67,15 +67,25 @@ Route::post('usuario/editarpass', 'UsuarioController@editarpass');
 
 Route::post('usuario/borrar', 'UsuarioController@borrar');
 
-
 Route::get('/mesa-v2/{id}', function ($id = 0) {
     $propina = 0;
     if($id!=0){
         $propina = app('App\Http\Controllers\ConfigController')->getPropina();
     }
+    try {
+        if(env('DIA_OPERATIVO')){
+            $dia_operativo = app('App\Http\Controllers\DocumentoController')->esDiaOperativoActivo();
+        }
+        else{
+            $dia_operativo = true;
+        }
+    } catch (\Throwable $th) {
+        $dia_operativo = true;
+    }
     return view("mesa.menu-v2")->with('mesa', $id)
                             ->with('tipos_producto', app('App\Http\Controllers\TipoProductoController')->mostrarMenu())
                             ->with('mesa_alias', app('App\Http\Controllers\ConfigController')->getMesaAlias($id))
+                            ->with('dia_operativo_valido', $dia_operativo)
                             ->with('valida_inventario', app('App\Http\Controllers\ConfigController')->getValidaInventario())
                             ->with('propina', $propina)
                             ->with('conn', app('App\Http\Controllers\TipoProductoController')->mesaMenu())
@@ -88,9 +98,20 @@ Route::get('/mesa/{id}', function ($id = 0) {
     if($id!=0){
         $propina = app('App\Http\Controllers\ConfigController')->getPropina();
     }
+    try {
+        if(env('DIA_OPERATIVO')){
+            $dia_operativo = app('App\Http\Controllers\DocumentoController')->esDiaOperativoActivo();
+        }
+        else{
+            $dia_operativo = true;
+        }
+    } catch (\Throwable $th) {
+        $dia_operativo = true;
+    }
     return view("mesa.menu")->with('mesa', $id)
                             ->with('tipos_producto', app('App\Http\Controllers\TipoProductoController')->mostrarMenu())
                             ->with('mesa_alias', app('App\Http\Controllers\ConfigController')->getMesaAlias($id))
+                            ->with('dia_operativo_valido', $dia_operativo)
                             ->with('valida_inventario', app('App\Http\Controllers\ConfigController')->getValidaInventario())
                             ->with('propina', $propina)
                             ->with('conn', app('App\Http\Controllers\TipoProductoController')->mesaMenu())

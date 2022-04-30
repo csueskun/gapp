@@ -286,21 +286,21 @@
     $(function(){
         cargarEstadoMesas();
         calcularTiempo();
-        if("{{Auth::user()->rol}}" == 'Mesero'){
-            vistaMesero("{{Auth::user()->id}}");
-        }
+        // if("{{Auth::user()->rol}}" == 'Mesero'){
+        //     vistaMesero("{{Auth::user()->id}}");
+        // }
         var x = setInterval(function() {
-            if("{{Auth::user()->rol}}" == 'Administrador'){
+            // if("{{Auth::user()->rol}}" == 'Administrador'){
                 filtrarMesero({target:{value:$('select[name=mesero]').val()}});
-            }
-            if("{{Auth::user()->rol}}" == 'Mesero'){
-                if($("#mis-mesas").attr('state') == 'off'){
-                    vistaMesero("{{Auth::user()->id}}");
-                }
-                else{
-                    filtrarMesero({target:{value:"{{Auth::user()->id}}"}});
-                }
-            }
+            // }
+            // if("{{Auth::user()->rol}}" == 'Mesero'){
+            //     if($("#mis-mesas").attr('state') == 'off'){
+            //         vistaMesero("{{Auth::user()->id}}");
+            //     }
+            //     else{
+            //         filtrarMesero({target:{value:"{{Auth::user()->id}}"}});
+            //     }
+            // }
             calcularTiempo();
             
         }, 5000);

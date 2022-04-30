@@ -1,5 +1,6 @@
 
 $(function () {
+
     $("button[tipo_producto_id=combo]").removeClass('hidden');
     setTimeout(function(){
         try {
@@ -9,6 +10,9 @@ $(function () {
         }
     }, 500);
     $('button.tipo_producto.titulo').on('click', function(e){
+        if($(e.target).hasClass('bloqueado-dia-operativo')){
+            return false;
+        }
         // if($(e.currentTarget).attr('aria-expanded')){
         //     return false;
         // }

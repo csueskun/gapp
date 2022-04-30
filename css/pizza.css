@@ -854,3 +854,9 @@ span.comandado:visited
     background-color: white;
     
 }
+.bloqueado-dia-operativo{
+    background-color: #403f3f !important;
+    border: none;
+    color: white !important;
+    cursor: not-allowed;
+}

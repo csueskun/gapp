@@ -5,11 +5,13 @@ var esDomicilio = $('meta[name=mesa]').attr('content');
 var propinaDefault = $('meta[name=propina]').attr('content');
 var validaInventario = $('meta[name=valida_inventario]').attr('content') == '1';
 var cajero_borra = $('meta[name=cajero_borra]').attr('content') == '1';
+var diaOperativoValido = $('meta[name=dia_operativo_valido]').attr('content') == '1';
 esDomicilio = (esDomicilio==""||esDomicilio==null||esDomicilio==0||esDomicilio=="0");
 var altDown = false;
 var showingIngedienteAdicional = null;
 
 $(function () {
+    bloquearPedidosPorDiaOperativo();
     $(document).keydown(function(e) {
         if (e.keyCode == 18) altDown = true;
     }).keyup(function(e) {
@@ -582,6 +584,7 @@ function actualizarDivPedido() {
     mostrarFullLoading();
     getPedido(function (pedido) {
         $("div#pedido").html(impItemPedido(pedido));
+        bloquearPedidosPorDiaOperativo();
         ocultarFullLoading();
     });
 }
@@ -1991,4 +1994,17 @@ function togglePagarDomicilio(pagar=true){
 
 function getPedidoObservaciones(){
     return observaciones;
+}
+
+function bloquearPedidosPorDiaOperativo(){
+    if(diaOperativoValido){
+        return false;
+    }
+    $('#collapse-dia-operativo-invalido').addClass('in');
+    $('#ParentContainer a').addClass('disabled bloqueado-dia-operativo');
+    $('#ParentContainer button').addClass('disabled bloqueado-dia-operativo');
+    $('#ParentContainer .btn').addClass('disabled bloqueado-dia-operativo');
+    $('#ParentContainer #otros').remove();
+    $('#ParentContainer #entregado-label').remove();
+    $('#ParentContainer>table').remove();
 }

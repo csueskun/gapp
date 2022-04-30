@@ -16,6 +16,7 @@
     <meta name="pedido_id" content="{{isset($pedido_id)?($pedido_id?$pedido_id:0):0}}">
     <meta name="mesa_alias" content="{{$mesa_alias}}">
     <meta name="rol" content="{{Auth::user()->rol}}">
+    <meta name="dia_operativo_valido" content="{{$dia_operativo_valido}}">
     {{ Html::script('bootstrap-3.3.6-dist/js/confirmation.js') }}
     
     {{ Html::style('css/bootstrap-datetimepicker.css') }}
@@ -57,6 +58,10 @@
             </table>
             <div class="col-sm-12"  style='padding: 2px'>
                 <div class="btn-group-vertical _100pc sub-menu-comidas" role="group" aria-label="...">
+                    <div id="collapse-dia-operativo-invalido" class="tipo_producto panel-collapse collapse">
+                        <br>
+                        <div class="alert alert-warning">No podrá realizar pedidos. El día operativo es diferente al actual.</div>
+                    </div>
                     @include('mesa.combos')
                     @foreach($tipos_producto as $tipo)
                         @if($tipo->codigo=='00')
@@ -528,7 +533,6 @@
                     @endforeach
 
                     
-
                 </div>
                 <br/><br/>
             </div>

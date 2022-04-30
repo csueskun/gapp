@@ -31,17 +31,19 @@ function preSiguienteDiaOperativo(activo){
 }
 
 function siguienteDiaOperativo(){
+    mostrarFullLoading();
     $.post( "/caja/siguiente-dia-operativo", {})
     .done(function (data) {
         if(data.code==201){
             mostrarWarning('El siguiente día operativo ya está establecido.')
+            ocultarFullLoading();
         }
         else if(data.code==200){
             window.location.href = '/caja/cuadre?updated=1';
         }
-        else if(data.code==200){
+        else{
             mostrarError('No se pudo establecer el día operativo');
-            window.location.href = '/caja/cuadre';
+            ocultarFullLoading();
         }
     });
 }
