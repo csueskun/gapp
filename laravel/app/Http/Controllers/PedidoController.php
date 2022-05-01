@@ -589,7 +589,9 @@ class PedidoController extends Controller
     }
     
     public function actualizarTotales($id){
-        DB::select("UPDATE pizza_producto_pedido set total = cant * valor WHERE pedido_id = {$id}");        
+        DB::select("UPDATE pizza_producto_pedido as x set x.total = x.cant * 
+            (x.valor + COALESCE((select sum(total) from pizza_producto_pedido_adicional where producto_pedido_id = x.id),0)) 
+            WHERE pedido_id = {$id}");        
     }
 
     public function crear(){
@@ -1096,10 +1098,10 @@ class PedidoController extends Controller
                 $producto_pedido_adicionales_valor+=$valor;
             }
             else{
-                $producto_pedido_adicional->valor = $adicional->valor;
-                $producto_pedido_adicional->total = $adicional->valor;
+                $producto_pedido_adicional->valor = floatval($adicional->valor);
+                $producto_pedido_adicional->total = floatval($adicional->valor);
                 $producto_pedido_adicional->cant = $adicional->cantidad;
-                $producto_pedido_adicionales_valor+= $adicional->valor;
+                $producto_pedido_adicionales_valor+= floatval($adicional->valor);
             }
             $producto_pedido_adicional = $controller->guardar($producto_pedido_adicional);
         }
@@ -1109,9 +1111,7 @@ class PedidoController extends Controller
         $producto_pedido->total = ($producto_pedido->valor+$producto_pedido_adicionales_valor)*$producto_pedido->cant;
         $producto_pedido = $controller->guardar($producto_pedido);
         $controller = app('App\Http\Controllers\PedidoController');
-
         $controller->actualizarValor($pedido->id);
-
         $pedido_id = new stdClass();
         $pedido_id->id = $pedido->id;
         return json_encode($pedido_id);
