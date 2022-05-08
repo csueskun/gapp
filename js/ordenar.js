@@ -1106,6 +1106,9 @@ function impItemPedido(productos_pedido){
         }
         html+=html2+'</div>';
     }
+    if(pedido_activo){
+        setTimeout(actualizarCambio, 200);
+    }
     ocultarFullLoading();
     return html;
 }
@@ -1137,7 +1140,7 @@ function propinaHtml(propina = 0){
         propina = accounting.formatMoney(propina, '$', 0);
         style = ''
     }
-    var html = `<ul class="list-group items_pedido" id="descuento" style="${style}">
+    var html = `<ul class="list-group items_pedido propina-html" id="descuento" style="${style}">
         <li class="list-group-item" style="height: 48px">
         <span class="producto">Propina:</span>
         <div class="btn-group">
@@ -1412,6 +1415,8 @@ function actualizarCambio(){
     input_total.val(total.attr('total'));
     calcularCambio();
     calcularPropina();
+    savePropina();
+    // setTimeout(savePropina, 1000);
 }
 
 
@@ -1904,12 +1909,16 @@ function savePropina(){
             function (data) {
                 if(data.code == 200){
                     $('input[name=old_propina]').val(propina);
+                    updatePropinaHtml(propina);
                 }
             }).fail(function() {
                 ocultarFullLoading();
                 mostrarError('Error al guardar. Intente de nuevo.')
             })
     }
+}
+function updatePropinaHtml(propina=0){
+    $(".propina-html")[0].outerHTML = propinaHtml(propina);
 }
 function loadPropina(){
     var propina = $('td#propina .curr').inputmask('unmaskedvalue');

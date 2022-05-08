@@ -1111,10 +1111,16 @@ class DocumentoController extends Controller
 
     public function setSiguienteDiaOperativo(){
         try {
-            $dia_operativo = $this->getSiguienteDiaOperativo();
             $config = app('App\Http\Controllers\ConfigController')->first();
-            if($config->dia_operativo == $dia_operativo){
-                return response()->json(['code'=>201]);
+            $now = date('Y-m-d 12:00:00');
+            if($config->dia_operativo<$now){
+                $dia_operativo = $now;
+            }
+            else{
+                $dia_operativo = $this->getSiguienteDiaOperativo();
+                if($config->dia_operativo == $dia_operativo){
+                    return response()->json(['code'=>201]);
+                }
             }
             Config::where('id', $config->id)->update(['dia_operativo'=>$dia_operativo]);
             return response()->json(['code'=>200]);
