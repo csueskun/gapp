@@ -481,3 +481,23 @@ function doneImprimiendo(){
     $('.imprimir').removeAttr("disabled").removeClass('disabled');
     $('.imprimir .fa').removeClass('fa-spin');
 }
+
+function postWithLoading(url, data, success, fail=blankFunction){
+    $.post(url, data, function (data) {
+        success(data);
+        ocultarFullLoading();
+    }).fail(function() {
+        fail();
+        ocultarFullLoading();
+    });
+}
+
+function deviceWidth(){
+    return (window.innerWidth > 0) ? window.innerWidth : screen.width;
+}
+
+function menuVersionFromDevice(){
+    return (deviceWidth()>799)?2:1;
+}
+
+function blankFunction(){}

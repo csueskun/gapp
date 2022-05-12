@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Redirect;
 use DB;
 use Auth;
 use stdClass;
+use Illuminate\Http\Request;
 
 class PedidoController extends Controller
 {
@@ -154,7 +155,9 @@ class PedidoController extends Controller
         }
         $total = $this->calcularValor($id);
         $pedido->total = $total->total;
-
+        if($pedido->mesa_id>1000){
+            $pedido->mesa_id-=1000;
+        }
         $pedido->estado = $estado;
         $pedido->save();
         if($pedido != null){
@@ -413,16 +416,11 @@ class PedidoController extends Controller
         return $pedido;
     }
 
-    public function vistaEditar($id){
+
+    public function liberarMesa($id){
         $pedido = Pedido::find($id);
-        return view("mesa.menu")
-            ->with('mesa', $pedido->mesa_id)
-            ->with('pedido_id', $id)
-            ->with('mesa_alias', app('App\Http\Controllers\ConfigController')->getMesaAlias($pedido->mesa_id))
-            ->with('valida_inventario', app('App\Http\Controllers\ConfigController')->getValidaInventario())
-            ->with('combos', app('App\Http\Controllers\ComboController')->menu())
-            ->with('propina', app('App\Http\Controllers\ConfigController')->getPropina())
-            ->with('tipos_producto', app('App\Http\Controllers\TipoProductoController')->mostrarMenu());
+        Pedido::where('id',$id)->update(['mesa_id'=>$pedido->mesa_id+1000]);
+        return response()->json(array('msg'=>'Liberada'));
     }
 
     public function actualizarComanda($id) {
@@ -1183,5 +1181,60 @@ class PedidoController extends Controller
         $cantidad_mesas = $cantidad_mesas->cantidad_mesas;
         $mesas = ['ocupadas'=>$mesas_ocupadas, 'total'=>$cantidad_mesas];
         return response()->json(array('hoy'=>$hoy[0],'activos'=>$activos[0],'domicilios'=>$domicilios[0],'mesas'=>$mesas));
+    }
+
+    protected function showMesaView($id, Request $request, $mesa_alias=false, $pedido_id=''){
+        $propina = 0;
+        if($id!=0){
+            $propina = app('App\Http\Controllers\ConfigController')->getPropina();
+        }
+        $dia_operativo = app('App\Http\Controllers\DocumentoController')->esDiaOperativoActivoWithEnv();
+        $mesa_alias = $mesa_alias?:app('App\Http\Controllers\ConfigController')->getMesaAlias($id);
+        $msg = $this->getMessagesFromRequest($request);
+        $view = $this->getMenuVersionFromRequest($request);
+        return view($view)->with('mesa', $id)
+            ->with('tipos_producto', app('App\Http\Controllers\TipoProductoController')->mostrarMenu())
+            ->with('mesa_alias', $mesa_alias)
+            ->with('dia_operativo_valido', $dia_operativo)
+            ->with('valida_inventario', app('App\Http\Controllers\ConfigController')->getValidaInventario())
+            ->with('propina', $propina)
+            ->with('status', $msg)
+            ->with('pedido_id', $pedido_id)
+            ->with('conn', app('App\Http\Controllers\TipoProductoController')->mesaMenu())
+            ->with('combos', app('App\Http\Controllers\ComboController')->menu());
+
+    }
+
+    public function mesaView($id, Request $request){
+        return $this->showMesaView($id, $request);
+    }    
+
+    public function vistaEditar($id, Request $request){
+        $pedido = Pedido::find($id);
+        try {
+            $mesa_alias=json_decode($pedido->obs)->mesa_alias;
+        } catch (\Throwable $th) {
+            $mesa_alias='';
+        }
+        return $this->showMesaView($pedido->mesa_id, $request, $mesa_alias, $id);
+    }
+
+    protected function getMenuVersionFromRequest($request){
+        $view='mesa.menu';
+        if($request['v']=='2'){
+            $view='mesa.menu-v2';
+        }
+        return $view;
+    }
+
+    protected function getMessagesFromRequest($request){
+        $msg = $request['msg'];
+        if($msg == 'ml'){
+            $msg = ['success' =>'Mesa liberada. Puede retomar el pedido desde la opción "Pedidos Activos"'];
+        }
+        else{
+            $msg = [];
+        }
+        return $msg;
     }
 }

@@ -58,8 +58,12 @@
                 <tr>
                     <td>{{ $pedido->id }}</td>
                     <td>{{ date_format(date_create($pedido->fecha), 'd/m/Y g:i A') }}</td>
-                    <td class="centrado">{{ $pedido->mesa_id == 0?'Domicilio':$pedido->mesa_id }}
-                        </td>
+                    <td class="centrado">
+                        {{ $pedido->mesa_id == 0?'Domicilio':json_decode($pedido->obs)->mesa_alias }}
+                        @if($pedido->mesa_id>1000)
+                        <span class="badge btn-warning">L</span>
+                        @endif
+                    </td>
                     <td>{{ $pedido->turno }}</td>
                     <td>{{ $pedido->caja_id }}</td>
                     <td class="">
@@ -96,6 +100,9 @@
                 </tr>
                 @endforeach
             </tbody>
+            <tfooter>
+                <tr><td colspan='10'><h4 style=""><span class="badge btn-warning">L</span> Mesa liberada</h4></td></tr>
+            </tfooter>
         </table>
         {{ $pedido_lista->appends($_GET)->links() }}
         <h4 style="float: right">{{ $pedido_lista->total() }} Encontrados</h4>
@@ -138,7 +145,7 @@
                   label: 'Editar',
                   icon: 'glyphicon glyphicon-pencil',
                   onClick: function() {
-                      window.location.href = "/pedido/"+$(this).attr("id")+"/editar";
+                      window.location.href = "/pedido/"+$(this).attr("id")+"/editar?v="+menuVersionFromDevice();
                   }
                 },
                 {

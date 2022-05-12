@@ -1128,4 +1128,17 @@ class DocumentoController extends Controller
             return response()->json(['code'=>500]);
         }
     }
+    public function esDiaOperativoActivoWithEnv(){
+        try {
+            if(env('DIA_OPERATIVO')){
+                $dia_operativo = $this->esDiaOperativoActivo();
+            }
+            else{
+                $dia_operativo = true;
+            }
+        } catch (\Throwable $th) {
+            $dia_operativo = true;
+        }
+        return $dia_operativo;
+    }
 }

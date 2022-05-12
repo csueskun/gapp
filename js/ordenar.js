@@ -6,6 +6,7 @@ var propinaDefault = $('meta[name=propina]').attr('content');
 var validaInventario = $('meta[name=valida_inventario]').attr('content') == '1';
 var cajero_borra = $('meta[name=cajero_borra]').attr('content') == '1';
 var diaOperativoValido = $('meta[name=dia_operativo_valido]').attr('content') == '1';
+var MESA_ID = $('meta[name=mesa]').attr('content');
 esDomicilio = (esDomicilio==""||esDomicilio==null||esDomicilio==0||esDomicilio=="0");
 var altDown = false;
 var showingIngedienteAdicional = null;
@@ -1101,8 +1102,12 @@ function impItemPedido(productos_pedido){
                 //
                 //if(isAdmin()){
                     html+='<button class="boton-inline-grande btn btn-danger imprimir" onclick="gaveta()"><span class="fa fa-inbox"/> ABRIR CAJÓN</button>';
-                //}
+                    //}
+                }
             }
+        if(pedido_activo && MESA_ID < 1000 && MESA_ID > 0){
+            html+='<button class="boton-inline-grande btn btn-warning imprimir" onclick="preLiberarMesa()"><span class="fa fa-square-o"/> LIBERAR MESA</button>';
+
         }
         html+=html2+'</div>';
     }
@@ -1112,6 +1117,41 @@ function impItemPedido(productos_pedido){
     ocultarFullLoading();
     return html;
 }
+function liberarMesa(){
+    var pedido_id = $('meta[name=pedido_id]').attr('content');
+    var _token = $('meta[name=csrf-token]').attr('content')
+    var url = "/pedidos/liberar/"+pedido_id;
+    var success = function(data){
+        location.href = '?msg=ml&v='+menuVersionFromDevice();
+    }
+    postWithLoading(url, {_token}, success);
+}
+
+function preLiberarMesa(){
+    var data = {
+        title: '',
+        type: 'orange',
+        typeAnimated: true,
+        content: '',
+        icon: 'fa fa-warning',
+        buttons: {
+            confirm: {
+                btnClass: 'btn-blue',
+                text: 'Continuar',
+                action: liberarMesa
+            },
+            cancel: {
+                btnClass: 'btn-red',
+                text: 'Cancelar',
+                action: blankFunction
+            },
+        }
+    };
+    data.title = 'Liberar mesa';
+    data.content = '¿Está seguro que desea liberar la mesa? Las mesas liberadas sólo se puede acceder desde la opción "PEDIDOS ACTIVOS"';
+    $.confirm(data);
+}
+
 function descuentoHtml(descuento = 0){
     var style = 'display: none';
     if(descuento == 0 || descuento == null){

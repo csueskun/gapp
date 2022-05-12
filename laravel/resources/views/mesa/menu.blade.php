@@ -31,6 +31,7 @@
 
 @endsection
 
+@include('template.status', ['status' => $status])
 <section class="borde-inferior lista fondo-rojo">
     <div class="container_ centrado">
         @if($mesa == 0)

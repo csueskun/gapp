@@ -138,6 +138,9 @@ class ConfigController extends Controller
     }
 
     public function getMesaAlias($id, $config = null){
+        if($id>1000){
+            $id-=1000;
+        }
         if($config == null){
             $config = $this->first();
         }

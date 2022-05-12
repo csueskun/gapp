@@ -324,12 +324,9 @@
         });
 
         $("div.mesas-container").on('click', 'a.mesa', function(e){
-            var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-            if(width>799){
-                e.preventDefault();
-                var target = $(e.currentTarget).attr('href').replace('/mesa/', '/mesa-v2/');
-                window.location.href = target;
-            }
+            e.preventDefault();
+            var target = $(e.currentTarget).attr('href')+'/?v='+menuVersionFromDevice();
+            window.location.href = target;
         });
         $.get('/borrar-sesion', function (data) {});
 
@@ -357,7 +354,7 @@
             var dur = moment.duration(moment().diff(moment($(this).attr('fecha'), "YYYY-MM-DD HH:mm:ss").format()));
             var h = Math.floor(dur.asHours());
             var m = Math.floor(dur.asMinutes() - h*60);
-            $(this).html( (h>0?h+' h ':'')+(m>0?m+' min':'')+(m<1&&h<1?'Menos de un minuto':'') );
+            $(this).html( (h>0?h+' h ':'')+(m>0?m+' min':'')+(m<1&&h<1?'Hace segundos':'') );
         });
     }
 
