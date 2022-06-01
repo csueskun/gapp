@@ -18,7 +18,7 @@
             Pedidos Archivados
             <button class="btn btn-default" data-toggle="modal" data-target="#reporteModal2" style="font-size: 20px">
                 <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
-                Reporte de ventas
+                Reporte de pedidos
             </button>
         </h1>
 
