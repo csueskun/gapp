@@ -1260,8 +1260,8 @@ class PedidoController extends Controller
             JOIN pizza_producto prod on prod.id = prpe.producto_id 
             JOIN pizza_pedido pedi on pedi.id = prpe.pedido_id 
             JOIN pizza_tipo_producto tipr on tipr.id = prod.tipo_producto_id
-            WHERE prpe.created_at >= $fecha_inicio
-            AND prpe.created_at <= $fecha_fin 
+            WHERE pedi.created_at >= $fecha_inicio
+            AND pedi.created_at <= $fecha_fin 
             AND pedi.estado = 2
             GROUP BY 1
             ");
