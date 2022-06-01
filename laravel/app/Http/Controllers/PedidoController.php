@@ -1252,9 +1252,9 @@ class PedidoController extends Controller
 
         $reporte = DB::select("
         
-            SELECT
+            SELECTx
             tipr.descripcion as tipo,
-            count(prpe.id) as cantidad,
+            sum(prpe.cant) as cantidad,
             sum(prpe.total) as total
             FROM pizza_producto_pedido prpe
             JOIN pizza_producto prod on prod.id = prpe.producto_id 
