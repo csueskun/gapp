@@ -1252,7 +1252,7 @@ class PedidoController extends Controller
 
         $reporte = DB::select("
         
-            SELECTx
+            SELECT
             tipr.descripcion as tipo,
             sum(prpe.cant) as cantidad,
             sum(prpe.total) as total
