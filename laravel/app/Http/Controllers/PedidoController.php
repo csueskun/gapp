@@ -1237,4 +1237,41 @@ class PedidoController extends Controller
         }
         return $msg;
     }
+
+    public function preReportePedidos(){
+        $fecha_inicio = Input::get("inicio");
+        $fecha_fin = Input::get("fin");
+        // $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
+        // $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
+        return $this->reportePedidos($fecha_inicio, $fecha_fin);
+    }
+
+    public function reportePedidos($inicio, $fin){
+        $fecha_inicio = "DATE_ADD('".$inicio."', INTERVAL 3 hour)";
+        $fecha_fin = "DATE_ADD('".$fin."', INTERVAL 3 hour)";
+
+        $reporte = DB::select("
+        
+            SELECT
+            tipr.descripcion as tipo,
+            count(prpe.id) as cantidad,
+            sum(prpe.total) as total
+            FROM pizza_producto_pedido prpe
+            JOIN pizza_producto prod on prod.id = prpe.producto_id 
+            JOIN pizza_pedido pedi on pedi.id = prpe.pedido_id 
+            JOIN pizza_tipo_producto tipr on tipr.id = prod.tipo_producto_id
+            WHERE prpe.created_at >= $fecha_inicio
+            AND prpe.created_at <= $fecha_fin 
+            AND pedi.estado = 2
+            GROUP BY 1
+            ");
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('pdf.pedidos', [
+            "data" => $reporte,
+            "inicio" => $inicio, 
+            "fin" => $fin, 
+            
+        ]);
+        return $pdf->stream();
+    }
 }

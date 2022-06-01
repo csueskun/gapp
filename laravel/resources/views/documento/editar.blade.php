@@ -210,9 +210,19 @@
                     <label for = "descuento" class = "control-label">Descuento</label>
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
-                        <input name="descuento" type="text" class="form-control metodo-pago" value="{{ number_format(old('descuento')?old('descuento'):$documento->descuento, 0) }}"/>
+                        <input name="descuento" type="text" class="form-control" value="{{ number_format(old('descuento')?old('descuento'):$documento->descuento, 0) }}"/>
                     </div>
                     <div class = "help-block with-errors">{{ $errors->first('descuento') }}</div>
+                </div>
+            </div>
+            <div class = "col-md-2">
+                <div class = "key- tipo- form-group has-feedback">
+                    <label for = "total" class = "control-label">Valor neto</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        <input readonly type="text" class="form-control" id='neto' value=""/>
+                    </div>
+                    <div class = "help-block with-errors"></div>
                 </div>
             </div>
             <div class = "col-md-2">
@@ -230,7 +240,7 @@
                     La suma de los métodos de pago debe ser igual al total del documento
                 </div>
             </div>
-            <div class = "col-md-6">
+            <div class = "col-md-5">
                 <div class = "key- tipo- form-group has-feedback {{ ($errors->first('banco')) ? 'has-error'  :''}}">
                     <label for = "banco" class = "control-label">Banco</label>
                     <select name="banco" id="banco" class="form-control font bebas">
@@ -316,6 +326,9 @@
 </section>
 
 <style>
+    input{
+        padding-right: 2px !important;
+    }
     table#table_productos td.no-mostrar{
         display: none;
     }
@@ -349,8 +362,20 @@
         $('.metodo-pago').each(function(i,v){
             v.value = v.value.replace(',','');
         });    
+        calcNeto();
     });
     var validTotal = true;
+    function calcNeto(){
+        var total = parseInt($('input#total').val().replace(',',''));
+        var dcto = parseInt($('input[name=descuento]').val().replace(',',''));
+        var neto = 0;
+        try {
+            neto= total-dcto;
+        } catch (error) {
+            neto = total;
+        }
+        $('input#neto').val(accounting.formatMoney(neto, '$', 0));
+    }
     function validateTotal() {
         var total = $('#total').val();
         total = parseInt(total.replace(',',''));
@@ -370,6 +395,7 @@
             $('#save-button').prop('disabled', true)
             $('.total-error').show();
         }
+        calcNeto();
     }
     $('.metodo-pago').on('keyup', validateTotal);
     function enviarForm(){
@@ -397,3 +423,4 @@
     }
 </script>
 @endsection
+{{ Html::script('js/accounting.min.js') }}

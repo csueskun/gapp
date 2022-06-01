@@ -21,6 +21,7 @@
         {{ Html::script('js/toastr.min.js') }}
         {{ Html::script('js/angular.min.js') }}
         {{ Html::script('js/angular-animate.js') }}
+        {{ Html::script('js/socket.io.min.js') }}
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
         @section('lib')
@@ -238,17 +239,17 @@
         </div>
     </body>
     <script>
-        /* Set the width of the side navigation to 250px */
-function openNav() {
-    document.getElementById("mySidenav").style.left = "0px";
-    document.getElementById("logo-dapp").style.marginLeft = "350px";
-}
-
-/* Set the width of the side navigation to 0 */
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "380px";
-    document.getElementById("mySidenav").style.left = "-380px";
-    document.getElementById("logo-dapp").style.marginLeft  = "5px";
-}
+        function openNav() {
+            document.getElementById("mySidenav").style.left = "0px";
+            document.getElementById("logo-dapp").style.marginLeft = "350px";
+        }
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "380px";
+            document.getElementById("mySidenav").style.left = "-380px";
+            document.getElementById("logo-dapp").style.marginLeft  = "5px";
+        }
+        // const socket = io('http://localhost:3000', {
+        //     transports: ['websocket'],
+        // });
     </script>
 </html>

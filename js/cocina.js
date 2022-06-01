@@ -2,6 +2,8 @@ var lastId = '0';
 var pedidosIds = [];
 var productosPedidosIds = [];
 var lastDate = '0';
+
+
 function entregadoCheckbox(checkbox, id){
     if(checkbox.attr("disabled") == "disabled"){
         return false;
@@ -42,8 +44,11 @@ $(function () {
     //     productosPedidosIds.push(parseInt($(this).attr('id')));
     // });
     // console.log(lastDate)
-    setInterval(buscarNuevos, 5000);
     // buscarNuevos();
+    setInterval(buscarNuevos, 5000);
+    // socket.on('pedido', function(arg){
+    //     buscarNuevos();
+    // });
 });
 
 function buscarNuevos(){
