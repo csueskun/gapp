@@ -1238,21 +1238,29 @@ class PedidoController extends Controller
         return $msg;
     }
 
-    public function preReportePedidos(){
+    public function preReportePedidosActivos(){
         $fecha_inicio = Input::get("inicio");
         $fecha_fin = Input::get("fin");
-        // $fecha_inicio = "DATE_ADD('".$fecha_inicio."', INTERVAL 3 hour)";
-        // $fecha_fin = "DATE_ADD('".$fecha_fin."', INTERVAL 3 hour)";
-        return $this->reportePedidos($fecha_inicio, $fecha_fin);
+        $domicilios = Input::get("domicilios");
+        $where = "AND pedi.estado in (1,3) ";
+        if($domicilios==0){
+            $where.="AND pedi.mesa_id != 0";
+        }
+        return $this->reportePedidos($fecha_inicio, $fecha_fin, $where);
     }
 
-    public function reportePedidos($inicio, $fin){
+    public function preReportePedidosArchivados(){
+        $fecha_inicio = Input::get("inicio");
+        $fecha_fin = Input::get("fin");
+        $where = "AND pedi.estado = 2";
+        return $this->reportePedidos($fecha_inicio, $fecha_fin, $where);
+    }
+
+    public function reportePedidos($inicio, $fin, $otherWhere=''){
         $fecha_inicio = "DATE_ADD('".$inicio."', INTERVAL 3 hour)";
         $fecha_fin = "DATE_ADD('".$fin."', INTERVAL 3 hour)";
 
-        $reporte = DB::select("
-        
-            SELECT
+        $reporte = DB::select("SELECT
             tipr.descripcion as tipo,
             sum(prpe.cant) as cantidad,
             sum(prpe.total) as total
@@ -1262,7 +1270,7 @@ class PedidoController extends Controller
             JOIN pizza_tipo_producto tipr on tipr.id = prod.tipo_producto_id
             WHERE pedi.created_at >= $fecha_inicio
             AND pedi.created_at <= $fecha_fin 
-            AND pedi.estado = 2
+            $otherWhere
             GROUP BY 1
             ");
         $pdf = app('dompdf.wrapper');

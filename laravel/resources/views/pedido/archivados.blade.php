@@ -18,7 +18,7 @@
             Pedidos Archivados
             <button class="btn btn-default" data-toggle="modal" data-target="#reporteModal2" style="font-size: 20px">
                 <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
-                Reporte de pedidos
+                Reporte de pedidos archivados
             </button>
         </h1>
 
@@ -110,7 +110,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title font bebas" id="myModalLabel">Reportes de ventas</h3>
+                <h3 class="modal-title font bebas" id="myModalLabel">
+                    Reportes de pedidos archivados
+                </h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
@@ -187,7 +189,7 @@
             inicio: $('div#fecha_inicio2').datetimepicker('getFormattedDate'),
             fin: $('div#fecha_fin2').datetimepicker('getFormattedDate'),
         };
-        window.open(`/pedido/reporte/?inicio=${data.inicio}&fin=${data.fin}`, '_blank')
+        window.open(`/pedido/reporte-archivados/?inicio=${data.inicio}&fin=${data.fin}`, '_blank')
     }
     $(function() {
         $('[data-toggle=confirmation]').confirmation(
