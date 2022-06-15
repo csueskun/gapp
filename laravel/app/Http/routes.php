@@ -82,6 +82,7 @@ Route::post('/pedido/{id}/patch', 'PedidoController@patchPedido')->middleware('a
 Route::post('/documento/{id}/patch', 'DocumentoController@patchDocumento')->middleware('auth');
 Route::post('/pedido/{id}/save-propina', 'PedidoController@savePropina')->middleware('auth');
 Route::get('/pedido/reporte-activos', 'PedidoController@preReportePedidosActivos');
+Route::get('/pedido/reporte-pos-activos', 'PedidoController@preReportePedidosActivosPos');
 Route::get('/pedido/reporte-archivados', 'PedidoController@preReportePedidosArchivados');
 
 Route::get('/producto/ver/{id}', function ($id = 0) {

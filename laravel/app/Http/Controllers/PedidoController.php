@@ -1249,6 +1249,25 @@ class PedidoController extends Controller
         return $this->reportePedidos($fecha_inicio, $fecha_fin, $where);
     }
 
+    public function preReportePedidosActivosPos(){
+        $fecha_inicio = Input::get("inicio");
+        $fecha_fin = Input::get("fin");
+        $domicilios = Input::get("domicilios");
+        $where = "AND pedi.estado in (1,3) ";
+        if($domicilios==0){
+            $where.="AND pedi.mesa_id != 0";
+        }
+        $config = app('App\Http\Controllers\ConfigController')->first();
+        $data = $this->reportePedidosData($fecha_inicio, $fecha_fin, $where);
+        $printStack = App\Util\POS::ReportePedidosPos(
+            $fecha_inicio,$fecha_fin, $data, $config);
+        $res = [
+            'print' => $printStack,
+            'servicio' => $config->servicio_impresion,
+        ];
+        return response()->json($res);
+    }
+
     public function preReportePedidosArchivados(){
         $fecha_inicio = Input::get("inicio");
         $fecha_fin = Input::get("fin");
@@ -1256,10 +1275,19 @@ class PedidoController extends Controller
         return $this->reportePedidos($fecha_inicio, $fecha_fin, $where);
     }
 
-    public function reportePedidos($inicio, $fin, $otherWhere=''){
-        $fecha_inicio = "DATE_ADD('".$inicio."', INTERVAL 3 hour)";
-        $fecha_fin = "DATE_ADD('".$fin."', INTERVAL 3 hour)";
+    public function reportePedidos($fecha_inicio, $fecha_fin, $otherWhere=''){
+        $reporte = $this->reportePedidosData($fecha_inicio, $fecha_fin, $otherWhere);
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('pdf.pedidos', [
+            "data" => $reporte,
+            "inicio" => $fecha_inicio, 
+            "fin" => $fecha_fin, 
+            
+        ]);
+        return $pdf->stream();
+    }
 
+    public function reportePedidosData($fecha_inicio, $fecha_fin, $otherWhere){
         $reporte = DB::select("SELECT
             tipr.descripcion as tipo,
             sum(prpe.cant) as cantidad,
@@ -1268,18 +1296,11 @@ class PedidoController extends Controller
             JOIN pizza_producto prod on prod.id = prpe.producto_id 
             JOIN pizza_pedido pedi on pedi.id = prpe.pedido_id 
             JOIN pizza_tipo_producto tipr on tipr.id = prod.tipo_producto_id
-            WHERE pedi.created_at >= $fecha_inicio
-            AND pedi.created_at <= $fecha_fin 
+            WHERE pedi.created_at >= '$fecha_inicio'
+            AND pedi.created_at <= '$fecha_fin'
             $otherWhere
             GROUP BY 1
             ");
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('pdf.pedidos', [
-            "data" => $reporte,
-            "inicio" => $inicio, 
-            "fin" => $fin, 
-            
-        ]);
-        return $pdf->stream();
+        return $reporte;
     }
 }

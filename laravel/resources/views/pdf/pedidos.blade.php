@@ -22,8 +22,8 @@
         </tr>
         <tr>
             <td class="center"><?= date("d/m/Y g:i a") ?></td>
-            <td class="center"><?= date_format(date_create($inicio), 'd/m/Y') ?></td>
-            <td class="center"><?= date_format(date_create($fin), 'd/m/Y') ?></td>
+            <td class="center"><?= date_format(date_create($inicio), 'd/m/Y g:i:a') ?></td>
+            <td class="center"><?= date_format(date_create($fin), 'd/m/Y g:i:a') ?></td>
         </tr>
     </table>
     <br>

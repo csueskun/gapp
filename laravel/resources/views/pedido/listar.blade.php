@@ -157,7 +157,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary busy" onclick="report()">Imprimir reporte</button>
+                <button type="button" class="btn btn-primary busy" onclick="report()">Mostrar PDF</button>
+                <button type="button" class="btn btn-primary busy" onclick="reportPOS()">Imprimir POS</button>
             </div>
         </div>
     </div>
@@ -189,32 +190,32 @@
             language:  'es',
             autoclose: 1,
             todayHighlight: 1,
-            minView: 2,
+            minView: 1,
             forceParse: 0,
             format: "yyyy-mm-dd 00:00:01"
         }).on('changeDate', function(e) {
             var ff = $("div#fecha_fin2");
             ff.data("datetimepicker").startDate = e.date;
-            ff.datetimepicker('update');
+            // ff.datetimepicker('update');
         });;
 
         $('div#fecha_fin2').datetimepicker({
             startDate: new Date(),
-            language:  'es',
+            language:  'es', 
             autoclose: 1,
             todayHighlight: 1,
-            minView: 2,
+            minView: 1,
             forceParse: 0,
             format: "yyyy-mm-dd 23:59:59"
         }).on("changeDate", function (e) {
             var fi = $("div#fecha_inicio2");
             fi.data("datetimepicker").endDate = e.date;
-            fi.datetimepicker('update');
+            // fi.datetimepicker('update');
         });
         $(".icon-arrow-left").addClass("glyphicon-chevron-left");
         $(".icon-arrow-right").addClass("glyphicon-chevron-right");
     });
-</script>
+    </script>
 
 <script>
     function report(){
@@ -223,7 +224,20 @@
             fin: $('div#fecha_fin2').datetimepicker('getFormattedDate'),
             domicilios: $("input[name=incluye_domicilios]").is(':checked') ? 1 : 0
         };
+        // console.log(data);
+        // return false;
         window.open(`/pedido/reporte-activos/?inicio=${data.inicio}&fin=${data.fin}&domicilios=${data.domicilios}`, '_blank')
+    }
+    function reportPOS(){
+        var data = {
+            inicio: $('div#fecha_inicio2').datetimepicker('getFormattedDate'),
+            fin: $('div#fecha_fin2').datetimepicker('getFormattedDate'),
+            domicilios: $("input[name=incluye_domicilios]").is(':checked') ? 1 : 0
+        };
+        var url = `/pedido/reporte-pos-activos/?inicio=${data.inicio}&fin=${data.fin}&domicilios=${data.domicilios}`;
+        $.get(url, function (data) {
+            enviarAServicioImpresionPost(data.servicio, data.print);
+        });
     }
     $(function() {
         $('[data-toggle=confirmation]').confirmation(

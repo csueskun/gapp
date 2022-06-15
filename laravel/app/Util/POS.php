@@ -2,6 +2,52 @@
 
 namespace App\Util;
 class POS{
+    public static function ReportePedidosPos($inicio, $fin, $data, $config){
+        $width = $config->num_impresora;
+        $values = [
+            ['Reporte de pedidos', ''],
+            ['Fecha inicio', date_format(date_create($inicio), 'd/m/Y H:i')],
+            ['Fecha fin', date_format(date_create($fin), 'd/m/Y H:i')],
+            ['Fecha impresión', date("d/m/Y H:i")],
+            ['', ''],
+        ];
+        $print = PosPrint::getStackFromTable(
+            $values, [19, $width-19], [STR_PAD_RIGHT, STR_PAD_LEFT]);
+        
+        $values = [];
+        $max = [0, 0, 0];
+        $sumTotal = 0;
+        $sumCantidad = 0;
+        foreach ($data as $row) {
+            $sumTotal += $row->total;
+            $sumCantidad += $row->cantidad;
+            $total = number_format($row->total, 0);
+            $cantidad = number_format($row->cantidad, 0);
+            $values[] = [
+                $row->tipo,
+                $row->cantidad,
+                $total
+            ];
+            if($max[1]<strlen($cantidad)){
+                $max[1] = strlen($cantidad);
+            }
+            if($max[2]<strlen($total)){
+                $max[2] = strlen($total);
+            }
+        }
+        $values[] = ['Total', number_format($sumCantidad, 0), number_format($sumTotal, 0)];
+        $max[1] += 1;
+        $max[2] += 1;
+        $max[0] = $width - $max[1] - $max[2];
+        $align = [STR_PAD_RIGHT, STR_PAD_LEFT, STR_PAD_LEFT];
+        $header = [['Categoria', 'Cantidad', 'Valor']];
+        $print = array_merge($print, PosPrint::getStackFromTable(
+            $header, [$width - 10 - $max[2], 10, $max[2]], $align));
+        $print = array_merge($print, PosPrint::getStackFromTable(
+            [[str_repeat('-',$width)]], [$width], [STR_PAD_RIGHT]));
+        $print = array_merge($print, PosPrint::getStackFromTable($values, $max, $align));
+        return $print;
+    }
     public static function comandaPosStack($pedido,$config,$re=false){
         $stack = [];
         $texto = '';
