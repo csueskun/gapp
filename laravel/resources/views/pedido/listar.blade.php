@@ -68,7 +68,11 @@
                     <td>{{ $pedido->id }}</td>
                     <td>{{ date_format(date_create($pedido->fecha), 'd/m/Y g:i A') }}</td>
                     <td class="centrado">
-                        {{ $pedido->mesa_id == 0?'Domicilio':json_decode($pedido->obs)->mesa_alias }}
+                        <?php try{ ?>
+                            {{ $pedido->mesa_id == 0?'Domicilio':json_decode($pedido->obs)->mesa_alias }}
+                        <?php }catch(\Exception $e){ ?>
+                            {{ $e }}
+                        <?php } ?>
                         @if($pedido->mesa_id>1000)
                         <span class="badge btn-warning">L</span>
                         @endif

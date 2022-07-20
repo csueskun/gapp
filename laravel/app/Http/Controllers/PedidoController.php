@@ -776,11 +776,13 @@ class PedidoController extends Controller
         $pedido = Pedido::find($id);
         if($pedido->entregado == '' || $pedido->entregado == null ){
             $pedido->entregado = date("Y-m-d H:i:s");
+            ProductoPedido::where('pedido_id', $id)->update(['entregado'=>1]);
         }
         else{
             $pedido->entregado = null;
         }
         $pedido->save();
+        return response()->json(array('msg'=>'actualizado'));
     }
     
     public function guardarObservacion($id,$observacion) {

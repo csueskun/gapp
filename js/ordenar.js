@@ -931,7 +931,7 @@ function impItemPedido(productos_pedido){
             }
             valorProducto = Math.floor(productos_pedido[i].total);
             if(obs.tipo === "MIXTA"){
-                html += '       <li class="list-group-item">' +
+                html += '       <li class="list-group-item'+(productos_pedido[i].entregado?'entregado':'no-entregado')+'">' +
                         '            <span class="producto">'+ x_cantidad + productos_pedido[i].producto.tipo_producto.descripcion + ' ' + '' + (getTamanosLabelMin(obs.tamano))+  '</span>';
                 var fracciones = obs.mix.length;
                 for(var j = 0; j<fracciones; j++){
@@ -969,7 +969,7 @@ function impItemPedido(productos_pedido){
                 }
             }
             else{
-                html += '       <li id="'+productos_pedido[i].id+'" class="list-group-item">' +
+                html += '       <li id="'+productos_pedido[i].id+'" class="list-group-item '+(productos_pedido[i].entregado?'entregado':'no-entregado')+'">' +
                         '            <span class="producto">'+ x_cantidad + productos_pedido[i].producto.tipo_producto.descripcion + ' ' + productos_pedido[i].producto.descripcion + ' ' + (getTamanosLabelMin(obs.tamano)) + '</span>';
                 esCompuesto = obs.compuesto != null && obs.compuesto != '' && obs.compuesto != '0';
                 if(esCompuesto){
@@ -1020,6 +1020,9 @@ function impItemPedido(productos_pedido){
             html+='<span class="detalles">'+(obs.sabor?obs.sabor:"")+'</span>';
             
             html+='            <br/><div class="spaceholder-valor-item">&nbsp;</div><div class="btn-group items">';
+            if(productos_pedido[i].entregado){
+                html+= '        <span title="Entregado" class="btn comandado fa fa-smile-o text-success btn-default"></span>';
+            }
             if(productos_pedido[i].preparado){
                 html+= '        <span title="Preparado" class="btn comandado fa fa-cutlery text-success btn-default"></span>';
             }
@@ -1490,6 +1493,7 @@ function entregadoCheckbox(checkbox){
         }
         else{
             checkbox.attr(c, c);
+            actualizarDivPedido();
         }
     });
 }

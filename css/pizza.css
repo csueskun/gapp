@@ -196,6 +196,9 @@ ul.items_pedido>li{
     padding: 4px;
     padding-bottom: 6px;
 }
+ul.items_pedido>li.entregado{
+    border-left: solid 4px #999999;
+}
 ul#descuento.items_pedido>li{
     border-left: solid 4px #f0ad4e;
 }
@@ -208,6 +211,9 @@ ul.items_pedido>li>span.producto{
     margin-right: 4px;
     color: #1b809e;
     line-height: 28px;
+}
+ul.items_pedido>li.entregado>span.producto{
+    color: #707070;
 }
 ul#descuento.items_pedido>li>span.producto{
     color: #f0ad4e;
@@ -300,7 +306,7 @@ ul.items_pedido div.btn-group.items{
 ul.items_pedido>li>div.btn-group.items>span, ul.items_pedido>li>div>div.btn-group.items>span{
     font-size: 24px;
     line-height: 20px;
-    padding: 4px 8px;
+    padding: 4px 6px;
 }
 ul.items_pedido#descuento>li>div.btn-group>span,
 ul.items_pedido#total>li>div.btn-group>span{
@@ -841,6 +847,7 @@ div.jconfirm-buttons{
 span.comandado{
     border: none;
     cursor: help;
+    padding-left: 2px !important;
 }
 span.comandado.text-danger{
     color: red;
