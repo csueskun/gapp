@@ -1270,6 +1270,39 @@ class PedidoController extends Controller
         return response()->json($res);
     }
 
+    public function preDividirCuentaPOS(Request $request){
+        $data = $request->all();
+        $cuentas = $data['cuentas'];
+        $pedido = $data['pedido'];
+        for ($i=0; $i < count($cuentas); $i++) { 
+            $cuenta = $cuentas[$i];
+            $cuenta['pedido'] = [];
+            $cuentas[$i]['total'] = '$'.number_format($cuenta['total'], 0);
+        }
+        for ($j=0; $j < count($pedido); $j++) { 
+            $pedidoItem = $pedido[$j];
+            $cuenta['pedido'][] = ['nombre'=>$pedidoItem['nombre']];
+            for ($i=0; $i < count($pedidoItem['cuentas']); $i++) { 
+                $pedidoItemCuenta = $pedidoItem['cuentas'][$i];
+                if($pedidoItemCuenta['cantidad']<1){
+                    continue;
+                }
+                $cuentas[$i]['pedido'][] = [
+                    'nombre' => $pedidoItem['nombre'],
+                    'subtotal' => '$'.number_format($pedidoItemCuenta['subtotal'], 0),
+                    'cantidad' => $pedidoItemCuenta['cantidad'],
+                ];
+            }
+        }
+        $config = app('App\Http\Controllers\ConfigController')->first();
+        $printStack = App\Util\POS::CuentaDividida($cuentas, $config);
+        $res = [
+            'print' => $printStack,
+            'servicio' => $config->servicio_impresion,
+        ];
+        return response()->json($res);
+    }
+
     public function preReportePedidosArchivados(){
         $fecha_inicio = Input::get("inicio");
         $fecha_fin = Input::get("fin");

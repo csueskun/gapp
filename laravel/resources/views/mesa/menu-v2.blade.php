@@ -642,6 +642,7 @@
         @include('mesa.observaciones')
         @include('mesa.editarItemPedido')
         @include('mesa.domicilio')
+        @include('mesa.dividirCuenta')
     </div>
     <input type="hidden" name="old_propina" value="0">
 </section>

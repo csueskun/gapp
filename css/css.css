@@ -872,6 +872,13 @@ fieldset[disabled] .btn-pollo.active {
 .pa-2{
     padding: 8px;
 }
+.pr-2{
+    padding-right: 8px !important;
+}
+.px-1{
+    padding-left: 4px;
+    padding-right: 4px;
+}
 .ma-0{
     margin: 0px;
 }
@@ -899,9 +906,15 @@ fieldset[disabled] .btn-pollo.active {
 .ml-2{
     margin-left: 8px;
 }
+.f24{
+    font-size: 24px;
+}
 .f20{
     font-size: 20px;
 }
 .f16{
     font-size: 16px;
+}
+.va-i{
+    vertical-align: inherit !important;
 }

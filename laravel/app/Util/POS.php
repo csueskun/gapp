@@ -2,6 +2,51 @@
 
 namespace App\Util;
 class POS{
+    public static function CuentaDividida($data, $config){
+        $width = $config->num_impresora;
+        $print = [];
+        $print[] = ["i"=> "texto", "v"=> 'Resumen de cuenta'];
+        $m = [STR_PAD_RIGHT, STR_PAD_RIGHT, STR_PAD_LEFT];
+        for ($i=0; $i < count($data); $i++) { 
+            $cuenta = $data[$i];
+            $print[] = ["i"=>"texto","v"=>str_repeat('-', $width)];
+            $print[] = ["i"=>"texto","v"=>$cuenta['alias']];
+            $pedido = $cuenta['pedido'];
+            $cuentaMaxLen = strlen($cuenta['total']);
+            $cuentaMaxLen2 = 0;
+            for ($j=0; $j < count($pedido); $j++) { 
+                $pedidoItem = $pedido[$j];
+                $pedidoItemLen = strlen($pedidoItem['subtotal']);
+                $pedidoItemLen2 = strlen($pedidoItem['cantidad']);
+                if($cuentaMaxLen<$pedidoItemLen){
+                    $cuentaMaxLen = $pedidoItemLen;
+                }
+                if($cuentaMaxLen2<$pedidoItemLen2){
+                    $cuentaMaxLen2 = $pedidoItemLen2;
+                }
+            }
+            $w = [
+                $cuentaMaxLen2+1, $width-2-$cuentaMaxLen-$cuentaMaxLen2, $cuentaMaxLen+1
+            ];
+            for ($j=0; $j < count($pedido); $j++) {
+                $pedidoItem = $pedido[$j];
+                $itemPrint = PosPrint::getStackFromTable(
+                    [[
+                        $pedidoItem['cantidad'],
+                        $pedidoItem['nombre'],
+                        $pedidoItem['subtotal']
+                    ]],
+                    $w, [STR_PAD_RIGHT, STR_PAD_RIGHT, STR_PAD_LEFT]
+                );
+                $print = array_merge($print, $itemPrint);
+            }
+            $print = array_merge($print, PosPrint::getStackFromTable(
+                [['', 'TOTAL '.strtoupper($cuenta['alias']), $cuenta['total']]],
+                $w, [STR_PAD_RIGHT, STR_PAD_LEFT, STR_PAD_LEFT]
+            ));
+        }
+        return $print;
+    }
     public static function ReportePedidosPos($inicio, $fin, $data, $config){
         $width = $config->num_impresora;
         $values = [

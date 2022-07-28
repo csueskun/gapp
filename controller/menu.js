@@ -261,5 +261,133 @@ app.controller('menuController', function($scope, $http) {
         $scope.observaciones.identificacion = clienteData.identificacion;
     }
 
+    $scope.cuenta = {
+        pedido: [], 
+        cuentas: [
+            {alias: 'Cuenta_1', total: 0},
+            {alias: 'Cuenta_2', total: 0},
+        ],
+        total: 0,
+        valid: false}
+    $scope.prepareDividirCuenta = function(){
+        $scope.cuenta.pedido = [];
+        $scope.cuenta.total = 0;
+        $('#ul-pedido>li').each(function(i, e){
+            var item = prepareCuentaItem($(e));
+            item.cuentas = prepareItemCuentas(item, $scope.cuenta.cuentas.length);
+            $scope.cuenta.pedido.push(item);
+        });
+    }
+
     $scope.loadTipoDocumentos();
+
+    function prepareCuentaItem(itemE){
+        var item = {
+            id: itemE.attr('id'),
+            cantidad: itemE.find('.producto .cantidad').html(),
+            nombre: itemE.find('.producto .nombre').html(),
+            total: itemE.find('span.valor').attr('valor'),
+            valid: null
+        };
+        if(!item.cantidad){
+            item.cantidad = 1;
+        }
+        item.cantidad = parseInt(item.cantidad);
+        item.total = parseFloat(item.total);
+        $scope.cuenta.total += item.total;
+        return item;
+    }
+    
+    function prepareItemCuentas(item, cant){
+        var cuentas = [];
+        var options = [];
+        for (var index = 0; index < cant; index++) {
+            if(item.cantidad>1){
+                options = [];
+                for (var y = 0; y <= item.cantidad; y++) {
+                    options.push(''+y);
+                }
+            }
+            else{
+                options = ['0', '1/'+cant, '1'];
+            }
+            cuentas.push({
+                cantidad: '0',
+                subtotal: 0,
+                options: options
+            });
+        }
+        return cuentas;
+    }
+    $scope.setCuentasNumber = function(cantidad){
+        $scope.cuenta.cuentas = [];
+        for (var i = 0; i < cantidad; i++) {
+            $scope.cuenta.cuentas.push({
+                alias: 'Cuenta_'+(i+1),
+                total: 0
+            });
+        }
+        $scope.prepareDividirCuenta();
+    }
+    $scope.updateItemCuenta = function(itemIndex, cuentaIndex){
+        var item = $scope.cuenta.pedido[itemIndex];
+        var cuenta = item.cuentas[cuentaIndex];
+        cuenta.subtotal = fractionToFloat(cuenta.cantidad)*item.total/item.cantidad;
+        validateItemCuenta(item);
+    }
+    $scope.printCuenta = function(){
+        $http.post("/pedido/reporte-cuenta-dividida", $scope.cuenta)
+        .then(
+            function(data){
+                enviarAServicioImpresionPost(data.data.servicio, data.data.print);
+            }
+        );
+    }
+
+    function validateItemCuenta(item){
+        var cantidad = 0
+        item.cuentas.forEach(cuenta => {
+            cantidad+=fractionToFloat(cuenta.cantidad);
+        });
+        item.valid = cantidad == item.cantidad;
+        validateCuenta();
+    }
+
+    function validateCuenta(){
+        $scope.cuenta.valid = true;
+        $scope.cuenta.cuentas.forEach(element => {
+            element.total = 0;
+        });
+        $scope.cuenta.pedido.forEach(item => {
+            if(!item.valid){
+                $scope.cuenta.valid = false;
+            }
+            for (var i = 0; i < item.cuentas.length; i++) {
+                const cuenta = item.cuentas[i];
+                $scope.cuenta.cuentas[i].total += cuenta.subtotal; 
+            }
+        });
+    }
+
+    function fractionToFloat(f){
+        switch (f) {
+            case '1/4': return 0.25;
+            case '1/3': return 1/3;
+            case '1/2': return 0.5;
+            default: return parseFloat(f);
+        }
+    }
+    function cantidadFH(fraction){
+        var gcd = function(a, b) {
+            if (b < 0.0000001) return a;
+            return gcd(b, Math.floor(a % b));
+        };
+        var len = fraction.toString().length - 2;
+        var denominator = Math.pow(10, len);
+        var numerator = fraction * denominator;
+        var divisor = gcd(numerator, denominator);
+        numerator /= divisor;
+        denominator /= divisor;
+        return Math.floor(numerator) + '/' + Math.floor(denominator);
+    }
 });

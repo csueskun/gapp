@@ -84,6 +84,7 @@ Route::post('/pedido/{id}/save-propina', 'PedidoController@savePropina')->middle
 Route::get('/pedido/reporte-activos', 'PedidoController@preReportePedidosActivos');
 Route::get('/pedido/reporte-pos-activos', 'PedidoController@preReportePedidosActivosPos');
 Route::get('/pedido/reporte-archivados', 'PedidoController@preReportePedidosArchivados');
+Route::post('/pedido/reporte-cuenta-dividida', 'PedidoController@preDividirCuentaPOS');
 
 Route::get('/producto/ver/{id}', function ($id = 0) {
     return app('App\Http\Controllers\ProductoController')->buscarConIngredientesYAdicionales($id);

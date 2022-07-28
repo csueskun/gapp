@@ -927,7 +927,7 @@ function impItemPedido(productos_pedido){
             var obs = JSON.parse(productos_pedido[i].obs);
             var x_cantidad = '';
             if(productos_pedido[i].cant>1){
-                x_cantidad = "<span style='color: #5cb85c'>"+productos_pedido[i].cant+"</span><span style='color:#5cb85c'>x </span>";
+                x_cantidad = "<span style='color: #5cb85c' class='cantidad'>"+productos_pedido[i].cant+"</span><span style='color:#5cb85c'>x </span>";
             }
             valorProducto = Math.floor(productos_pedido[i].total);
             if(obs.tipo === "MIXTA"){
@@ -970,7 +970,7 @@ function impItemPedido(productos_pedido){
             }
             else{
                 html += '       <li id="'+productos_pedido[i].id+'" class="list-group-item '+(productos_pedido[i].entregado?'entregado':'no-entregado')+'">' +
-                        '            <span class="producto">'+ x_cantidad + productos_pedido[i].producto.tipo_producto.descripcion + ' ' + productos_pedido[i].producto.descripcion + ' ' + (getTamanosLabelMin(obs.tamano)) + '</span>';
+                        '            <span class="producto">'+ x_cantidad + '<span class="nombre">'+ productos_pedido[i].producto.tipo_producto.descripcion + ' ' + productos_pedido[i].producto.descripcion + ' ' + (getTamanosLabelMin(obs.tamano)) + '</span></span>';
                 esCompuesto = obs.compuesto != null && obs.compuesto != '' && obs.compuesto != '0';
                 if(esCompuesto){
                     for (var k = 0; k < obs.compuesto.length; k++) {
@@ -1110,6 +1110,7 @@ function impItemPedido(productos_pedido){
             }
         if(pedido_activo && MESA_ID < 1000 && MESA_ID > 0){
             html+='<button class="boton-inline-grande btn btn-warning imprimir" onclick="preLiberarMesa()"><span class="fa fa-square-o"/> LIBERAR MESA</button>';
+            html+='<button class="boton-inline-grande btn btn-primary imprimir" onclick="preDividirCuenta()"><span class="fa fa-th-large"/> DIVIDIR CUENTA</button>';
 
         }
         html+=html2+'</div>';
@@ -1895,6 +1896,10 @@ function abrirObservaciones(){
     // $('#observacionesModal #observacion').val(observaciones.observacion);
     $('#loadObservacionesButton').trigger('click');
     $('#observacionesModal').modal('show');
+}
+function preDividirCuenta(){
+    $('#prepareDividirCuentaButton').trigger('click');
+    $('#dividirCuentaModal').modal('show');
 }
 function saveObs() {
     mostrarFullLoading();
