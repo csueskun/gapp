@@ -264,18 +264,28 @@ app.controller('menuController', function($scope, $http) {
     $scope.cuenta = {
         pedido: [], 
         cuentas: [
-            {alias: 'Cuenta_1', total: 0},
-            {alias: 'Cuenta_2', total: 0},
+            {alias: 'Cuenta_1', total: 0, propina: 0},
+            {alias: 'Cuenta_2', total: 0, propina: 0},
         ],
         total: 0,
-        valid: false}
+        propina: 0,
+        valid: false};
     $scope.prepareDividirCuenta = function(){
         $scope.cuenta.pedido = [];
         $scope.cuenta.total = 0;
+        $scope.cuenta.propina = 0;
+        $scope.cuenta.valid = false;
+        try {
+            $scope.cuenta.propina = parseFloat($('ul.propina-html span.valor').attr('total'));
+        } catch (error) {
+        }
         $('#ul-pedido>li').each(function(i, e){
             var item = prepareCuentaItem($(e));
             item.cuentas = prepareItemCuentas(item, $scope.cuenta.cuentas.length);
             $scope.cuenta.pedido.push(item);
+        });
+        $scope.cuenta.cuentas.forEach(element => {
+            element.propina = $scope.cuenta.propina/$scope.cuenta.cuentas.length
         });
     }
 
@@ -314,7 +324,7 @@ app.controller('menuController', function($scope, $http) {
             cuentas.push({
                 cantidad: '0',
                 subtotal: 0,
-                options: options
+                options: options,
             });
         }
         return cuentas;

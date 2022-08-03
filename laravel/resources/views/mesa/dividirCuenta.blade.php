@@ -50,10 +50,26 @@
                                 <!-- <span class="total">
                                     $@{{cuenta.total | number:0}}
                                 </span> -->
+                                Total
                             </td>
                             <td class="text-right" ng-repeat="itemCuenta in cuenta.cuentas">
                                 <span class="total">
                                     $@{{itemCuenta.total | number:0}}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr ng-if="cuenta.propina">
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">
+                                <!-- <span class="total">
+                                    $@{{cuenta.total | number:0}}
+                                </span> -->
+                                Propina
+                            </td>
+                            <td class="text-right" ng-repeat="itemCuenta in cuenta.cuentas">
+                                <span class="total">
+                                    $@{{itemCuenta.propina | number:0}}
                                 </span>
                             </td>
                         </tr>

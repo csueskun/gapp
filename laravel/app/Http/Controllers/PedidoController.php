@@ -1278,6 +1278,7 @@ class PedidoController extends Controller
             $cuenta = $cuentas[$i];
             $cuenta['pedido'] = [];
             $cuentas[$i]['total'] = '$'.number_format($cuenta['total'], 0);
+            $cuentas[$i]['propina'] = '$'.number_format($cuenta['propina'], 0);
         }
         for ($j=0; $j < count($pedido); $j++) { 
             $pedidoItem = $pedido[$j];

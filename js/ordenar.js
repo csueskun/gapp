@@ -1159,17 +1159,17 @@ function preLiberarMesa(){
 function descuentoHtml(descuento = 0){
     var style = 'display: none';
     if(descuento == 0 || descuento == null){
-        descuento = '$ 0';
+        descuento_ = '$ 0';
     }
     else{
-        descuento = accounting.formatMoney(descuento, '$', 0);
+        descuento_ = accounting.formatMoney(descuento, '$', 0);
         style = ''
     }
-    var html = `<ul class="list-group items_pedido" id="descuento" style="${style}">
+    var html = `<ul class="list-group items_pedido descuento-html" id="descuento" style="${style}">
         <li class="list-group-item" style="height: 48px">
         <span class="producto">Descuento:</span>
         <div class="btn-group">
-            <span class="btn btn-success total valor" total="">${descuento}</span>
+            <span class="btn btn-success total valor" total="${descuento}">${descuento_}</span>
         </div>
         </li>
         </ul>`;
@@ -1178,17 +1178,17 @@ function descuentoHtml(descuento = 0){
 function propinaHtml(propina = 0){
     var style = 'display: none';
     if(propina == 0 || propina == null){
-        propina = '$ 0';
+        propina_ = '$ 0';
     }
     else{
-        propina = accounting.formatMoney(propina, '$', 0);
+        propina_ = accounting.formatMoney(propina, '$', 0);
         style = ''
     }
     var html = `<ul class="list-group items_pedido propina-html" id="descuento" style="${style}">
         <li class="list-group-item" style="height: 48px">
         <span class="producto">Propina:</span>
         <div class="btn-group">
-            <span class="btn btn-success total valor" total="">${propina}</span>
+            <span class="btn btn-success total valor" total="${propina}">${propina_}</span>
         </div>
         </li>
         </ul>`;

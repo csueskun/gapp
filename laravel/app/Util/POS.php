@@ -9,9 +9,13 @@ class POS{
         $m = [STR_PAD_RIGHT, STR_PAD_RIGHT, STR_PAD_LEFT];
         for ($i=0; $i < count($data); $i++) { 
             $cuenta = $data[$i];
+            try {
+                $pedido = $cuenta['pedido'];
+            } catch (\Throwable $th) {
+                continue;
+            }
             $print[] = ["i"=>"texto","v"=>str_repeat('-', $width)];
             $print[] = ["i"=>"texto","v"=>$cuenta['alias']];
-            $pedido = $cuenta['pedido'];
             $cuentaMaxLen = strlen($cuenta['total']);
             $cuentaMaxLen2 = 0;
             for ($j=0; $j < count($pedido); $j++) { 
@@ -40,8 +44,14 @@ class POS{
                 );
                 $print = array_merge($print, $itemPrint);
             }
-            $print = array_merge($print, PosPrint::getStackFromTable(
-                [['', 'TOTAL '.strtoupper($cuenta['alias']), $cuenta['total']]],
+            $totales = [
+                ['', 'TOTAL', $cuenta['total']]
+            ];
+            if($cuenta['propina']){
+                $totales[0][1] = 'SUBTOTAL';
+                $totales[] = ['', 'PROPINA', $cuenta['propina']];
+            }
+            $print = array_merge($print, PosPrint::getStackFromTable($totales,
                 $w, [STR_PAD_RIGHT, STR_PAD_LEFT, STR_PAD_LEFT]
             ));
         }
