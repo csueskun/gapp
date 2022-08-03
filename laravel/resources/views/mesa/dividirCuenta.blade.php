@@ -43,14 +43,11 @@
                         </tr>
                     </tbody>
                     <tfoot>
-                        <tr >
+                        <tr ng-show="cuenta.propina">
                             <td></td>
                             <td></td>
                             <td class="text-right">
-                                <!-- <span class="total">
-                                    $@{{cuenta.total | number:0}}
-                                </span> -->
-                                Total
+                                Subtotal
                             </td>
                             <td class="text-right" ng-repeat="itemCuenta in cuenta.cuentas">
                                 <span class="total">
@@ -58,18 +55,27 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr ng-if="cuenta.propina">
+                        <tr ng-show="cuenta.propina">
                             <td></td>
                             <td></td>
                             <td class="text-right">
-                                <!-- <span class="total">
-                                    $@{{cuenta.total | number:0}}
-                                </span> -->
                                 Propina
                             </td>
                             <td class="text-right" ng-repeat="itemCuenta in cuenta.cuentas">
                                 <span class="total">
                                     $@{{itemCuenta.propina | number:0}}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class='f30'>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">
+                                Total
+                            </td>
+                            <td class="text-right" ng-repeat="itemCuenta in cuenta.cuentas">
+                                <span class="total">
+                                    $@{{itemCuenta.twp | number:0}}
                                 </span>
                             </td>
                         </tr>

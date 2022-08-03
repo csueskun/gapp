@@ -264,17 +264,18 @@ app.controller('menuController', function($scope, $http) {
     $scope.cuenta = {
         pedido: [], 
         cuentas: [
-            {alias: 'Cuenta_1', total: 0, propina: 0},
-            {alias: 'Cuenta_2', total: 0, propina: 0},
+            {alias: 'Cuenta_1', total: 0, propina: 0, twp:0},
+            {alias: 'Cuenta_2', total: 0, propina: 0, twp:0},
         ],
         total: 0,
         propina: 0,
         valid: false};
-    $scope.prepareDividirCuenta = function(){
+    $scope.prepareDividirCuenta = function(cantidad=2){
         $scope.cuenta.pedido = [];
         $scope.cuenta.total = 0;
         $scope.cuenta.propina = 0;
         $scope.cuenta.valid = false;
+        resetCuentas(cantidad);
         try {
             $scope.cuenta.propina = parseFloat($('ul.propina-html span.valor').attr('total'));
         } catch (error) {
@@ -286,6 +287,7 @@ app.controller('menuController', function($scope, $http) {
         });
         $scope.cuenta.cuentas.forEach(element => {
             element.propina = $scope.cuenta.propina/$scope.cuenta.cuentas.length
+            element.twp = element.twp+element.propina;
         });
     }
 
@@ -330,14 +332,18 @@ app.controller('menuController', function($scope, $http) {
         return cuentas;
     }
     $scope.setCuentasNumber = function(cantidad){
+        $scope.prepareDividirCuenta(cantidad);
+    }
+    function resetCuentas(cantidad){
         $scope.cuenta.cuentas = [];
         for (var i = 0; i < cantidad; i++) {
             $scope.cuenta.cuentas.push({
                 alias: 'Cuenta_'+(i+1),
-                total: 0
+                total: 0,
+                propina: 0,
+                twp: 0
             });
         }
-        $scope.prepareDividirCuenta();
     }
     $scope.updateItemCuenta = function(itemIndex, cuentaIndex){
         var item = $scope.cuenta.pedido[itemIndex];
@@ -375,6 +381,7 @@ app.controller('menuController', function($scope, $http) {
             for (var i = 0; i < item.cuentas.length; i++) {
                 const cuenta = item.cuentas[i];
                 $scope.cuenta.cuentas[i].total += cuenta.subtotal; 
+                $scope.cuenta.cuentas[i].twp = $scope.cuenta.cuentas[i].total + $scope.cuenta.cuentas[i].propina; 
             }
         });
     }
