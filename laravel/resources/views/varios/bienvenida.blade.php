@@ -3,9 +3,11 @@
 @section('contenido')
 
 @section('lib')
+{{ Html::style('css/jquery-confirm.min.css') }}
 {{ Html::script('js/moment.js') }}
 {{ Html::script('js/moment.es.js') }}
 {{ Html::script('/controller/menu.js') }}
+{{ Html::script('js/jquery-confirm.min.js') }}
 @endsection
 
 <section class="borde-inferior lista fondo-rojo">
@@ -70,7 +72,12 @@
             <span>&nbsp;</span>
         </a>
         @for($i = 1; $i<=$config->cantidad_mesas;$i++)
-        <a href="/mesa/{{$i}}" id="mesa{{$i}}" class="{{ isset($estado_mesas[$i]) ? $estado_mesas[$i]['clase'] : 'btn btn-success'}} cuadrado boton-grande mesa">
+        <a 
+            id="mesa{{$i}}" 
+            href="/mesa/{{$i}}" 
+            pedido-id="{{ isset($estado_mesas[$i]) ? $estado_mesas[$i]['pedido'] : '0'}}" 
+            mesa-num='{{$i}}' 
+            class="{{ isset($estado_mesas[$i]) ? $estado_mesas[$i]['clase'] : 'btn btn-success'}} cuadrado boton-grande mesa">
             <span>&nbsp;</span>
             <h2 class="no-margin"><i class="fa fa-cutlery"></i> {{$i}}</h2>
             <span>&nbsp;</span>
@@ -105,6 +112,7 @@
             <h4 class="titulo no-margin-padding">
                 <i class="fa fa-square ml-2" style="color: #5cb85c;"></i> Disponible
                 <i class="fa fa-square ml-2" style="color: #d9534f;"></i> Con Pedido Entregado
+                <i class="fa fa-square ml-2" style="color: #5bc0de;"></i> Creado por el cliente
                 <i class="fa fa-square-o ml-2"></i> No Disponible
                 <i class="fa fa-wpforms ml-2"></i> Prefacturado
             </h4>
@@ -325,8 +333,13 @@
 
         $("div.mesas-container").on('click', 'a.mesa', function(e){
             e.preventDefault();
-            var target = $(e.currentTarget).attr('href')+'/?v='+menuVersionFromDevice();
-            window.location.href = target;
+            if($(e.currentTarget).hasClass('estado-4')){
+                preRetomarPedido($(e.currentTarget).attr('pedido-id'))
+            }
+            else{
+                var target = $(e.currentTarget).attr('href')+'/?v='+menuVersionFromDevice();
+                window.location.href = target;
+            }
         });
         $.get('/borrar-sesion', function (data) {});
 
@@ -431,6 +444,39 @@
             vistaMesero("{{Auth::user()->id}}");
         }
     }
+
+    function preRetomarPedido(pedido){
+        var data = {
+            title: 'Continuar pedido',
+            type: 'blue',
+            typeAnimated: true,
+            content: 'Si continua, tomará el pedido creado por el cliente.',
+            // boxWidth: '600px',
+            icon: 'fa fa-warning',
+            buttons: {
+                confirm: {
+                    btnClass: 'btn-blue',
+                    text: 'Continuar',
+                    action: function(){
+                        retomarPedido(pedido)
+                    }
+                },
+                cancel: {
+                    btnClass: 'btn-red',
+                    text: 'Cancelar',
+                    action: function(){
+                        // ocultarFullLoading();
+                    }
+                },
+            }
+        };
+        $.confirm(data);
+    }
+
+    function retomarPedido(pedido){
+        alert(pedido)
+    }
+
 
 </script>
 

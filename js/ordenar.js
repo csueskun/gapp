@@ -1947,7 +1947,13 @@ function isAdmin(admin_role='Administrador'){
 function isCajero(cajero_role='Cajero'){
     return role == cajero_role;
 }
+function isCliente(cliente_role='Cliente'){
+    return role == cliente_role;
+}
 function savePropina(){
+    if(isCliente()){
+        return false;
+    }
     var propina = $('td#propina .curr').inputmask('unmaskedvalue');
     var pedido_id = $('meta[name=pedido_id]').attr('content');
     if(pedido_id){

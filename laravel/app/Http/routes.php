@@ -67,6 +67,7 @@ Route::post('usuario/editarpass', 'UsuarioController@editarpass');
 
 Route::post('usuario/borrar', 'UsuarioController@borrar');
 
+Route::get('mesa-cliente/{id}', 'PedidoController@mesaClienteView');
 Route::get('mesa-v2/{id}', 'PedidoController@mesaV2View')->middleware('auth')->middleware('tiene.roles:Mesero.Administrador.Cajero');
 Route::get('mesa/{id}', 'PedidoController@mesaView')->middleware('auth')->middleware('tiene.roles:Mesero.Administrador.Cajero');
 

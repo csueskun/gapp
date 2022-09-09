@@ -92,13 +92,17 @@ class ConfigController extends Controller
             if(isset($mesa->entregado) && $mesa->entregado != null){
                 $clase = "btn btn-primary";
             }
+            if(isset($mesa->estado) && $mesa->estado == 4){
+                $clase = "btn btn-info estado-4";
+            }
             $clase .= " mesero-".$mesa->user_id;
             $estado_mesas[$mesa->mesa_id] = array(
                 "clase"=>$clase, 
                 "fecha"=>$mesa->created_at, 
                 "entregado"=>$mesa->entregado, 
                 "prefacturado"=>$mesa->prefacturado,
-                "comandas"=>$comandas
+                "comandas"=>$comandas,
+                "pedido"=>$mesa->id
             );
         }
         return $estado_mesas;

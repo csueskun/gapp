@@ -1185,7 +1185,7 @@ class PedidoController extends Controller
         return response()->json(array('hoy'=>$hoy[0],'activos'=>$activos[0],'domicilios'=>$domicilios[0],'mesas'=>$mesas));
     }
 
-    protected function showMesaView($id, Request $request, $mesa_alias=false, $pedido_id=''){
+    protected function showMesaView($id, Request $request, $mesa_alias=false, $pedido_id='', $cliente=false){
         $propina = 0;
         if($id!=0){
             $propina = app('App\Http\Controllers\ConfigController')->getPropina();
@@ -1202,10 +1202,15 @@ class PedidoController extends Controller
             ->with('propina', $propina)
             ->with('status', $msg)
             ->with('pedido_id', $pedido_id)
+            ->with('menu_cliente', $cliente)
             ->with('conn', app('App\Http\Controllers\TipoProductoController')->mesaMenu())
             ->with('combos', app('App\Http\Controllers\ComboController')->menu());
 
     }
+
+    public function mesaClienteView($id, Request $request){
+        return $this->showMesaView($id, $request, false, '', true);
+    }    
 
     public function mesaView($id, Request $request){
         return $this->showMesaView($id, $request);

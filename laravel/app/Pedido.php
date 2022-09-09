@@ -19,6 +19,6 @@ class Pedido extends Model
     // 1 activo
     // 2 pagado
     // 3 facturado no pagado
-    // 4
+    // 4 creado por el cliente
     // 5 
 }

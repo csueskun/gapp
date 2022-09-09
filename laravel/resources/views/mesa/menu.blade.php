@@ -14,13 +14,21 @@
     <meta name="propina" content="{{$propina}}">
     <meta name="pedido_id" content="{{isset($pedido_id)?($pedido_id?$pedido_id:0):0}}">
     <meta name="mesa_alias" content="{{$mesa_alias}}">
+
+    @if(Auth::user())
     <meta name="rol" content="{{Auth::user()->rol}}">
+    @else
+    <meta name="rol" content="Cliente">
+    @endif
     <meta name="dia_operativo_valido" content="{{$dia_operativo_valido}}">
     {{ Html::script('bootstrap-3.3.6-dist/js/confirmation.js') }}    
     {{ Html::style('css/bootstrap-datetimepicker.css') }}
     {{ Html::style('css/jquery-confirm.min.css') }}
     {{ Html::style('css/menu.css') }}
     {{ Html::style('css/combos.css') }}
+    @if($menu_cliente)
+    {{ Html::style('css/menu-cliente.css') }}
+    @endif
     {{ Html::script('js/moment-with-locales.js') }}
     {{ Html::script('js/bootstrap-datetimepicker.js') }}
     {{ Html::script('js/jquery-confirm.min.js') }}
@@ -554,8 +562,10 @@
                     <ul class="list-group items_pedido" id="total"><li class="list-group-item"><span class="producto">Total Pedido:</span><div class="btn-group"></div></li></ul>
                 </div>
                 <br/>
+                @if(Auth::user())
                 @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Mesero')
                 <label class="checkbox-inline grande" id="entregado-label" style="display: none"><input type="checkbox" id="entregado-checkbox" name="entregado-checkbox" onchange="entregadoCheckbox($(this))">Entregado</label>
+                @endif
                 @endif
             </div>
         </div>

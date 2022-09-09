@@ -112,6 +112,7 @@
             </div>
             <div class="modal-footer">
                 <div class="btn-group centrado">
+                    @if(Auth::user())
                     @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Cajero')
                     <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="togglePagarDomicilio(false)" class = "fuente bebas btn btn-warning btn-lg imprimir"><span class="fa fa-usd"></span> Domicilio</button>
                     @endif
@@ -119,10 +120,8 @@
                     @if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Cajero')
                     <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="preEnviarFormPagar()" class = "fuente bebas btn btn-success btn-lg imprimir"><span class="fa fa-usd"></span> Pagar</button>
                     <button style="font-size:30px;padding: 4px 6px;" type="button" onclick="gaveta()" class = "fuente bebas btn btn-danger btn-lg imprimir"><span class="fa fa-inbox"></span> Cajón</button>
-                    
                     @endif
-                    <!--@if(Auth::user()->rol=='Administrador')
-                    @endif -->
+                    @endif
                 </div>
                 <br>
                 <br>

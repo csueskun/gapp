@@ -1,0 +1,9 @@
+.fondo-rojo{
+    background-color: green;
+}
+#entregado-label,
+#navCuenta #pedido button,
+#navCuenta #pedido a.btn,
+div.btn-group.items > span.btn.comandado{
+    display: none !important;
+}
