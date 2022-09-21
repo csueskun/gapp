@@ -474,7 +474,22 @@
     }
 
     function retomarPedido(pedido){
-        alert(pedido)
+        mostrarFullLoading();
+        var data = {
+            estado: 1,
+            user_id: '{{Auth::user()->id}}',
+            caja_id: '{{Auth::user()->caja_id}}',
+        }
+        $.post(`pedido/${pedido}/patch`, data, function (data) {
+            cargarEstadoMesas();
+            setTimeout(() => {
+                var target = $(`a[pedido-id=${pedido}]`).attr('href')+'/?v='+menuVersionFromDevice();
+                window.location.href = target;
+            }, 1000);
+        }).fail(function() {
+            mostrarWarning('Error al intentar retomar el pedido')
+            ocultarFullLoading();
+        });
     }
 
 

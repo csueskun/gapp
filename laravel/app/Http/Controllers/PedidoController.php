@@ -102,10 +102,13 @@ class PedidoController extends Controller
         $pedido->fecha = $datos->fecha;
         $pedido->mesa_id = $datos->mesa_id;
         $pedido->estado = $datos->estado;
-        $pedido->user_id = $datos->user_id;
+        try {
+            $pedido->user_id = $datos->user_id;
+            $pedido->caja_id = $datos->caja_id;
+        } catch (\Throwable $th) {
+        }
         $pedido->obs = $datos->obs;
         $pedido->turno = $datos->turno;
-        $pedido->caja_id = $datos->caja_id;
         $pedido->save();
         return $pedido;
     }
@@ -949,6 +952,7 @@ class PedidoController extends Controller
         $producto_pedido_json = Input::get('producto_pedido_json');
         $mesa = Input::get('mesa');
         $pedido =  Input::get('pedido');
+        $pedido_cliente =  Input::get('pedido_cliente');
         if($pedido == null || $pedido == '0' || $pedido == '-1'){
             $pedido = Pedido::where('mesa_id', $mesa)->where('estado', 1)->first();
             if($pedido){
@@ -966,7 +970,7 @@ class PedidoController extends Controller
                 $pedido = null;
             }
         }
-        return $this->agregarProductoPedido($producto_pedido_json, $mesa, $pedido, false);
+        return $this->agregarProductoPedido($producto_pedido_json, $mesa, $pedido, false, $pedido_cliente);
     }
 
     public function preAgregarComboProductoPedido(){
@@ -974,6 +978,7 @@ class PedidoController extends Controller
         $mesa = Input::get('mesa');
         $pedido =  Input::get('pedido');
         $force =  Input::get('force') == 1;
+        $pedido_cliente =  Input::get('pedido_cliente');
         if($pedido == null || $pedido == '0' || $pedido == '-1'){
             $pedido = Pedido::where('mesa_id', $mesa)->where('estado', 1)->first();
             if($pedido){
@@ -991,7 +996,7 @@ class PedidoController extends Controller
             }
             $producto_pedido_json = json_encode($pp);
             try {
-                $res = $this->agregarProductoPedido($producto_pedido_json, $mesa, $pedido, false);
+                $res = $this->agregarProductoPedido($producto_pedido_json, $mesa, $pedido, false, $pedido_cliente);
                 if(!$pedido){
                     $pedido = json_decode($res);
                     $pedido = $pedido->id;
@@ -1006,7 +1011,9 @@ class PedidoController extends Controller
         }
         return $pedido;
     }
-    public function agregarProductoPedido($producto_pedido_json = null, $mesa = null, $pedido = null, $es_combo = false){
+    public function agregarProductoPedido(
+        $producto_pedido_json = null, $mesa = null, $pedido = null, 
+        $es_combo = false, $pedido_cliente=false){
         $controller = app('App\Http\Controllers\PedidoController');
 
         if($pedido == 0){
@@ -1028,19 +1035,23 @@ class PedidoController extends Controller
                 return json_encode($validarInventario);
             }
         }
-
         if($pedido == null){
             $pedido = new stdClass();
             $pedido->fecha = date("Y-m-d H:i:s");
             $pedido->mesa_id = $mesa;
             $pedido->obs = '{"mesa_alias":"'.$producto_pedido_json->alias.'"}';
-            $pedido->user_id = Auth::user()->id;
-            $pedido->caja_id = Auth::user()->caja_id;
-            if($mesa==0){
-                $pedido->estado = 3;
+            if($pedido_cliente=='true'){
+                $pedido->estado = 4;
             }
             else{
-                $pedido->estado = 1;
+                $pedido->user_id = Auth::user()->id;
+                $pedido->caja_id = Auth::user()->caja_id;
+                if($mesa==0){
+                    $pedido->estado = 3;
+                }
+                else{
+                    $pedido->estado = 1;
+                }
             }
             $pedido->turno = app('App\Http\Controllers\ConfigController')->asignarTurno();
             $pedido = $this->guardar($pedido);
@@ -1209,12 +1220,22 @@ class PedidoController extends Controller
     }
 
     public function mesaClienteView($id, Request $request){
+        if($this->invalidClienteMesa($id)){
+            return view('errors.error')
+                ->with('title', "MESA $id OCUPADA")
+                ->with('subtitle', 'HAY UN PEDIDO ASOCIADO A LA MESA. 
+                    POR FAVOR COMUNICARSE CON UN MESERO.');
+        }
         return $this->showMesaView($id, $request, false, '', true);
-    }    
+    }
 
     public function mesaView($id, Request $request){
         return $this->showMesaView($id, $request);
-    }    
+    }
+
+    protected function invalidClienteMesa($mesa){
+        return Pedido::whereRaw("mesa_id = $mesa AND (estado = 1 OR estado = 3)")->count();
+    }
 
     public function vistaEditar($id, Request $request){
         $pedido = Pedido::find($id);

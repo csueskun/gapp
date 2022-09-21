@@ -112,9 +112,9 @@ Route::get('/pedido/archivados', function () {
 
 Route::get('/producto/buscar/{buscar}', 'ProductoController@buscarModal')->middleware('auth');
 
-Route::post('/producto-pedido/agregar', 'PedidoController@preAgregarProductoPedido')->middleware('auth');
-Route::post('/combo-producto-pedido/agregar', 'PedidoController@preAgregarComboProductoPedido')->middleware('auth');
-Route::post('/producto-pedido/borrar-combo/{combo}', 'ProductoPedidoController@borrarPorCombo')->middleware('auth');
+Route::post('/producto-pedido/agregar', 'PedidoController@preAgregarProductoPedido');
+Route::post('/combo-producto-pedido/agregar', 'PedidoController@preAgregarComboProductoPedido');
+Route::post('/producto-pedido/borrar-combo/{combo}', 'ProductoPedidoController@borrarPorCombo');
 //Route::post('/pedidos/agregar/{producto_pedido}/{mesa}/{pedido}', 'PedidoController@agregarProductoPedido')->middleware('auth');
 /****** debug ****/
 Route::get('/pedidos/agregar/{producto_pedido}/{mesa}/{pedido}', 'PedidoController@agregarProductoPedido')->middleware('auth');

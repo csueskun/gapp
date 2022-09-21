@@ -597,7 +597,8 @@ function addComboProductoPedido(productos, form, force=false){
         productos: productos,
         alias: $('meta[name=mesa_alias]').attr('content'),
         _token: $('meta[name=csrf-token]').attr('content'),
-        mesa: $('meta[name=mesa]').attr('content')
+        mesa: $('meta[name=mesa]').attr('content'),
+        pedido_cliente: isCliente()
     };
     $.ajax({
         type: 'POST',
@@ -648,6 +649,7 @@ function addComboProductoPedido(productos, form, force=false){
             mostrarSuccess('<strong>Listo!</strong> Producto Agregado');
             actualizarDivPedido();
             terminarAgregarPedido(form);
+            ocultarFullLoading();
         }
     })
     .fail(function() {
@@ -673,7 +675,8 @@ function addProductoPedido(producto, form, last = true, first = true, multi=fals
         producto_pedido_json: JSON.stringify(producto),
         mesa: mesa,
         pedido: pedido_id,
-        first: first
+        first: first,
+        pedido_cliente: isCliente()
     };
     //console.log(JSON.stringify(producto))
     $.ajax({
@@ -848,11 +851,11 @@ function impItemPedido(productos_pedido){
     var pedido_id = productos_pedido.id;
     $('meta[name=pedido_id]').attr('content', pedido_id);
     var html2 = "";
-    if(productos_pedido.estado === 4){
-        $(".number-spinner").closest(".row").hide();
-        $(".producto-express").removeAttr('onclick');
-        html2+= '<a data-toggle=\"modal\" data-target=\"#modal_pagar\" onclick=\"actualizarCambio()\" onclick="actualizarCambio()" class = "boton-inline-grande btn btn-success"><span class="fa fa-usd"></span> Pagar</a>';
-    }
+    // if(productos_pedido.estado === 4){
+    //     $(".number-spinner").closest(".row").hide();
+    //     $(".producto-express").removeAttr('onclick');
+    //     html2+= '<a data-toggle=\"modal\" data-target=\"#modal_pagar\" onclick=\"actualizarCambio()\" onclick="actualizarCambio()" class = "boton-inline-grande btn btn-success"><span class="fa fa-usd"></span> Pagar</a>';
+    // }
     var mesa = $('meta[name=mesa]').attr('content');
     var mesero = !(mesa==""||mesa==null||mesa==0||mesa=="0");
     var pedido_id = 0;
@@ -865,7 +868,7 @@ function impItemPedido(productos_pedido){
     var obs = "";
     if(productos_pedido!="{}"&&productos_pedido!=null){
         pedido_id = productos_pedido.id;
-        pedido_activo = (productos_pedido.estado == 1 || productos_pedido.estado == 3);
+        pedido_activo = (productos_pedido.estado == 1 || productos_pedido.estado == 3 || productos_pedido.estado == 4);
         productos_pedido = productos_pedido.productos_pedido;
         html +="<ul class=\"list-group items_pedido panel-collapse in collapse\" id=\"ul-pedido\">";
         var valorProducto = 0;
