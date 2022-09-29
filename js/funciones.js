@@ -1,7 +1,7 @@
 const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 $(function() {
 
-    
+  
     $("a.pd").click(function (event) {
         event.preventDefault();
     });
@@ -501,3 +501,40 @@ function menuVersionFromDevice(){
 }
 
 function blankFunction(){}
+
+function populate(frm, data) {   
+    $.each(data, function(key, value) {  
+        var ctrl = $('[name='+key+']', frm);  
+        switch(ctrl.prop("type")) { 
+            case "radio": case "checkbox":   
+                ctrl.each(function() {
+                    if($(this).attr('value') == value) $(this).attr("checked",value);
+                });   
+                break;  
+            default:
+                ctrl.val(value); 
+        }  
+    });  
+}
+
+function getFormData($form){
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
+
+    $.map(unindexed_array, function(n, i){
+        indexed_array[n['name']] = n['value'];
+    });
+
+    return indexed_array;
+}
+
+function ajaxPut(url, data, done=blankFunction, fail=blankFunction, always=blankFunction){
+    $.ajax({
+        method: "PUT",
+        url: url,
+        data: data
+    })
+    .done(done)
+    .fail(fail)
+    .always(always);
+}

@@ -808,3 +808,7 @@ Route::post('/inventario/pos', 'SaldosProductoController@pos');
 Route::get('/config/orden', 'TipoProductoController@ordenView')->middleware('auth')->middleware('tiene.roles:Administrador.Cajero');
 Route::post('/orden/tipo_producto', 'TipoProductoController@orden')->middleware('auth')->middleware('tiene.roles:Administrador.Cajero');;
 Route::post('/orden/combo', 'ComboController@orden')->middleware('auth')->middleware('tiene.roles:Administrador.Cajero');;
+
+Route::get('/puntos', 'PuntosController@vistaLista')->middleware('auth')->middleware('tiene.rol:Administrador');
+Route::get('/puntos/{id}/editar', 'PuntosController@vistaEditar')->middleware('auth')->middleware('tiene.rol:Administrador');
+Route::put('/puntos/', 'PuntosController@editar')->middleware('auth')->middleware('tiene.rol:Administrador');

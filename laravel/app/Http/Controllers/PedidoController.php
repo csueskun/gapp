@@ -162,6 +162,7 @@ class PedidoController extends Controller
             $pedido->mesa_id-=1000;
         }
         $pedido->estado = $estado;
+        $this->getTerceroData($pedido);
         $pedido->save();
         if($pedido != null){
             $controller = app('App\Http\Controllers\ProductoPedidoController');
@@ -173,10 +174,6 @@ class PedidoController extends Controller
             }
             $pedido->productos_pedido = $productos_pedido;
         }
-
-        $pedidoObs = isset($pedido->obs)?$pedido->obs:'{}';
-        $pedidoObs = json_decode($pedidoObs);
-
         
         $documento = new Documento;
         $documento->tipodoc = "FV";
@@ -187,38 +184,7 @@ class PedidoController extends Controller
         $documento->total = $pedido->total;
         $documento->usuario_id = $pedido->user_id;
         $documento->caja_id = $pedido->caja_id;
-        $documento->tercero_id = isset($pedidoObs->clienteId)?$pedidoObs->clienteId:null;
-        if($documento->tercero_id == ""){
-            $documento->tercero_id = null;
-        }
-
-        if($documento->tercero_id == null){
-
-            if(isset($pedidoObs->cliente)&&isset($pedidoObs->identificacion)){
-                $tercero_ = Tercero::where('identificacion', $pedidoObs->identificacion)->first();
-                if($tercero_){
-                }
-                else{
-                    $tercero_ = new Tercero;
-                    $tercero_->identificacion = $pedidoObs->identificacion;
-                    $tercero_->nombrecompleto = strtoupper($pedidoObs->cliente);
-                    $tercero_->save();
-                }
-            }
-            else{
-                $tercero_ = Tercero::where('nombrecompleto', 'VARIOS')->first();
-                if($tercero_){
-                }
-                else{
-                    $tercero_ = new Tercero;
-                    $tercero_->identificacion = '00';
-                    $tercero_->nombrecompleto = 'VARIOS';
-                    $tercero_->save();
-                }
-            }
-            $documento->tercero_id = $tercero_->id;
-        }
-
+        $documento->tercero_id = $pedido->tercero_id;
         $documento->paga_efectivo = isset($formaPago['paga_efectivo'])?$formaPago['paga_efectivo']:null;
         $documento->paga_debito = isset($formaPago['paga_debito'])?$formaPago['paga_debito']:null;
         $documento->paga_credito = isset($formaPago['paga_credito'])?$formaPago['paga_credito']:null;
@@ -340,6 +306,61 @@ class PedidoController extends Controller
         }
         $documento->save();
         
+    }
+    protected function getTerceroData($pedido){
+        $sumaPuntos = true;
+        $pedidoObs = isset($pedido->obs)?$pedido->obs:'{}';
+        $pedidoObs = json_decode($pedidoObs);
+        $pedido->tercero_id = isset($pedidoObs->clienteId)?$pedidoObs->clienteId:null;
+        if($pedido->tercero_id == ""){
+            $pedido->tercero_id = null;
+        }
+        if(!$pedido->tercero_id){
+            $pedido->tercero_id = isset($pedidoObs->cliente_id)?$pedidoObs->cliente_id:null;
+        }
+
+        if($pedido->tercero_id == null){
+
+            if(isset($pedidoObs->cliente)&&isset($pedidoObs->identificacion)){
+                $tercero_ = Tercero::where('identificacion', $pedidoObs->identificacion)->first();
+                if($tercero_){
+                }
+                else{
+                    $tercero_ = new Tercero;
+                    $tercero_->identificacion = $pedidoObs->identificacion;
+                    $tercero_->nombrecompleto = strtoupper($pedidoObs->cliente);
+                    $tercero_->save();
+                }
+            }
+            else{
+                $sumaPuntos = false;
+                $tercero_ = Tercero::where('nombrecompleto', 'VARIOS')->first();
+                if($tercero_){
+                }
+                else{
+                    $tercero_ = new Tercero;
+                    $tercero_->identificacion = '00';
+                    $tercero_->nombrecompleto = 'VARIOS';
+                    $tercero_->save();
+                }
+            }
+        }
+        else{
+            $tercero_ = Tercero::find($pedido->tercero_id);
+        }
+        if($sumaPuntos){
+            try {
+                $puntos = app('App\Http\Controllers\PuntosController')
+                    ->calcularPuntos($pedido->total);
+                if(!$tercero_->puntosacumulados){
+                    $tercero_->puntosacumulados = 0;
+                }
+                $tercero_->puntosacumulados += $puntos;
+                $tercero_->save();
+            } catch (\Throwable $th) {
+            }
+        }
+        $pedido->tercero_id = $tercero_->id;
     }
     public function createDetalleFromAdicional($adicionalPedido, $documentoId) {
         $detalleDocumento = new DetalleDocumento;

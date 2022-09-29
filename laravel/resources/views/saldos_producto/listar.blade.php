@@ -15,27 +15,30 @@
 
 @section('contenido')
 
-
-<div class="container">
-    
-    <div class="row alertas">
-    @include('template.status', ['status' => session('status')])
+<section class="borde-inferior fondo-blanco">
+    <div class="container">
+        <h1 class="titulo">
+            Inventario
+            <button class="f20 btn btn-success font bebas" onclick="generateExcel()">
+                <span class="fa fa-file-excel-o" aria-hidden="true"></span>
+                Exportar a Excel
+            </button>
+            <button class="f20 btn btn-primary busy font bebas" onclick="printPos()">
+                <span class="fa fa-print" aria-hidden="true"></span>
+                Impresión POS
+            </button>
+        </h1>
+        <br/>
     </div>
-    <br/>
-    <br/>
-    <div class="row" style="background-color: white; padding: 10px">
-        <div class="col-md-12">
-            <h2>
-                Inventario
-                <button class="btn btn-success font bebas" onclick="generateExcel()">
-                    <span class="fa fa-file-excel-o" aria-hidden="true"></span>
-                    Exportar a Excel
-                </button>
-                <button class="btn btn-primary busy font bebas" onclick="printPos()">
-                    <span class="fa fa-print" aria-hidden="true"></span>
-                    Impresión POS
-                </button>
-            </h2></div><br/><br/><br/>
+</section>
+<section class="borde-inferior lista fondo-comun">
+    <div class="container">
+        
+        <div class="row alertas">
+        @include('template.status', ['status' => session('status')])
+        </div>
+        <br/>
+        <br/>
         <div class="col-md-5">
             <div class="dataTables_length" id="example_length">
                 <label>Mostrar 
@@ -70,7 +73,7 @@
         <br/>
         <br/>
         <br/>
-        <table class="table normal table-hover table-condensed vertical-n" cellspacing="0" width="100%" style="margin-left: 10px; margin-right: 10px">
+        <table class="midatatable table table-striped table-bordered" cellspacing="0" width="100%" style="margin-left: 10px; margin-right: 10px">
             <thead>
                 <tr class='font bebas' style='font-size: 20px'>
                     <th class="" campo="">Producto</th>
@@ -123,75 +126,76 @@
             </tr>
         </table>
     </div>
-</div>
-<div id="detallado" class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title font bebas">Generar Detallado</h3>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
+    <div id="detallado" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title font bebas">Generar Detallado</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+          <div class="modal-body">
+              <form action="" method="post">
+                <input type = "hidden" name="id" value=""/>
+                <input type = "hidden" name="tipo" value=""/>
+                <div class = "col-md-6">
+                    <div class = "campo tipo texto form-group has-feedback">
+                        <label for = "inicio" class = "control-label">Fecha Inicio *</label>
+                        <input type = "text" class = "form-control" id = "inicio" name = "inicio" value = "" required/>
+                        <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                    </div>
+                    <script type='text/javascript'>
+                        $('#inicio').datetimepicker({
+                            language:  'es',
+                            todayBtn:  1,
+                            autoclose: 1,
+                            todayHighlight: 1,
+                            minView: 2,
+                            forceParse: 0,
+                            format: 'yyyy-mm-dd'
+                        });
+                    </script> 
+                </div>
+                <div class = "col-md-6">
+                    <div class = "campo tipo texto form-group has-feedback">
+                        <label for = "fin" class = "control-label">Fecha fin *</label>
+                        <input type = "text" class = "form-control" id = "fin" name = "fin" value = "" required/>
+                        <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                    </div>
+                    <script type='text/javascript'>
+                        $('#fin').datetimepicker({
+                            language:  'es',
+                            todayBtn:  1,
+                            autoclose: 1,
+                            todayHighlight: 1,
+                            minView: 2,
+                            forceParse: 0,
+                            format: 'yyyy-mm-dd'
+                        });
+                    </script> 
+                </div>
+                <div class = "col-md-6">
+                    <div class = "campo tipo select form-group has-feedback">
+                        <label for = "tipo_documento" class = "control-label">Tipo Documento</label>
+                        <select class = "form-control" id = "tipo_documento" name = "tipo_documento" required>
+                            <option value="TO">Todos</option>
+                            <option value="FV">Factura de Venta</option>
+                            <option value="FC">Factura de Compra</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" onclick="generarDetallado()" class="btn btn-primary font bebas">Generar Detallado</button>
+            <button type="button" class="btn btn-secondary font bebas" data-dismiss="modal">Cerrar</button>
+          </div>
         </div>
-      <div class="modal-body">
-          <form action="" method="post">
-            <input type = "hidden" name="id" value=""/>
-            <input type = "hidden" name="tipo" value=""/>
-            <div class = "col-md-6">
-                <div class = "campo tipo texto form-group has-feedback">
-                    <label for = "inicio" class = "control-label">Fecha Inicio *</label>
-                    <input type = "text" class = "form-control" id = "inicio" name = "inicio" value = "" required/>
-                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                </div>
-                <script type='text/javascript'>
-                    $('#inicio').datetimepicker({
-                        language:  'es',
-                        todayBtn:  1,
-                        autoclose: 1,
-                        todayHighlight: 1,
-                        minView: 2,
-                        forceParse: 0,
-                        format: 'yyyy-mm-dd'
-                    });
-                </script> 
-            </div>
-            <div class = "col-md-6">
-                <div class = "campo tipo texto form-group has-feedback">
-                    <label for = "fin" class = "control-label">Fecha fin *</label>
-                    <input type = "text" class = "form-control" id = "fin" name = "fin" value = "" required/>
-                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                </div>
-                <script type='text/javascript'>
-                    $('#fin').datetimepicker({
-                        language:  'es',
-                        todayBtn:  1,
-                        autoclose: 1,
-                        todayHighlight: 1,
-                        minView: 2,
-                        forceParse: 0,
-                        format: 'yyyy-mm-dd'
-                    });
-                </script> 
-            </div>
-            <div class = "col-md-6">
-                <div class = "campo tipo select form-group has-feedback">
-                    <label for = "tipo_documento" class = "control-label">Tipo Documento</label>
-                    <select class = "form-control" id = "tipo_documento" name = "tipo_documento" required>
-                        <option value="TO">Todos</option>
-                        <option value="FV">Factura de Venta</option>
-                        <option value="FC">Factura de Compra</option>
-                    </select>
-                </div>
-            </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" onclick="generarDetallado()" class="btn btn-primary font bebas">Generar Detallado</button>
-        <button type="button" class="btn btn-secondary font bebas" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
-  </div>
-</div>
+</section>
+
 
 
 <form id="excel" action="/HSPrint/excel.php" method="POST">

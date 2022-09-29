@@ -131,6 +131,7 @@
                 <li class="nav-item"><a href="/adicional/agregar" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-glass" aria-hidden="true"></i> Adicionales</a></li>
                 <li class="nav-item"><a href="/combo" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-qrcode" aria-hidden="true"></i> Combos</a></li>
                 <li class="nav-item"><a href="/tercero" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-address-book-o" aria-hidden="true"></i> Terceros</a></li>
+                <li class="nav-item"><a href="/puntos" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-heart" aria-hidden="true"></i> Fidelidad</a></li>
             </ul>
             <h2 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                 <span>Gestión</span>
