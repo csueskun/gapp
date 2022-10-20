@@ -48,7 +48,7 @@
     <div class="container">
         <div class="vertical-center">
             <div align="center">
-              <img class="mb-4" src="http://www.webgapp.net/logoinicio.png" alt="" width="150" height="150">
+              <img class="mb-4" src="/images/logoinicio.png" alt="" width="150" height="150">
             </div>
             <h1>{{$title}}</h1>
             <h2>{{$subtitle}}</h2>
