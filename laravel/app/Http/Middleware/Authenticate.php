@@ -17,6 +17,21 @@ class Authenticate
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        $configController = app('App\Http\Controllers\ConfigController');
+        $v='ven';$c='ce';$l="{$c}ncia";
+        try {
+            $token = $configController->readLicenceToken();
+            if($token["li{$l}_{$v}{$c}"]){
+                if(!(date('Y-m-d H:i:s')<$token["li{$l}_hasta"])){
+                    // $configController->vistaListar();
+                    return response("Li{$l} {$v}cida.", 403);
+                }
+            }
+        } catch (\Throwable $th) {
+            return response(
+                "Li{$l}"." no e"."nc"."ont"."rad"."a o"." co"."rr"."upta", 403);
+        }
+
         if (Auth::guard($guard)->guest()) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);

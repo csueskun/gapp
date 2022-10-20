@@ -14,9 +14,6 @@ Route::get('/cmd', 'ConfigController@vistaListar');
 
 Route::get('/estadomesas', 'ConfigController@estado_mesas2');
 Route::get('/caja/cuadre', 'DocumentoController@cuadreView')->middleware('tiene.roles:Administrador.Cajero');
-// Route::get('/caja/cuadre', function () {
-//     return view("caja.cuadre");
-// })->middleware('auth')->middleware('tiene.roles:Administrador.Cajero');
 
 Route::get('/dashboard', function () {
     return view("varios.dashboard");
@@ -75,9 +72,6 @@ Route::get('menu-test', 'TipoProductoController@mostrarMenu');
 Route::get('/producto-ingredientes', 'ProductoIngredienteController@getIngredientes');
 Route::get('/adicionales', 'AdicionalController@getAdicionales');
 
-
-//Route::get('/mesa/{id}','TipoProductoController@mesaMenu')->middleware('auth')->middleware('tiene.roles:Mesero.Administrador');
-
 Route::get('/pedido/{id}/editar', 'PedidoController@vistaEditar')->middleware('auth')->middleware('tiene.roles:Mesero.Administrador.Cajero');
 Route::post('/pedido/{id}/patch', 'PedidoController@patchPedido')->middleware('auth');
 Route::post('/documento/{id}/patch', 'DocumentoController@patchDocumento')->middleware('auth');
@@ -98,7 +92,6 @@ Route::get('/adicional/tipo_producto/{id}', function ($id = 0) {
     return app('App\Http\Controllers\AdicionalController')->buscarPorTipoProducto($id);
 });
 
-
 /***************************************************
           Pedido
 *****************************************/
@@ -115,8 +108,6 @@ Route::get('/producto/buscar/{buscar}', 'ProductoController@buscarModal')->middl
 Route::post('/producto-pedido/agregar', 'PedidoController@preAgregarProductoPedido');
 Route::post('/combo-producto-pedido/agregar', 'PedidoController@preAgregarComboProductoPedido');
 Route::post('/producto-pedido/borrar-combo/{combo}', 'ProductoPedidoController@borrarPorCombo');
-//Route::post('/pedidos/agregar/{producto_pedido}/{mesa}/{pedido}', 'PedidoController@agregarProductoPedido')->middleware('auth');
-/****** debug ****/
 Route::get('/pedidos/agregar/{producto_pedido}/{mesa}/{pedido}', 'PedidoController@agregarProductoPedido')->middleware('auth');
 
 Route::get('/pedidos/ver', function () {
@@ -174,19 +165,6 @@ Route::post('/pedidos/cancelarProductoPedido/{producto_pedido_id}', function ($p
 Route::post('/producto/cargar_imagen', 'ProductoController@subirImagen');
 Route::post('/producto/cambiar_imagen', 'ProductoController@cambiarImagen');
 Route::post('/producto/guardar-como/{id}', 'ProductoController@guardarComo');
-
-function buscarArrayKey($array, $llave, $valor){
-    if ($array == null) {
-        return -1;
-    } else {
-        foreach ($array as $key => $pedido) {
-            if ($pedido[$llave] == $valor) {
-                return $key;
-            }
-        }
-        return -1;
-    }
-}
 
 
 /*
@@ -457,11 +435,6 @@ Route::get('/producto/listar', function () {
     return view('producto.listar')
                                 ->with("producto_lista",app('App\Http\Controllers\ProductoController')->todos());
 })->middleware('auth')->middleware('tiene.rol:Administrador');
-//Route::get('/producto/editar/{id}', function ($id) {
-//    return view('producto.editar')
-//                                ->with("producto",app('App\Http\Controllers\ProductoController')->buscar($id))
-//                                    ->with("tipo_producto_lista",app('App\Http\Controllers\TipoProductoController')->todos());
-//});
 Route::get('/producto/crear', function () {
     return view('producto.crear')
                                     ->with("tipo_producto_lista",app('App\Http\Controllers\TipoProductoController')->todos());
@@ -492,108 +465,6 @@ Route::post("/producto/{id}", "ProductoController@patchProducto");
 Route::patch("/producto/{id}", "ProductoController@patchProducto");
 Route::get("/producto/{id}", "ProductoController@getProducto");
 
-
-
-/*
-|--------------------------------------------------------------------------
-| ProductoIngrediente Routes
-|--------------------------------------------------------------------------
-|
-*/
-/*
-Route::get('/producto_ingrediente/listar', function () {
-    return view('producto_ingrediente.listar')
-                                ->with("producto_ingrediente_lista",app('App\Http\Controllers\ProductoIngredienteController')->todos());
-});
-Route::get('/producto_ingrediente/editar/{id}', function ($id) {
-    return view('producto_ingrediente.editar')
-                                ->with("producto_ingrediente",app('App\Http\Controllers\ProductoIngredienteController')->buscar($id))
-                                    ->with("producto_lista",app('App\Http\Controllers\ProductoController')->todos())
-                                    ->with("ingrediente_lista",app('App\Http\Controllers\IngredienteController')->todos());
-});
-Route::get('/producto_ingrediente/crear', function () {
-    return view('producto_ingrediente.crear')
-                                    ->with("producto_lista",app('App\Http\Controllers\ProductoController')->todos())
-                                    ->with("ingrediente_lista",app('App\Http\Controllers\IngredienteController')->todos());
-});
-Route::post('/producto_ingrediente/crear', 'ProductoIngredienteController@crear');
-Route::post('/producto_ingrediente/editar', 'ProductoIngredienteController@editar');
-Route::post('/producto_ingrediente/borrar', 'ProductoIngredienteController@borrar');
-*/
-/*
-|--------------------------------------------------------------------------
-| ProductoPedido Routes
-|--------------------------------------------------------------------------
-|
-*/
-/*
-Route::get('/producto_pedido/listar', function () {
-    return view('producto_pedido.listar')
-                                ->with("producto_pedido_lista",app('App\Http\Controllers\ProductoPedidoController')->todos());
-});
-Route::get('/producto_pedido/editar/{id}', function ($id) {
-    return view('producto_pedido.editar')
-                                ->with("producto_pedido",app('App\Http\Controllers\ProductoPedidoController')->buscar($id))
-                                    ->with("pedido_lista",app('App\Http\Controllers\PedidoController')->todos())
-                                    ->with("producto_lista",app('App\Http\Controllers\ProductoController')->todos());
-});
-Route::get('/producto_pedido/crear', function () {
-    return view('producto_pedido.crear')
-                                    ->with("pedido_lista",app('App\Http\Controllers\PedidoController')->todos())
-                                    ->with("producto_lista",app('App\Http\Controllers\ProductoController')->todos());
-});
-Route::post('/producto_pedido/crear', 'ProductoPedidoController@crear');
-Route::post('/producto_pedido/editar', 'ProductoPedidoController@editar');
-Route::post('/producto_pedido/borrar', 'ProductoPedidoController@borrar');
-*/
-/*
-|--------------------------------------------------------------------------
-| ProductoPedidoAdicional Routes
-|--------------------------------------------------------------------------
-|
-*/
-/*
-Route::get('/producto_pedido_adicional/listar', function () {
-    return view('producto_pedido_adicional.listar')
-                                ->with("producto_pedido_adicional_lista",app('App\Http\Controllers\ProductoPedidoAdicionalController')->todos());
-});
-Route::get('/producto_pedido_adicional/editar/{id}', function ($id) {
-    return view('producto_pedido_adicional.editar')
-                                ->with("producto_pedido_adicional",app('App\Http\Controllers\ProductoPedidoAdicionalController')->buscar($id))
-                                    ->with("producto_pedido_lista",app('App\Http\Controllers\ProductoPedidoController')->todos())
-                                    ->with("adicional_lista",app('App\Http\Controllers\AdicionalController')->todos());
-});
-Route::get('/producto_pedido_adicional/crear', function () {
-    return view('producto_pedido_adicional.crear')
-                                    ->with("producto_pedido_lista",app('App\Http\Controllers\ProductoPedidoController')->todos())
-                                    ->with("adicional_lista",app('App\Http\Controllers\AdicionalController')->todos());
-});
-Route::post('/producto_pedido_adicional/crear', 'ProductoPedidoAdicionalController@crear');
-Route::post('/producto_pedido_adicional/editar', 'ProductoPedidoAdicionalController@editar');
-Route::post('/producto_pedido_adicional/borrar', 'ProductoPedidoAdicionalController@borrar');
-*/
-/*
-|--------------------------------------------------------------------------
-| ProductoPedidoDocumento Routes
-|--------------------------------------------------------------------------
-|
-*/
-/*
-Route::get('/producto_pedido_documento/listar', function () {
-    return view('producto_pedido_documento.listar')
-                                ->with("producto_pedido_documento_lista",app('App\Http\Controllers\ProductoPedidoDocumentoController')->todos());
-});
-Route::get('/producto_pedido_documento/editar/{id}', function ($id) {
-    return view('producto_pedido_documento.editar')
-                                ->with("producto_pedido_documento",app('App\Http\Controllers\ProductoPedidoDocumentoController')->buscar($id));
-});
-Route::get('/producto_pedido_documento/crear', function () {
-    return view('producto_pedido_documento.crear');
-});
-Route::post('/producto_pedido_documento/crear', 'ProductoPedidoDocumentoController@crear');
-Route::post('/producto_pedido_documento/editar', 'ProductoPedidoDocumentoController@editar');
-Route::post('/producto_pedido_documento/borrar', 'ProductoPedidoDocumentoController@borrar');
-*/
 /*
 |--------------------------------------------------------------------------
 | TipoDocumento Routes
@@ -603,22 +474,6 @@ Route::post('/producto_pedido_documento/borrar', 'ProductoPedidoDocumentoControl
 Route::get('/prepare-domicilio-documento', 'TipoDocumentoController@prepareDomicilioDocumento');
 Route::post('/domicilio-documento', 'DocumentoController@saveDomicilioDocumento');
 Route::post('/pago-compra', 'DocumentoController@savePagoCompra');
-/*
-Route::get('/tipo_documento/listar', function () {
-    return view('tipo_documento.listar')
-                                ->with("tipo_documento_lista",app('App\Http\Controllers\TipoDocumentoController')->todos());
-});
-Route::get('/tipo_documento/editar/{id}', function ($id) {
-    return view('tipo_documento.editar')
-                                ->with("tipo_documento",app('App\Http\Controllers\TipoDocumentoController')->buscar($id));
-});
-Route::get('/tipo_documento/crear', function () {
-    return view('tipo_documento.crear');
-});
-Route::post('/tipo_documento/crear', 'TipoDocumentoController@crear');
-Route::post('/tipo_documento/editar', 'TipoDocumentoController@editar');
-Route::post('/tipo_documento/borrar', 'TipoDocumentoController@borrar');
-*/
 /*
 |--------------------------------------------------------------------------
 | TipoProducto Routes
@@ -641,67 +496,6 @@ Route::post('/tipo_producto/editar', 'TipoProductoController@editar');
 Route::post('/tipo_producto/borrar', 'TipoProductoController@borrar');
 Route::post('/tipo_producto/crearModal', 'TipoProductoController@crearModal');
 Route::get('/auth-hsoftware', 'LoginController@doAuthLogin');
-/*
-Route::get('/tipo_producto/crearModal', 'TipoProductoController@crearModal');
-Route::get('/tipo_producto/lista', 'TipoProductoController@todosAZ');
-*/
-
-/*
-|--------------------------------------------------------------------------
-| ProductoSabor Routes
-|--------------------------------------------------------------------------
-|
-*/
-/*
-Route::get('/producto_sabor/listar', function () {
-    return view('producto_sabor.listar')
-                                ->with("producto_sabor_lista",app('App\Http\Controllers\ProductoSaborController')->todos());
-});
-Route::get('/producto_sabor/editar/{id}', function ($id) {
-    return view('producto_sabor.editar')
-                                ->with("producto_sabor",app('App\Http\Controllers\ProductoSaborController')->buscar($id))
-                                    ->with("producto_lista",app('App\Http\Controllers\ProductoController')->todos())
-                                    ->with("sabor_lista",app('App\Http\Controllers\SaborController')->todos());
-});
-Route::get('/producto_sabor/crear', function () {
-    return view('producto_sabor.crear')
-                                    ->with("producto_lista",app('App\Http\Controllers\ProductoController')->todos())
-                                    ->with("sabor_lista",app('App\Http\Controllers\SaborController')->todos());
-});
-Route::post('/producto_sabor/crear', 'ProductoSaborController@crear');
-Route::post('/producto_sabor/editar', 'ProductoSaborController@editar');
-Route::post('/producto_sabor/borrar', 'ProductoSaborController@borrar');
-
-*/
-/*
-|--------------------------------------------------------------------------
-| Sabor Routes
-|--------------------------------------------------------------------------
-|
-*/
-
-/*
-Route::get('/sabor/listar', function () {
-    return view('sabor.listar')
-                                ->with("sabor_lista",app('App\Http\Controllers\SaborController')->todos());
-});
-Route::get('/sabor/editar/{id}', function ($id) {
-    return view('sabor.editar')
-                                ->with("sabor",app('App\Http\Controllers\SaborController')->buscar($id))
-                                    ->with("producto_lista",app('App\Http\Controllers\ProductoController')->todos())
-                                    ->with("sabor_lista",app('App\Http\Controllers\SaborController')->todos());
-});
-Route::get('/sabor/crear', function () {
-    return view('sabor.crear')
-                                    ->with("producto_lista",app('App\Http\Controllers\ProductoController')->todos())
-                                    ->with("sabor_lista",app('App\Http\Controllers\SaborController')->todos());
-});
-Route::post('/sabor/crear', 'SaborController@crear');
-Route::post('/sabor/editar', 'SaborController@editar');
-Route::post('/sabor/borrar', 'SaborController@borrar');
-Route::get('/sabor/lista', 'SaborController@todosAZ');
-
-*/
 Route::post('/sabor/crearModal', 'SaborController@crearModal');
 
 Route::get('borrar-sesion', function(){
@@ -813,7 +607,10 @@ Route::get('/puntos', 'PuntosController@vistaLista')->middleware('auth')->middle
 Route::get('/puntos/{id}/editar', 'PuntosController@vistaEditar')->middleware('auth')->middleware('tiene.rol:Administrador');
 Route::put('/puntos/', 'PuntosController@editar')->middleware('auth')->middleware('tiene.rol:Administrador');
 
+
 Route::get('/download/token', 'ConfigController@downloadToken');
-Route::get('/licence', 'ConfigController@readLicenceToken');
-Route::get('/valid', 'ConfigController@vistaVer');
-Route::get('/invalid', 'ConfigController@vistaListar');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/invalid', 'ConfigController@vistaListar');
+    Route::get('/licence', 'ConfigController@readLicenceToken');
+    Route::get('/valid', 'ConfigController@vistaVer');
+});

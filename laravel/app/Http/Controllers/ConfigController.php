@@ -329,7 +329,7 @@ class ConfigController extends Controller
     public function vistaVer(){
         try{
             $vista = $this->readLicenceToken();
-            return date('Y-m-d H:i:s')<$vista['licencia_hasta']?1:0;
+            return date('Y-m-d H:i:s')<$vista['lic'.'enci'.'a_has'.'ta']?'V'.'ál'.'ido':'In'.'vál'.'ido';
             $bp = base_path();
             $bp = urlencode($bp);
             $id = app('App\Http\Controllers\LoginController')->doAuthLogin();
@@ -368,12 +368,13 @@ class ConfigController extends Controller
             fwrite($myfile, $json);
             return 'Token descargado';
         } catch (\Throwable $th) {
+            // return $th;
             return 'Token no descargado';
         }
     }
     
     public function getUuid(){
-        return '3748eb17-a207-5bc3-aa4f-3113a1b9409d';
+        // return '3748eb17-a207-5bc3-aa4f-3113a1b9409d';
         try {
             $uuid = shell_exec("echo | WMIC csproduct get uuid");
             $uuid = urlencode($uuid);
