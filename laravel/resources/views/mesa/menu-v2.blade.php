@@ -823,7 +823,8 @@
                 $(this).html('Ocultar Adicionales');
             }
             $(this).toggleClass('showing');
-            $(this).closest('div').find('label').fadeToggle("slow");
+            // $(this).closest('div').find('label').fadeToggle("slow");
+            $(this).closest('div').find('label').hide();
             $(this).closest('div').find('.ingrediente-grupo-nombre').fadeToggle("slow");
         });
         $('#modal_pagar').on('hidden.bs.modal', function () {
