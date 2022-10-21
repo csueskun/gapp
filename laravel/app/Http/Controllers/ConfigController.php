@@ -377,6 +377,9 @@ class ConfigController extends Controller
         // return '3748eb17-a207-5bc3-aa4f-3113a1b9409d';
         try {
             $uuid = shell_exec("echo | WMIC csproduct get uuid");
+            $p = "/[\w\d]+-[\w\d]+-[\w\d]+-[\w\d]+-[\w\d]+/";
+            preg_match_all($p,$uuid,$matches,PREG_PATTERN_ORDER);
+            $uuid=($matches[0][0]);
             $uuid = urlencode($uuid);
         } catch (\Throwable $th) {
             $uuid = 'ERROR UUID SCRIPT';
