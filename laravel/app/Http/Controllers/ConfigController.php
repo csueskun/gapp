@@ -358,19 +358,23 @@ class ConfigController extends Controller
         $codigo = urlencode($codigo);
         $uuid = urlencode($uuid);
         $url = "http://h-software.co/lic.php/?empresa=$empresa&codigo=$codigo&uuid=$uuid";
-        $json = @file_get_contents($url);
+        $json = file_get_contents($url);
         if(!$json){
             return "Sin conexión.";
         }
-        $file = base_path().'/hsoftware.lic';
-        try {
-            $myfile = fopen($file, "w") or die("Unable to open file!");
-            fwrite($myfile, $json);
-            return 'Token descargado';
+        try{
+            $this->writeLicence($json);
+            return $json;
         } catch (\Throwable $th) {
-            // return $th;
-            return 'Token no descargado';
+            return 'Error escribiendo';
         }
+
+    }
+
+    public function writeLicence($json){
+        $file = base_path().'/hsoftware.lic';
+        $myfile = fopen($file, "w") or die("Unable to open file!");
+        fwrite($myfile, $json);
     }
     
     public function getUuid(){

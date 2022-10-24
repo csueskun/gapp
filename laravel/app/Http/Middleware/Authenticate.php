@@ -26,8 +26,8 @@ class Authenticate
             }
         } catch (\Throwable $th) {
             try {
-                $configController->downloadToken();
-                $token = $configController->readLicenceToken();
+                $token = $configController->downloadToken();
+                $token = unserialize(base64_decode($token));
                 if($token["li{$l}_{$v}{$c}"]&&!(date('Y-m-d H:i:s')<$token["li{$l}_hasta"])){
                     return response("Li{$l} {$v}cida.", 403);
                 }
