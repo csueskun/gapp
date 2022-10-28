@@ -218,7 +218,8 @@ td.has-feedback .form-control {
     padding: 16px 0px 12px 12px;
 }
 
-label.radio-inline>input[type="checkbox"]{
+label.radio-inline>input[type="checkbox"],
+label.radio-inline>input[type="radio"]{
     width: 20px;
     margin-right: 8px;
     vertical-align: sub;

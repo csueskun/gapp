@@ -23,88 +23,100 @@
         <br/>
         @include('template.status', ['status' => session('status')])
         
-    <form data-toggle = "validator" role = "form" action = "../editar" method="POST">
-        {{ csrf_field() }}
-        <input type="hidden" name="id" value="{{ $tipo_producto->id }}">
-        <input type="hidden" name="fracciones" value="">
-        <input type="hidden" name="tamanos" value="">
+        <form data-toggle = "validator" role = "form" action = "../editar" method="POST">
+            {{ csrf_field() }}
+            <input type="hidden" name="id" value="{{ $tipo_producto->id }}">
+            <input type="hidden" name="fracciones" value="">
+            <input type="hidden" name="tamanos" value="">
 
-        <div class = "col-md-6">
-            <div class = "form-group has-feedback">
-                <label for = "descripcion" class = "control-label">Descripcion *</label>
-                <input type = "text"  class = "form-control" id = "descripcion" name = "descripcion" required value = "{{ old('descripcion')?old('descripcion'):$tipo_producto->descripcion }}">
-                <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                <div class = "help-block with-errors">{{ $errors->first('descripcion') }}</div>
+            <div class = "col-md-6">
+                <div class = "form-group has-feedback">
+                    <label for = "descripcion" class = "control-label">Descripcion *</label>
+                    <input type = "text"  class = "form-control" id = "descripcion" name = "descripcion" required value = "{{ old('descripcion')?old('descripcion'):$tipo_producto->descripcion }}">
+                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                    <div class = "help-block with-errors">{{ $errors->first('descripcion') }}</div>
+                </div>
             </div>
-        </div>
-        <div class = "col-md-6">
-            <div class = "form-group has-feedback">
-                <label for = "impresora" class = "control-label">Impresora Dedicada</label>
-                <input type = "text"  class = "form-control" id = "impresora" name = "impresora" value = "{{ old('impresora')?old('impresora'):$tipo_producto->impresora }}">
-                <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
-                <div class = "help-block with-errors">{{ $errors->first('impresora') }}</div>
+            <div class = "col-md-6">
+                <div class = "form-group has-feedback">
+                    <label for = "impresora" class = "control-label">Impresora Dedicada</label>
+                    <input type = "text"  class = "form-control" id = "impresora" name = "impresora" value = "{{ old('impresora')?old('impresora'):$tipo_producto->impresora }}">
+                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                    <div class = "help-block with-errors">{{ $errors->first('impresora') }}</div>
+                </div>
             </div>
-        </div>
 
-        <div class = "col-md-12">
-            <div class = "form-group campo-radios">
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="1" name="aplica_tamanos" {{ $tipo_producto->aplica_tamanos == '1'?'checked':'' }}>Aplica Tamaños
-                </label>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="1" name="aplica_ingredientes" {{ $tipo_producto->aplica_ingredientes == '1'?'checked':'' }}>Aplica Ingredientes
-                </label>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="1" name="aplica_sabores" {{ $tipo_producto->aplica_sabores == '1'?'checked':'' }}>Aplica Sabores
-                </label>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="1" name="valor_editable" {{ $tipo_producto->valor_editable == '1'?'checked':'' }}>Valor editable
-                </label>
-                <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+            <div class = "col-md-12">
+                <div class = "form-group campo-radios">
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="1" name="aplica_tamanos" {{ $tipo_producto->aplica_tamanos == '1'?'checked':'' }}>Aplica Tamaños
+                    </label>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="1" name="aplica_ingredientes" {{ $tipo_producto->aplica_ingredientes == '1'?'checked':'' }}>Aplica Ingredientes
+                    </label>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="1" name="aplica_sabores" {{ $tipo_producto->aplica_sabores == '1'?'checked':'' }}>Aplica Sabores
+                    </label>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="1" name="valor_editable" {{ $tipo_producto->valor_editable == '1'?'checked':'' }}>Valor editable
+                    </label>
+                    <span class = "glyphicon form-control-feedback" aria-hidden = "true"></span>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-12">
-            <div class="form-group campo-radios" id="tamanos">
-                <label for = "descripcion" class = "control-label">Tamaños *</label><br/>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="grande" name="tamano">Grande
-                </label>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="extrag" name="tamano">Extra Grande
-                </label>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="mediano" name="tamano">Mediano
-                </label>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="pequeno" name="tamano">Pequeño
-                </label>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="porcion" name="tamano">Porción
-                </label>
+            <div class="col-md-12">
+                <div class="form-group campo-radios" id="tamanos">
+                    <label for = "descripcion" class = "control-label">Tamaños *</label><br/>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="grande" name="tamano">Grande
+                    </label>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="extrag" name="tamano">Extra Grande
+                    </label>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="mediano" name="tamano">Mediano
+                    </label>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="pequeno" name="tamano">Pequeño
+                    </label>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="porcion" name="tamano">Porción
+                    </label>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-12">
-            <div class="form-group campo-radios" id="fracciones">
-                <label for = "descripcion" class = "control-label">Fracciones *</label><br/>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input disabled checked type="checkbox" value="1/1" name="fraccion">1/1(Completa)
-                </label>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="2/2" name="fraccion">2/2(Mitades)
-                </label>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="3/3" name="fraccion">3/3(Tercios)
-                </label>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="4/4" name="fraccion">4/4(Cuartos)
-                </label>
-                <label class="radio-inline" style="margin-bottom: 10px">
-                    <input type="checkbox" value="3/4+1/4" name="fraccion">3/4 + 1/4
-                </label>
+            <div class="col-md-12">
+                <div class="form-group campo-radios" id="fracciones">
+                    <label for = "descripcion" class = "control-label">Fracciones *</label><br/>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input disabled checked type="checkbox" value="1/1" name="fraccion">1/1(Completa)
+                    </label>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="2/2" name="fraccion">2/2(Mitades)
+                    </label>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="3/3" name="fraccion">3/3(Tercios)
+                    </label>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="4/4" name="fraccion">4/4(Cuartos)
+                    </label>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="checkbox" value="3/4+1/4" name="fraccion">3/4 + 1/4
+                    </label>
+                </div>
             </div>
-        </div>
+
+            <div class="col-md-12">
+                <div class="form-group campo-radios" id="cobro">
+                    <label for = "descripcion" class = "control-label">Cobro con fracciones</label><br/>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input checked type="radio" value="0" name="cobro_fraccion"> &nbsp; Mayor valor
+                    </label>
+                    <label class="radio-inline" style="margin-bottom: 10px">
+                        <input type="radio" value="1" name="cobro_fraccion"> &nbsp; Promedio
+                    </label>
+                </div>
+            </div>
         
                     
             <div class = "col-xs-12">

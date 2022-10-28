@@ -86,6 +86,18 @@
         </div>
 
         <div class="col-md-12">
+            <div class="form-group campo-radios" id="cobro">
+                <label for = "descripcion" class = "control-label">Cobro con fracciones</label><br/>
+                <label class="radio-inline" style="margin-bottom: 10px">
+                    <input checked type="radio" value="0" name="cobro_fraccion"> &nbsp; Mayor valor
+                </label>
+                <label class="radio-inline" style="margin-bottom: 10px">
+                    <input type="radio" value="1" name="cobro_fraccion"> &nbsp; Promedio
+                </label>
+            </div>
+        </div>
+
+        <div class="col-md-12">
             <div class="form-group campo-radios" id="tamanos">
                 <label for = "descripcion" class = "control-label">Tamaños *</label><br/>
                 <label class="radio-inline" style="margin-bottom: 10px">
