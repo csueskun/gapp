@@ -71,7 +71,7 @@
                             <!-- <span class="fa fa-caret-right"></span>
                             <span class="fa fa-caret-left"></span> -->
                         </button>
-                        <div id="collapse{{$tipo->id}}" tipo_producto_id='{{$tipo->id}}' class="tipo_producto panel-collapse collapse" valor-editable="{{$tipo->valor_editable}}">
+                        <div id="collapse{{$tipo->id}}" tipo_producto_id='{{$tipo->id}}' class="tipo_producto panel-collapse collapse" valor-editable="{{$tipo->valor_editable}}" cobro-fraccion="{{$tipo->cobro_fraccion}}">
                             <form class="producto" tipo_producto_id='{{$tipo->id}}'>
                                 @if($tipo->aplica_tamanos!=1 && $tipo->aplica_sabores!=1 && $tipo->aplica_ingredientes!=1 && $tipo->valor_editable!=1 )
                                 <br/>

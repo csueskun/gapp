@@ -144,6 +144,8 @@
             }
         });
 
+        $('input[name=cobro_fraccion][value="{{$tipo_producto->cobro_fraccion}}"]').prop('checked', true)
+
 
         var json_fracciones = '{{$tipo_producto->fracciones}}'.replace(/&quot;/g,'"');
         if(json_fracciones!==''){
@@ -184,7 +186,7 @@
 
         $("input[name=fracciones]").val(JSON.stringify(fracciones));
         $("input[name=tamanos]").val(JSON.stringify(tamanos));
-
+        $('input[name=cobro_fraccion]').val($('div#cobro').find('input:radio:checked').val());
     });
 </script>
 @endsection

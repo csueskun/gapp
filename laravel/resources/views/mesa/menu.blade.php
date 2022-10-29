@@ -74,7 +74,7 @@
                         @continue
                         @endif
                         <a data-toggle="collapse" href="#collapse{{$tipo->id}}" class="titulo btn btn-default" role="button">{{$tipo->descripcion}}  <span class="fa fa-caret-down"></span><span class="fa fa-caret-up"></span></a>
-                        <div id="collapse{{$tipo->id}}" class="panel-collapse collapse" valor-editable="{{$tipo->valor_editable}}">
+                        <div id="collapse{{$tipo->id}}" class="panel-collapse collapse" valor-editable="{{$tipo->valor_editable}}" cobro-fraccion="{{$tipo->cobro_fraccion}}">
                             <form class="producto" tipo_producto_id='{{$tipo->id}}'>
                                 @if($tipo->aplica_tamanos!=1 && $tipo->aplica_sabores!=1 && $tipo->aplica_ingredientes!=1 && $tipo->valor_editable!=1 )
                                 <br/>

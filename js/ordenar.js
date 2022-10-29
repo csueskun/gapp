@@ -247,6 +247,8 @@ $("form.producto").submit(function (event) {
         }
     }
     if(fraccion>1){
+        var cobroPromedio = cobraFraccionPromedio($(this));
+        var valorPromedio = 0;
         interruptorBotonOcupado($(this).find("button[type=submit]"));
         producto_pedido.obs.tipo = "MIXTA";
         producto_pedido.obs.dist = distribucion;
@@ -266,6 +268,7 @@ $("form.producto").submit(function (event) {
             });
             var valor = $(this).find("select.fraccion[name=producto-f"+i+"] option:selected").attr(attr);
             valor = parseFloat(valor);
+            valorPromedio += valor;
             if(valor>valor_max){
                 valor_max = valor;
                 producto_modelo = i;
@@ -306,7 +309,6 @@ $("form.producto").submit(function (event) {
                 producto_pedido.obs.sin_ingredientes.push(sin_ingredientes[k]);
             }
         }
-
         producto.id = $(this).find("select.fraccion[name=producto-f"+producto_modelo+"]").val();
         if (producto.id==0){
             return false;
@@ -320,6 +322,10 @@ $("form.producto").submit(function (event) {
         var valor = $(this).find("select.fraccion[name=producto-f"+producto_modelo+"] option:selected").attr(attr);
         valor = parseFloat(valor);
         producto.valor = valor;
+        valorPromedio = valorPromedio/fraccion; 
+        if(cobroPromedio){
+            producto.valor = valorPromedio;
+        }
     }
     else{
         interruptorBotonOcupado($(this).find("button[type=submit]"));
@@ -433,6 +439,13 @@ function getValorSelectedTamanoUnico($form){
 }
 function isValorEditable($form){
     var attr = $form.closest("div.panel-collapse.collapse").attr('valor-editable');
+    if(attr=='1'){
+        return true;
+    }
+    return false;
+}
+function cobraFraccionPromedio($form){
+    var attr = $form.closest("div.panel-collapse.collapse").attr('cobro-fraccion');
     if(attr=='1'){
         return true;
     }

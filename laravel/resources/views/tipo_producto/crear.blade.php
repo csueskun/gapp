@@ -165,7 +165,7 @@
 
         $("input[name=fracciones]").val(JSON.stringify(fracciones));
         $("input[name=tamanos]").val(JSON.stringify(tamanos));
-
+        $('input[name=cobro_fraccion]').val($('div#cobro').find('input:radio:checked').val());
     });
 </script>
 @endsection

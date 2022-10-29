@@ -142,6 +142,7 @@ class TipoProductoController extends Controller
             $tipo_producto->aplica_sabores = Input::get("aplica_sabores");
             $tipo_producto->aplica_ingredientes = Input::get("aplica_ingredientes");
             $tipo_producto->valor_editable = Input::get("valor_editable");
+            $tipo_producto->cobro_fraccion = Input::get("cobro_fraccion");
             $tipo_producto->save();
         
             return Redirect::to('tipo_producto/crear')
@@ -168,6 +169,7 @@ class TipoProductoController extends Controller
             $tipo_producto->aplica_sabores = Input::get("aplica_sabores");
             $tipo_producto->aplica_ingredientes = Input::get("aplica_ingredientes");
             $tipo_producto->valor_editable = Input::get("valor_editable");
+            $tipo_producto->cobro_fraccion = Input::get("cobro_fraccion");
             $tipo_producto->save();
             return response()->json($tipo_producto);
         }
@@ -199,6 +201,7 @@ class TipoProductoController extends Controller
             $tipo_producto->aplica_sabores = Input::get("aplica_sabores");
             $tipo_producto->aplica_ingredientes = Input::get("aplica_ingredientes");
             $tipo_producto->valor_editable = Input::get("valor_editable");
+            $tipo_producto->cobro_fraccion = Input::get("cobro_fraccion");
             $tipo_producto->save();
         
             return Redirect::to('tipo_producto/editar/'.$tipo_producto->id)
