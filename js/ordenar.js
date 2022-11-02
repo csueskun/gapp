@@ -60,7 +60,7 @@ $(function () {
                 $(this).closest("form.producto").find("div.row._"+i).hide();
             }
         }
-
+        hideAllAdicionales();
         validarFormAgregarProducto($(this).closest("form"));
     });
     
@@ -73,26 +73,25 @@ $(function () {
 
         if(val==="porcion"){
             form.find("div.row.fracciones[id*='fracciones-']").hide();
-            form.find("div.row.contenedor-adicionales[id*='adicionales-']").hide();
+            // form.find("div.row.contenedor-adicionales[id*='adicionales-']").hide();
         }
         else{
             form.find("div.row.fracciones[id*='fracciones-']").show();
-            form.find("div.row.contenedor-adicionales[id*='adicionales-']").show();
+            // form.find("div.row.contenedor-adicionales[id*='adicionales-']").show();
         }
 
         form.find("div.contenedor-adicionales>label>input").removeAttr("checked");
         // form.find("div.contenedor-adicionales>label").hide();
-        form.find("div.contenedor-adicionales>label").css({'position': 'absolute', 'z-index': -1, 'display': 'none'});
+        // form.find("div.contenedor-adicionales>label").hide();
         // form.find("div.contenedor-adicionales-fraccion>label").hide();
-        form.find("div.contenedor-adicionales-fraccion>label").css({'position': 'absolute', 'z-index': -1, 'display': 'none'});
+        // form.find("div.contenedor-adicionales-fraccion>label").hide();
         // form.find("div.contenedor-adicionales>label.adicional-"+val).show();
-        form.find("div.contenedor-adicionales>label.adicional-"+val).removeAttr('style');
+        // form.find("div.contenedor-adicionales>label.adicional-"+val).removeAttr('style');
         // form.find("div.contenedor-adicionales-fraccion>label.adicional-"+val).show();
-        form.find("div.contenedor-adicionales-fraccion>label.adicional-"+val).removeAttr('style');
-
+        // form.find("div.contenedor-adicionales-fraccion>label.adicional-"+val).removeAttr('style');
         form.find("input[name=tamano-fraccion][value="+val+"]").prop('checked',true);
         form.find("select").val("0");
-        
+        hideAllAdicionales();
         validarFormAgregarProducto($(this).closest("form"));
     });
 
