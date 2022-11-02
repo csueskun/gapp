@@ -821,15 +821,7 @@
         });
 
         $('h3.adicionales-header').on('click', function(){
-            if($(this).hasClass('showing')){
-                $(this).html('Mostrar Adicionales');
-            }
-            else{
-                $(this).html('Ocultar Adicionales');
-            }
-            $(this).toggleClass('showing');
-            $(this).closest('div').find('label').fadeToggle("slow");
-            $(this).closest('div').find('.ingrediente-grupo-nombre').fadeToggle("slow");
+            toggleAdicionales($(this));
         });
         $('#modal_pagar').on('hidden.bs.modal', function () {
             savePropina();

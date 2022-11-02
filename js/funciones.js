@@ -538,3 +538,27 @@ function ajaxPut(url, data, done=blankFunction, fail=blankFunction, always=blank
     .fail(fail)
     .always(always);
 }
+
+function toggleAdicionales(e){
+    var tamano = e.closest('form').find('input[name=tamano-fraccion]:checked').val().toUpperCase();
+    var contenedor = e.closest('div');
+    contenedor.find('label').hide();
+    if(e.hasClass('showing')){
+        e.html('Mostrar Adicionales');
+        contenedor.find('.ingrediente-grupo-nombre.adiciona-grupo').hide();
+    }
+    else{
+        e.html('Ocultar Adicionales');
+        contenedor.find(`label.adicional-${tamano}`).show();
+        contenedor.find('.ingrediente-grupo-nombre.adiciona-grupo').show();
+    }
+    e.toggleClass('showing')
+}
+
+function hideAllAdicionales(){
+    var sel = 'label[class^="checkbox-inline adicional-"], ';
+    sel+= 'label[class^="adicional-"]';
+    $(sel).hide();
+    // $('.ingrediente-grupo-nombre.adiciona-grupo').hide();
+    $('.adicionales-header').removeClass('showing').html('Mostrar adicionales');
+}

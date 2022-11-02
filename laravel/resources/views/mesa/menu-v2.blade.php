@@ -200,12 +200,7 @@
                                 @foreach($tipo->adicionalesg as $key => $grupo)
                                     <div class="ingrediente-grupo-nombre adiciona-grupo" style="display: none">{{$key}}</div>
                                 @foreach($grupo as $adicional)
-                                    <label class="adicional-{{$adicional->pivot->tamano}}"
-                                           @if($tipo->aplica_tamanos=='1')
-                                           style="display: none; {{$adicional->pivot->tamano!='GRANDE'?'position:absolute;z-sition:absolute;z-index:-1':''}}">
-                                        @else
-                                            style="display: none; {{$adicional->pivot->tamano!='UNICO'?'position:absolute;z-index:-1':''}}">
-                                        @endif
+                                    <label class="adicional-{{$adicional->pivot->tamano}}" style="display: none">
                                         <img src="/images/ingrediente/{{$adicional->imagen}}" onerror="if (this.src != '/images/ingrediente/ingrediente.jpg') this.src = '/images/ingrediente/ingrediente.jpg';" height="80"/><br/>
                                         {{$adicional->descripcion}}<br/>$({{number_format($adicional->pivot->valor)}})<br/>
                                         <input value="{'id':'{{$adicional->pivot->id}}','nombre':'{{$adicional->descripcion}}',
@@ -272,12 +267,7 @@
                                 @foreach($tipo->adicionalesg as $key => $grupo)
                                 <div class="ingrediente-grupo-nombre adiciona-grupo" style="display: none">{{$key}}</div>
                                 @foreach($grupo as $adicional)
-                                <label class="checkbox-inline adicional-{{$adicional->pivot->tamano}}"
-                                     @if($tipo->aplica_tamanos=='1')
-                                     style="display: none; {{$adicional->pivot->tamano!='GRANDE'?'position:absolute;z-index:-1':''}}">
-                                     @else
-                                     style="display: none; {{$adicional->pivot->tamano!='UNICO'?'position:absolute;z-index:-1':''}}">
-                                     @endif
+                                <label class="checkbox-inline adicional-{{$adicional->pivot->tamano}}">
                                      <img src="/images/ingrediente/{{$adicional->imagen}}" onerror="if (this.src != '/images/ingrediente/ingrediente.jpg') this.src = '/images/ingrediente/ingrediente.jpg';" height="80"/><br/>
                                     <input value="{'id':'{{$adicional->pivot->id}}','unidad':'{{$adicional->unidad}}','ingrediente':'{{$adicional->id}}','nombre':'{{$adicional->descripcion}}','valor':'{{$adicional->pivot->valor}}','cantidad':'{{$adicional->pivot->cantidad}}'}" type="checkbox" name="adicional" value="">
                                         {{$adicional->descripcion}} {{$adicional->pivot->tamano}}<br/>$({{number_format($adicional->pivot->valor)}})
@@ -339,12 +329,7 @@
                                 @foreach($tipo->adicionalesg as $key => $grupo)
                                     <div class="ingrediente-grupo-nombre adiciona-grupo" style="display: none">{{$key}}</div>
                                 @foreach($grupo as $adicional)
-                                <label class="checkbox-inline adicional-{{$adicional->pivot->tamano}}"
-                                     @if($tipo->aplica_tamanos=='1')
-                                     style="display: none; {{$adicional->pivot->tamano!='GRANDE'?'position:absolute;z-index:-1':''}}">
-                                     @else
-                                     style="display: none; {{$adicional->pivot->tamano!='UNICO'?'position:absolute;z-index:-1':''}}">
-                                     @endif
+                                <label class="checkbox-inline adicional-{{$adicional->pivot->tamano}}">
                                     <img src="/images/ingrediente/{{$adicional->imagen}}" onerror="if (this.src != '/images/ingrediente/ingrediente.jpg') this.src = '/images/ingrediente/ingrediente.jpg';" height="80"/><br/>
                                     <input value="{'id':'{{$adicional->pivot->id}}','unidad':'{{$adicional->unidad}}','ingrediente':'{{$adicional->id}}','nombre':'{{$adicional->descripcion}}','valor':'{{$adicional->pivot->valor}}','cantidad':'{{$adicional->pivot->cantidad}}'}" type="checkbox" name="adicional" value="">{{$adicional->descripcion}}<br/>$({{number_format($adicional->pivot->valor)}})
                                 </label>
@@ -402,12 +387,7 @@
                                 @foreach($tipo->adicionalesg as $key => $grupo)
                                     <div class="ingrediente-grupo-nombre adiciona-grupo" style="display: none">{{$key}}</div>
                                 @foreach($grupo as $adicional)
-                                <label class="checkbox-inline adicional-{{$adicional->pivot->tamano}}"
-                                     @if($tipo->aplica_tamanos=='1')
-                                     style="display: none; {{$adicional->pivot->tamano!='GRANDE'?'position:absolute;z-index:-1':''}}">
-                                     @else
-                                     style="display: none; {{$adicional->pivot->tamano!='UNICO'?'position:absolute;z-index:-1':''}}">
-                                     @endif
+                                <label class="checkbox-inline adicional-{{$adicional->pivot->tamano}}">
                                     <img src="/images/ingrediente/{{$adicional->imagen}}" onerror="if (this.src != '/images/ingrediente/ingrediente.jpg') this.src = '/images/ingrediente/ingrediente.jpg';" height="80"/><br/>
                                     <input value="{'id':'{{$adicional->pivot->id}}','unidad':'{{$adicional->unidad}}','ingrediente':'{{$adicional->id}}','nombre':'{{$adicional->descripcion}}','valor':'{{$adicional->pivot->valor}}','cantidad':'{{$adicional->pivot->cantidad}}'}" type="checkbox" name="adicional" value="">{{$adicional->descripcion}}<br/>$({{number_format($adicional->pivot->valor)}})
                                 </label>
@@ -467,12 +447,7 @@
                                 @foreach($tipo->adicionalesg as $key => $grupo)
                                     <div class="ingrediente-grupo-nombre adiciona-grupo" style="display: none">{{$key}}</div>
                                 @foreach($grupo as $adicional)
-                                <label class="checkbox-inline adicional-{{$adicional->pivot->tamano}}"
-                                     @if($tipo->aplica_tamanos=='1')
-                                     style="display: none; {{$adicional->pivot->tamano!='GRANDE'?'position:absolute;z-index:-1':''}}">
-                                     @else
-                                     style="display: none; {{$adicional->pivot->tamano!='UNICO'?'position:absolute;z-index:-1':''}}">
-                                     @endif
+                                <label class="checkbox-inline adicional-{{$adicional->pivot->tamano}}">
                                      <img src="/images/ingrediente/{{$adicional->imagen}}" onerror="if (this.src != '/images/ingrediente/ingrediente.jpg') this.src = '/images/ingrediente/ingrediente.jpg';" height="80"/><br/>
                                     <input value="{'id':'{{$adicional->pivot->id}}','unidad':'{{$adicional->unidad}}','ingrediente':'{{$adicional->id}}','nombre':'{{$adicional->descripcion}}','valor':'{{$adicional->pivot->valor}}','cantidad':'{{$adicional->pivot->cantidad}}'}" type="checkbox" name="adicional" value="">{{$adicional->descripcion}}<br/>$({{number_format($adicional->pivot->valor)}})
                                 </label>
@@ -816,16 +791,10 @@
         });
 
         $('h3.adicionales-header').on('click', function(){
-            if($(this).hasClass('showing')){
-                $(this).html('Mostrar Adicionales');
-            }
-            else{
-                $(this).html('Ocultar Adicionales');
-            }
-            $(this).toggleClass('showing');
+            toggleAdicionales($(this));
+            // $(this).toggleClass('showing');
             // $(this).closest('div').find('label').fadeToggle("slow");
-            $(this).closest('div').find('label').hide();
-            $(this).closest('div').find('.ingrediente-grupo-nombre').fadeToggle("slow");
+            // $(this).closest('div').find('.ingrediente-grupo-nombre').fadeToggle("slow");
         });
         $('#modal_pagar').on('hidden.bs.modal', function () {
             savePropina();

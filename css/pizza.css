@@ -797,8 +797,8 @@ h3.adicionales-header:not(.showing){
     border: thin solid #bfd8bf;
 }
 h3.adicionales-header.showing{
-    color: #eea236;
-    background-color: #fbe4c3;
+    color: #eea236 !important;
+    background-color: #fbe4c3 !important;
 }
 #cambio select{
     font-size: 30px;
