@@ -212,7 +212,8 @@ class DocumentoController extends Controller
             SUM(paga_debito) debito, 
             sum(paga_credito) tcredito,
             sum(paga_transferencia) transferencia,
-            sum(paga_plataforma) plataforma 
+            sum(paga_plataforma) plataforma, 
+            sum(paga_puntos) puntos 
             FROM pizza_documento
             WHERE created_at >= $fecha_inicio
             AND created_at <= $fecha_fin 
@@ -531,7 +532,7 @@ class DocumentoController extends Controller
             SELECT sum(iva) impiva, sum(impco) impcon, sum(descuento) dcto, sum(
                 case when tipodoc in ('FV','BI','RC','CI') then paga_efectivo else (0) end) efectivo, 
             SUM(paga_debito) debito, SUM(paga_credito) tcredito, 
-            sum(paga_transferencia) transferencia, sum(paga_plataforma) plataforma
+            sum(paga_transferencia) transferencia, sum(paga_plataforma) plataforma, sum(paga_puntos) puntos
             FROM pizza_documento
             WHERE created_at >= $fecha_inicio
             AND created_at <= $fecha_fin 
@@ -898,6 +899,7 @@ class DocumentoController extends Controller
         $documento->total = 0;
         $documento->total_iva = 0;
         $documento->paga_efectivo = 0;
+        $documento->paga_puntos = 0;
         $documento->paga_transferencia = 0;
         $documento->paga_plataforma = 0;
         $documento->paga_debito = 0;

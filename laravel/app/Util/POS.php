@@ -734,6 +734,10 @@ class POS{
                 $texto.= self::impLinea("Plataforma", ' $'.number_format($documento->paga_plataforma, 0), $caracteres);
                 $impMedios = true;
             }
+            if($documento->paga_puntos != null && $documento->paga_puntos != ''){
+                $texto.= self::impLinea("Plataforma", ' $'.number_format($documento->paga_puntos, 0), $caracteres);
+                $impMedios = true;
+            }
             if($impMedios){
                 $texto = 'Forma de pago:'.("\n").$texto;
                 $texto.= ("\n");
@@ -985,6 +989,7 @@ class POS{
             $linea.= self::impLinea('CRÉDITO','$'.number_format($t->tcredito,0),$caracteres);
             $linea.= self::impLinea('TRANSFERENCIA','$'.number_format($t->transferencia,0),$caracteres);
             $linea.= self::impLinea('PLATAFORMA','$'.number_format($t->plataforma,0),$caracteres);
+            $linea.= self::impLinea('PUNTOS','$'.number_format($t->puntos,0),$caracteres);
             $stack[] = ["i"=>"texto","v"=>$linea];
         }
         $linea = '';

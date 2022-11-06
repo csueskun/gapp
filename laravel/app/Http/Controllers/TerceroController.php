@@ -37,6 +37,11 @@ class TerceroController extends Controller
     public function encontrar($id) {
         return Tercero::find($id);
     }
+    public function puntos($id) {
+        $tercero = Tercero::find($id);
+        return response(['code'=>200, 'data'=>$tercero->puntosacumulados], 200)
+        ->header('Content-Type', 'application/json');
+    }
     
     public function encontrarPorCampo($campo, $buscar) {
         return Tercero::where($campo, $buscar)->get();

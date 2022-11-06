@@ -1079,6 +1079,7 @@ function impItemPedido(productos_pedido){
                         '<input type = "hidden" name = "_token" value = "' + $('meta[name=csrf-token]').attr('content') + '" >' +
                         '<input type = "hidden" name = "id" value = "' + pedido_id + '" / >' +
                         '<input type="hidden" name="_method" value="POST">' +
+                        '<input type = "hidden" name = "paga_puntos" value = "" / >' +
                         '<input type = "hidden" name = "paga_efectivo" value = "" / >' +
                         '<input type = "hidden" name = "paga_debito" value = "" / >' +
                         '<input type = "hidden" name = "paga_credito" value = "" / >' +
@@ -1088,6 +1089,7 @@ function impItemPedido(productos_pedido){
                         '<input type = "hidden" name = "banco" value = "" / >' +
                         '<input type = "hidden" name = "debe" value = "" / >' +
                         '<input type = "hidden" name = "descuento" value = "" / >' +
+                        '<input type = "hidden" name = "tercero" value = "" / >' +
                         '</form>  ';
         html+="<button id='boton-observaciones' class=\"btn btn-warning boton-inline-grande\" onclick='abrirObservaciones()' type=\"button\"><i class=\"glyphicon glyphicon-edit\"></i> Observaciones</button>";
         if(mesa != '0'){
@@ -1469,8 +1471,15 @@ function submitFix(form){
 function actualizarCambio(){
     var input_total = $("div#cambio td#cambio_total>input");
     var total = $('ul#total.items_pedido span.total.valor');
-    if(observaciones.cliente!=null) $("div#cambio td#tercero_des input").val(observaciones.cliente+' '+observaciones.identificacion);
-    else $("div#cambio td#tercero_des input").val('VARIOS');
+    if(observaciones.cliente_id){
+        $("div#cambio td#tercero_des input").val(observaciones.cliente+' '+observaciones.identificacion);
+        getClientePuntos(observaciones.cliente_id);
+        $("#form-pagar input[name=tercero]").val(observaciones.cliente_id);
+    }
+    else{
+        $("div#cambio td#tercero_des input").val('VARIOS');
+        $("#form-pagar input[name=tercero]").val('');
+    };
     input_total.val(total.attr('total'));
     calcularCambio();
     calcularPropina();
@@ -1478,6 +1487,43 @@ function actualizarCambio(){
     // setTimeout(savePropina, 1000);
 }
 
+function getClientePuntos(id){
+    observaciones.cliente_puntos = 0;
+    $.get("/tercero/"+id+"/puntos", function (data) {
+        if(data.code==200){
+            observaciones.cliente_puntos = data.data;
+            $("div#cambio td#puntos_des input").val(observaciones.cliente_puntos);
+            if(!observaciones.cliente_puntos){
+                $('button.puntos-toggle').hide();
+            }
+        }
+    });
+}
+
+function usarPuntos(){
+    var puntos = parseFloat($("div#cambio td#puntos_des input.curr").inputmask('unmaskedvalue'));
+    if(!puntos){
+        return false;
+    }
+    $('button.puntos-toggle').toggle();
+    $("input[name^=paga_]").val(0);
+    calcularCambio();
+    var subtotal = parseFloat($("td#cambio_total>input").inputmask('unmaskedvalue'));
+    var descuento = parseFloat($("td#descuento table input.curr").inputmask('unmaskedvalue'));
+    var propina = parseFloat($("td#propina table input.curr").inputmask('unmaskedvalue'));
+    var total = subtotal+(isNaN(descuento)?0:descuento)+propina;
+    if(total<puntos){
+        puntos = total;
+    }
+    $("div#cambio td#paga_puntos input.curr").val(puntos);
+    calcularCambio();
+}
+
+function clearPuntos(){
+    $("div#cambio td#paga_puntos input.curr").val(0);
+    calcularCambio();
+    $('button.puntos-toggle').toggle();
+}
 
 function paraLlevar(){
     var campo = $("input#llevar-mesa");
@@ -1652,6 +1698,7 @@ function imprimiendo(){
 
 function preEnviarFormPagar(){
     savePropina();
+    var pagaPu = parseFloat($("div#cambio td#paga_puntos input").inputmask('unmaskedvalue'));
     var pagaE = parseFloat($("td#paga_efectivo>input").inputmask('unmaskedvalue'));
     var pagaD = parseFloat($("td#paga_debito>input").inputmask('unmaskedvalue'));
     var pagaC = parseFloat($("td#paga_credito>input").inputmask('unmaskedvalue'));
@@ -1689,6 +1736,7 @@ function preEnviarFormPagar(){
 
     $f = $("#form-pagar");
     $f.find('input[name=paga_efectivo]').val(isNaN(pagaE)?0:pagaE);
+    $f.find('input[name=paga_puntos]').val(isNaN(pagaPu)?0:pagaPu);
     $f.find('input[name=paga_debito]').val(isNaN(pagaD)?0:pagaD);
     $f.find('input[name=paga_credito]').val(isNaN(pagaC)?0:pagaC);
     $f.find('input[name=paga_transferencia]').val(isNaN(pagaT)?0:pagaT);
@@ -1803,6 +1851,7 @@ function toggleOtrosMedios(viendo){
     calcularCambio();
 }
 function calcularCambio(){
+    var pagaPu = parseFloat($("div#cambio td#paga_puntos input").inputmask('unmaskedvalue'));
     var pagaE = parseFloat($("td#paga_efectivo>input").inputmask('unmaskedvalue'));
     var pagaD = parseFloat($("td#paga_debito>input").inputmask('unmaskedvalue'));
     var pagaC = parseFloat($("td#paga_credito>input").inputmask('unmaskedvalue'));
@@ -1813,7 +1862,7 @@ function calcularCambio(){
     var propina = parseFloat($("td#propina table input.curr").inputmask('unmaskedvalue'));
     descuento = !isNaN(descuento)?descuento:0;
     propina = !isNaN(propina)?propina:0;
-    var cambio = (!isNaN(pagaE)?pagaE:0)+(!isNaN(pagaD)?pagaD:0)+(!isNaN(pagaC)?pagaC:0)+(!isNaN(pagaT)?pagaT:0)+(!isNaN(pagaP)?pagaP:0)-total + descuento - propina;
+    var cambio = (!isNaN(pagaPu)?pagaPu:0)+(!isNaN(pagaE)?pagaE:0)+(!isNaN(pagaD)?pagaD:0)+(!isNaN(pagaC)?pagaC:0)+(!isNaN(pagaT)?pagaT:0)+(!isNaN(pagaP)?pagaP:0)-total + descuento - propina;
     if(cambio<0){
         cambio = -cambio;
         $("td#debiendo").show();

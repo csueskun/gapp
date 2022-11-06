@@ -145,8 +145,6 @@ class PedidoController extends Controller
     }
     
     public function pagar($id, $estado, $formaPago=[]) {
-
-
         $pedido = Pedido::where("id", $id)->with("productos")->first();
         if($pedido->estado == 2 || $pedido->estado == 4){
             if($pedido->estado == 4){
@@ -163,6 +161,7 @@ class PedidoController extends Controller
         }
         $pedido->estado = $estado;
         $this->getTerceroData($pedido);
+        
         $pedido->save();
         if($pedido != null){
             $controller = app('App\Http\Controllers\ProductoPedidoController');
@@ -186,6 +185,7 @@ class PedidoController extends Controller
         $documento->caja_id = $pedido->caja_id;
         $documento->tercero_id = $pedido->tercero_id;
         $documento->paga_efectivo = isset($formaPago['paga_efectivo'])?$formaPago['paga_efectivo']:null;
+        $documento->paga_puntos = isset($formaPago['paga_puntos'])?$formaPago['paga_puntos']:null;
         $documento->paga_debito = isset($formaPago['paga_debito'])?$formaPago['paga_debito']:null;
         $documento->paga_credito = isset($formaPago['paga_credito'])?$formaPago['paga_credito']:null;
         $documento->paga_transferencia = isset($formaPago['paga_transferencia'])?$formaPago['paga_transferencia']:null;
@@ -196,7 +196,6 @@ class PedidoController extends Controller
         $documento->descuento = isset($formaPago['descuento'])?$formaPago['descuento']:null;
         $documento->iva = 0;
         $documento->impco = 0;
-
         
         $tipo_documento_ = app('App\Http\Controllers\TipoDocumentoController')->siguienteTipo($documento->tipodoc);
         // $documento->numdoc = str_pad($tipo_documento_->consecutivo, 8, "0", STR_PAD_LEFT);
@@ -305,7 +304,16 @@ class PedidoController extends Controller
             $this->createDetalleFromAdicionalFraccion($detalles_adicional->$key, $documento->id);
         }
         $documento->save();
-        
+        $this->canjearPuntos($documento->tercero_id, $documento->paga_puntos);
+    }
+    protected function canjearPuntos($tercero, $puntos){
+        if(!$tercero||!$puntos){
+            return false;
+        }
+        $tercero = Tercero::find($tercero);
+        $tercero->puntosacumulados -= $puntos;
+        $tercero->save();
+        return true;
     }
     protected function getTerceroData($pedido){
         $sumaPuntos = true;
@@ -388,9 +396,10 @@ class PedidoController extends Controller
         $detalleDocumento->detalle = "EXTRA ".$adicionalFraccion->nombre;
         $detalleDocumento->save();
     }
-    public function pagarPorId() {
+    public function pagarPorId(Request $request) {
         $formaPago = [];
         $formaPago['paga_efectivo'] = Input::get('paga_efectivo');
+        $formaPago['paga_puntos'] = Input::get('paga_puntos');
         $formaPago['paga_debito'] = Input::get('paga_debito');
         $formaPago['paga_credito'] = Input::get('paga_credito');
         $formaPago['paga_transferencia'] = Input::get('paga_transferencia');
@@ -399,9 +408,32 @@ class PedidoController extends Controller
         $formaPago['banco'] = Input::get('banco');
         $formaPago['debe'] = Input::get('debe');
         $formaPago['descuento'] = Input::get('descuento');
+        $formaPago['tercero'] = Input::get('tercero');
+
+        if(intval($formaPago['paga_puntos'])){
+            $back = url()->previous();
+            if(str_contains($back, '?')){
+                $back .= '&msg=pi';
+            }
+            else{
+                $back .= '?msg=pi';
+            }
+            if(!$this->validarPuntos($formaPago['tercero'], $formaPago['paga_puntos'])){
+                return Redirect::to($back);
+            }
+        }
         $this->pagar(Input::get('id'), 2, $formaPago);
         return Redirect::to('/pedido/ver/'.Input::get('id'))
                         ->with('status', ["success-contenido" => "Pedido Pagado y Archivado."]);
+    }
+    public function validarPuntos($tercero, $canjear) {
+        try {
+            $t = Tercero::find($tercero);
+            echo $t->puntosacumulados;
+            return $t->puntosacumulados >= intval($canjear);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function pagarImprimirPorId($id) {
         $this->pagar($id, 4);
@@ -1280,6 +1312,9 @@ class PedidoController extends Controller
         $msg = $request['msg'];
         if($msg == 'ml'){
             $msg = ['success' =>'Mesa liberada. Puede retomar el pedido desde la opción "Pedidos Activos"'];
+        }
+        elseif($msg == 'pi'){
+            $msg = ['danger' =>'Los puntos del cliente no son suficientes'];
         }
         else{
             $msg = [];

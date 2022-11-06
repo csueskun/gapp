@@ -532,20 +532,26 @@ Route::post('/documento/{id}/anular', 'DocumentoController@anular')->middleware(
 /*-------------------------------------------------------------------------
 |           Rutas Tercero
 |------------------------------------------------------------------------*/
-Route::get('/tercero', 'TerceroController@vistaLista');
-Route::get('/api/terceros', 'TerceroController@getTerceros');
-Route::get('/tercero/crear', 'TerceroController@vistaCrear');
-Route::get('/tercero/{id}/editar', 'TerceroController@vistaEditar');
 
-Route::get('/tercero/buscar/{buscar}', 'TerceroController@buscar');
-Route::get('/tercero/paginar', 'TerceroController@paginar_modal');
-Route::post('/tercero/', 'TerceroController@crear');
-Route::post('/tercero/modal/', 'TerceroController@crearModal');
-Route::post('/new-tercero/', 'TerceroController@crearIf');
-Route::put('/tercero/', 'TerceroController@editar');
-Route::put('/tercero/modal', 'TerceroController@editarModal');
-Route::delete('/tercero/', 'TerceroController@borrar');
-Route::delete('/tercero/modal', 'TerceroController@borrarModal');
+Route::group(['middleware' => 'auth'], function () {
+    
+    Route::get('/tercero', 'TerceroController@vistaLista');
+    Route::get('/api/terceros', 'TerceroController@getTerceros');
+    Route::get('/tercero/crear', 'TerceroController@vistaCrear');
+    Route::get('/tercero/{id}/editar', 'TerceroController@vistaEditar');
+    
+    Route::get('/tercero/buscar/{buscar}', 'TerceroController@buscar');
+    Route::get('/tercero/paginar', 'TerceroController@paginar_modal');
+    Route::post('/tercero/', 'TerceroController@crear');
+    Route::post('/tercero/modal/', 'TerceroController@crearModal');
+    Route::post('/new-tercero/', 'TerceroController@crearIf');
+    Route::put('/tercero/', 'TerceroController@editar');
+    Route::put('/tercero/modal', 'TerceroController@editarModal');
+    Route::delete('/tercero/', 'TerceroController@borrar');
+    Route::delete('/tercero/modal', 'TerceroController@borrarModal');
+    Route::get('/tercero/{id}/puntos', 'TerceroController@puntos');
+    
+});
 
 
 Route::get('/cocina', 'CocinaController@vistaCocina');

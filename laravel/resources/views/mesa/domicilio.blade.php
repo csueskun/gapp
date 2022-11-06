@@ -12,11 +12,24 @@
                                 <td class="label">Tercero</td><td id='tercero_des'><input readonly name="tercero_des" class="form-control"/></td>
                             </tr>
                             <tr>
+                                <td class="label">Puntos disponibles&nbsp;&nbsp;</td><td id='puntos_des'><input readonly name="puntos_des" class="form-control curr"/></td>
+                            </tr>
+                            <tr><td>&nbsp;</td></tr>
+                            <tr>
                                 <td class="label">Total</td><td width="400px" id='cambio_total'><input name="" class="form-control curr" readonly/></td>
                             </tr>
                             <tr>
                                 <td class="label">Efectivo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                 <td id='paga_efectivo'><input name="paga_efectivo" onkeyup="calcularCambio()" class="form-control curr"/></td>
+                            </tr>
+                            <tr>
+                                <td class="label">Puntos&nbsp;
+                                    <button onclick="usarPuntos()" type='button' class="puntos-toggle btn btn-success btn-sm fuente bebas" style="
+                                    padding: 0px 10px; font-size: 11px;font-size: 20px; width: 96px;">Canjear</button>
+                                    <button onclick="clearPuntos()" type='button' class="puntos-toggle btn btn-danger btn-sm fuente bebas" style="
+                                    padding: 0px 10px; font-size: 11px;font-size: 20px; display: none; width: 96px;">NO CANJEAR</button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td id='paga_puntos'><input name="paga_puntos" readonly class="form-control curr"/></td>
                             </tr>
 
                             <tr>

@@ -90,6 +90,7 @@
             <th class="right">Pago en crédito</th>
             <th class="right">Pago en transferencia</th>
             <th class="right">Pago en plataforma</th>
+            <th class="right">Pago en puntos</th>
             <th class="right">Total</th>
         </tr>
     </thead>
@@ -109,14 +110,15 @@
             "b10"=>"OTRO",
             
         ];
-        $total = [0, 0, 0, 0, 0, 0];
+        $total = [0, 0, 0, 0, 0, 0, 0];
         foreach($pagos as $pago){
             $total[0]+=$pago->efectivo;
             $total[1]+=$pago->debito;
             $total[2]+=$pago->credito;
             $total[3]+=$pago->transferencia;
             $total[4]+=$pago->plataforma;
-            $total[5]+=$pago->total;
+            $total[5]+=$pago->plataforma;
+            $total[6]+=$pago->total;
             ?>
             <tr>
                 <td><?= array_key_exists('b'.$pago->formapago, $bancos)?$bancos['b'.$pago->formapago]:$pago->formapago ?></td>
@@ -125,6 +127,7 @@
                 <td class="right"><?= number_format($pago->credito,0) ?></td>
                 <td class="right"><?= number_format($pago->transferencia,0) ?></td>
                 <td class="right"><?= number_format($pago->plataforma,0) ?></td>
+                <td class="right"><?= number_format($pago->puntos,0) ?></td>
                 <td class="right"><?= number_format($pago->total,0) ?></td>
             </tr>
         <?php } ?>
@@ -136,6 +139,7 @@
             <th class="right"><?= number_format($total[3],0) ?></th>
             <th class="right"><?= number_format($total[4],0) ?></th>
             <th class="right"><?= number_format($total[5],0) ?></th>
+            <th class="right"><?= number_format($total[6],0) ?></th>
         </tr>
     </tbody>
 </table>

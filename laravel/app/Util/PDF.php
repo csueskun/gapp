@@ -362,6 +362,8 @@ class PDF{
                 $linea .= '<tr><td colspan="2" class="overflow"><hr></td></tr>';
                 $linea.= "<tr><td class='al-izq letra-sans mediana'>PLATAFORMA</td><td style='width: 180px;font-size: 1.3em;' class='al-der color-verde'>$ " . number_format($t->plataforma) . "</td></tr>";
                 $linea .= '<tr><td colspan="2" class="overflow"><hr></td></tr>';
+                $linea.= "<tr><td class='al-izq letra-sans mediana'>PUNTOS</td><td style='width: 180px;font-size: 1.3em;' class='al-der color-verde'>$ " . number_format($t->puntos) . "</td></tr>";
+                $linea .= '<tr><td colspan="2" class="overflow"><hr></td></tr>';
                 $linea .= '</table>';
             }
             $html.=$linea;
