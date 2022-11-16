@@ -6,9 +6,11 @@
 {{ Html::script('js/datatables.min.js') }}
 {{ Html::script('js/dataTables.bootstrap.min.js') }}
 {{ Html::script('bootstrap-3.3.6-dist/js/confirmation.js') }}
+{{ Html::style('css/jquery-confirm.min.css') }}
 {{ Html::script('/js/bootstrap-datetimepicker.min.js') }}
 {{ Html::script('/js/bootstrap-datetimepicker.es.js') }}
 {{ Html::style('/css/bootstrap-datetimepicker.min.css') }}
+{{ Html::script('js/jquery-confirm.min.js') }}
 
 @endsection
 
@@ -22,6 +24,10 @@
             <button class="f20 btn btn-success font bebas" onclick="generateExcel()">
                 <span class="fa fa-file-excel-o" aria-hidden="true"></span>
                 Exportar a Excel
+            </button>
+            <button class="f20 btn btn-warning font bebas" onclick="preImportarInventario()">
+                <span class="fa fa-file-excel-o" aria-hidden="true"></span>
+                Importar Inventario
             </button>
             <button class="f20 btn btn-primary busy font bebas" onclick="printPos()">
                 <span class="fa fa-print" aria-hidden="true"></span>
@@ -202,86 +208,9 @@
     <input type="hidden" name="data" value="">
 </form>
 
-<script>
-    function generarDetallado(){
-        window.open('/inventario/detallado/?'+$("#detallado form").serialize(), '_blank')
-    }
-    function generateExcel(){
-        $('button.busy').attr('disabled', true);
-        $('button.busy span').addClass('fa-spin');
-        $.get('/saldos_producto/excel', function (data) {
-            if(data.code == 200){
-                $('form#excel input').val(JSON.stringify(data.msg));
-                $('form#excel').submit();
-            }
-            $('button.busy').attr('disabled', false);
-            $('button.busy span').removeClass('fa-spin');
-        });
-    }
-    function printPos(){
-        $('button.busy').attr('disabled', true);
-        $('button.busy span').addClass('fa-spin');
-        $.get('/config/servicio-impresion', function (data) {
-            servicio_impresion = data;
-            $.post("/inventario/pos", {}, function (data) {
-                //console.log(data);
-                // enviarAServicioImpresion(servicio_impresion+'?stack='+JSON.stringify(data));
-                enviarAServicioImpresionPost(servicio_impresion, data);
-                $('button.busy').attr('disabled', false);
-                $('button.busy span').removeClass('fa-spin');
-            });
-        });
-    }
-    function printPosx(){
-        $.get('/config/servicio-impresion', function (data) {
-            servicio_impresion = data;
-            $.post("/caja/cuadre-post", {}, function (data) {
-                console.log(data);
-                //enviarAServicioImpresion(servicio_impresion+'?stack='+JSON.stringify(data))
-            });
-        });
-    }
+<input id="importar-button" type="file" onchange="preUploadFile(this)" class="hidden">
 
-    function enviarAServicioImpresion(url){
-        $.ajax({
-            url: url,
-            headers: {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Credentials":"true"},
-            type: 'GET',
-            // This is the important part
-            crossDomain: true,
-            dataType: "jsonp",
-            xhrFields: {
-                withCredentials: true,
-
-            },
-            // This is the important part
-            success: function (response) {
-                // handle the response
-            },
-            error: function (xhr, status) {
-                // handle errors
-            }
-        });
-    }
-    $(function() {
-        $('[data-toggle=confirmation]').confirmation(
-        {
-            buttons: [
-                {
-                  class: 'btn btn-primary',
-                  label: 'Detallado',
-                  icon: 'glyphicon glyphicon-pencil',
-                  onClick: function() {
-                    $("#detallado form input[name=id]").val($(this).closest("tr").attr("producto_id"));
-                    $("#detallado form input[name=tipo]").val($(this).closest("tr").attr("tipo"));
-                    $('#detallado').modal('toggle');
-                  }
-                },
-            ]
-          }
-        );
-    });
-</script>
+{{ Html::script('js/inventario.js') }}
 <style>
 .popover-title{
     display: none;

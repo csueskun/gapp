@@ -429,7 +429,6 @@ class PedidoController extends Controller
     public function validarPuntos($tercero, $canjear) {
         try {
             $t = Tercero::find($tercero);
-            echo $t->puntosacumulados;
             return $t->puntosacumulados >= intval($canjear);
         } catch (\Throwable $th) {
             return false;

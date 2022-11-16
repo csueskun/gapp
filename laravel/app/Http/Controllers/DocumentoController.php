@@ -1143,4 +1143,51 @@ class DocumentoController extends Controller
         }
         return $dia_operativo;
     }
+
+    public function inventarioImportRowToDocumento($inventario){
+        $documento = new Documento;
+        $documento->tipodoc = 'NI';
+        $tipo = app('App\Http\Controllers\TipoDocumentoController')->siguienteTipo('NI');
+        $documento->numdoc = strval($tipo->consecutivo);
+        $documento->mesa_id=999;
+        $documento->pedido_id=0;
+        $documento->total=0;
+        $documento->tercero_id=0;
+        $documento->paga_efectivo=0;
+        $documento->paga_transferencia=0;
+        $documento->paga_debito=0;
+        $documento->paga_credito=0;
+        $documento->paga_credito=0;
+        $documento->paga_plataforma=0;
+        $documento->banco=0;
+        $documento->debe=0;
+        $documento->descuento=0;
+        $documento->iva=0;
+        $documento->impco=0;
+        $documento->caja_id=Auth::user()->caja_id;
+        $documento->tipoie='I';
+        $documento->codprefijo='00';
+        $documento->usuario_id=Auth::user()->id;
+        $documento->save();
+        if($documento->id){
+            $tipo->aumentarConsecutivo();
+            foreach ($inventario as $item){
+                $this->inventarioRowToDetalle($documento->id, $item);
+            }    
+        }
+        return false;
+    }
+
+    protected function inventarioRowToDetalle($documento, $row){
+        $attribute = $row['IDI']?'ingrediente_id':'producto_id';
+        $attributeId = $row['IDI']?:$row['IDP'];
+        $detalle = new DetalleDocumento;
+        $detalle->documento_id = $documento;
+        $detalle->$attribute = $attributeId;
+        $detalle->cantidad = floatval($row['ENTREGADO']);
+        $detalle->detalle = $row['NOMBRE'];
+        $detalle->valor = 0;
+        $detalle->total = 0;
+        $detalle->save();
+    }
 }

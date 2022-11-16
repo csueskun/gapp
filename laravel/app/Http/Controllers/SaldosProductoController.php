@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 use App\SaldosProducto;
 use App\ProductoIngrediente;
+use App\Producto;
+use App\Ingrediente;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Carbon\Carbon;
 use DB;
 
 class SaldosProductoController extends Controller
@@ -950,6 +955,190 @@ class SaldosProductoController extends Controller
         }
         return '777';
     }
+
+    public function importar(Request $request){
+        $file = $request->file('file');
+        $location = base_path().'/storage/csv';
+        $extension = $file->getClientOriginalExtension();
+        $save_as = 'inventario.'.$extension;
+        $file->move($location, $save_as);
+        if(!$file){
+            return $this->respond(Response::HTTP_NOT_FOUND);
+        }
+        $csv = array_map('str_getcsv', file($location.'/'.$save_as));
+        try {
+            array_walk($csv, function(&$a) use ($csv) {
+                $a = array_combine($csv[0], $a);
+            });
+            array_shift($csv);
+        } catch (\Throwable $th) {
+            return $this->respond(400, []);
+        }
+        $updated = [];
+        foreach ($csv as $row) {
+            if($this->importRowIsInvalid($row)){
+                continue;
+            }
+            if($this->upsertImportRow($row)){
+                $updated[] = $row;
+            };
+        }
+        app('App\Http\Controllers\DocumentoController')->inventarioImportRowToDocumento($updated);
+        return response()->json(array('code'=>200, 'updated'=>count($updated)));
+    }
+
+    protected function importRowIsInvalid($row){
+        try {
+            if(!$row['IDI']&&!$row['IDP']){
+                return true;
+            }
+            if($row['ENTREGADO']=="0"){
+                return true;
+            }
+            return !is_numeric($row['ENTREGADO']);
+        } catch (\Throwable $th) {
+            return true;
+        }
+    }
+
+    protected function upsertImportRow($row){
+        if($row['IDI']){
+            $where = 'ingrediente_id';
+            $condition = $row['IDI'];
+        }
+        elseif ($row['IDP']){
+            $where = 'producto_id';
+            $condition = $row['IDP'];
+        }
+        $saldo = SaldosProducto::where($where, $condition)->first();
+        if($saldo){
+            $existencia = $saldo->existencia;
+            $saldo->existencia = $existencia+floatval($row['ENTREGADO']);
+            try {
+                $saldo->save();
+            } catch (\Throwable $th) {
+                return false;
+            }
+        }
+        else{
+            $fields = [
+                'existencia', 'existencia_max', 
+                'existencia_min', 'entradas00', 
+                'entradas01', 'entradas02', 'entradas03', 
+                'entradas04', 'entradas05', 'entradas06', 
+                'entradas07', 'entradas08', 'entradas09', 
+                'entradas10', 'entradas11', 'entradas12', 
+                'salidas00', 'salidas01', 'salidas02', 
+                'salidas03', 'salidas04', 'salidas05', 
+                'salidas06', 'salidas07', 'salidas08', 
+                'salidas09', 'salidas10', 'salidas11', 
+                'salidas12', ];
+            $saldo = new SaldosProducto;
+            foreach ($fields as $field) {
+                $saldo->$field = 0;
+                $saldo->$where = $condition;
+            }
+            try {
+                $saldo->save();
+            } catch (\Throwable $th) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function exportTemplate(){
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=Saldos.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        $saldos = SaldosProducto::all();
+        $columns = array(
+            'IDI', 'IDP', 'NOMBRE', 'EXISTENCIA', 
+            'UNIDAD', 'MIN', 'MAX', 'ENTREGADO');
+
+        $callback = function() use ($saldos, $columns)
+        {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            $ingredientesId = [];
+            $productosId = [];
+            $ingredientes = Ingrediente::all()->keyBy('id');
+            $productos = Producto::where('terminado', 1)->get()->keyBy('id');
+            foreach($saldos as $saldo) {
+                $unidad = '';
+                $nombre = '';
+                $ids = ['', ''];
+                try {
+                    if($saldo->producto_id){
+                        $producto = $productos[$saldo->producto_id];
+                        $nombre = $producto->descripcion;
+                        $unidad = $producto->unidad?:'und';
+                        $ids[1] = $producto->id;
+                        $productosId[] = $producto->id;
+                    }
+                    elseif($saldo->ingrediente_id){
+                        $ingrediente = $ingredientes[$saldo->ingrediente_id];
+                        $nombre = $ingrediente->descripcion;
+                        $unidad = $ingrediente->unidad;
+                        $ids[0] = $ingrediente->id;
+                        $ingredientesId[] = $ingrediente->id;
+                    }
+                    else{
+                        continue;
+                    }
+                } catch (\Throwable $th) {
+                    continue;
+                }
+                fputcsv($file, array(
+                    $ids[0],
+                    $ids[1],
+                    $nombre,
+                    $saldo->existencia,
+                    $unidad,
+                    $saldo->existencia_min,
+                    $saldo->existencia_max,
+                    0
+                ));
+            }
+            foreach($productos as $producto){
+                if(in_array($producto->id, $productosId)){
+                    continue;
+                }
+                $productosId[] = $productosId;
+                fputcsv($file, array(
+                    '',
+                    $producto->id,
+                    $producto->descripcion,
+                    0,
+                    $producto->unidad?:'und',
+                    0, 0, 0
+                ));
+            }
+            foreach($ingredientes as $ingrediente){
+                if(in_array($ingrediente->id, $ingredientesId)){
+                    continue;
+                }
+                $ingredientesId[] = $ingredientesId;
+                fputcsv($file, array(
+                    $ingrediente->id,
+                    '',
+                    $ingrediente->descripcion,
+                    0,
+                    $ingrediente->unidad?:'und',
+                    0, 0, 0
+                ));
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
+    }
+
     
     //<
     //>

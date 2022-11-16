@@ -437,6 +437,24 @@ function enviarAServicioImpresionPost(url,data,drawer=0, prepared=false){
         }
     });
 }
+function uploadFile(url, form_data, onSuccess=blankFunction, 
+        onError=blankFunction, always=blankFunction){
+    $.ajax({
+        url: url,
+        dataType: 'json',  // <-- what to expect back from the PHP script, if anything
+        cache: false,
+        contentType: false, 
+        processData: false,
+        data: form_data,                         
+        type: 'post',
+        success: function (response) {
+            onSuccess(response);
+        },
+        error: function (xhr, status) {
+            onError(xhr, status);
+        }
+    });
+}
 function printDedicadas(url, data, drawer){
     var comandas = prepareDedicadas(data);
     comandas.forEach(function(p){

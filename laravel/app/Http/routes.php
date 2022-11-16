@@ -619,4 +619,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/invalid', 'ConfigController@vistaListar');
     Route::get('/licence', 'ConfigController@readLicenceToken');
     Route::get('/valid', 'ConfigController@vistaVer');
+    
+    
+    Route::post('/file/upload/inventario', 'SaldosProductoController@importar');
+    Route::get('/file/download/inventario', 'SaldosProductoController@exportTemplate');
+
+
 });
