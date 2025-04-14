@@ -1,0 +1,40 @@
+li.highlight{
+    animation-name: highlight;
+    animation-duration: 1s;
+    animation-iteration-count: 20;
+}
+li.producto{
+    font-weight: bold;
+    font-size: 1.2em;
+    font-family: 'robotolight';
+    cursor: pointer;
+}
+li.producto>label>input[type=checkbox]{
+    /* Double-sized Checkboxes */
+    -ms-transform: scale(2); /* IE */
+    -moz-transform: scale(2); /* FF */
+    -webkit-transform: scale(2); /* Safari and Chrome */
+    -o-transform: scale(2); /* Opera */
+    margin-right: 10px;
+}
+span.sin, span.extra{
+    display: block;
+    margin-left: 24px;
+}
+h2.panel-title{
+    font-family: 'bebas_neuebold';
+    font-size: 30px;
+    display: block;
+    margin-left: 24px;
+}
+
+@keyframes highlight {
+    0%  {background-color: white;}
+    30%  {background-color: #a4d5ff;}
+}
+div.pedido{
+    vertical-align: top;
+    width: 320px;
+    display: inline-block;
+    margin: 8px;
+}

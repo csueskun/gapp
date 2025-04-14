@@ -1,0 +1,9 @@
+/laravel/vendor
+/node_modules
+/laravel/storage
+/lavarel/public/images
+/laravel/.env
+images/*
+/laravel/hsoftware.lic
+/laravel/composer.json
+/laravel/composer.lock

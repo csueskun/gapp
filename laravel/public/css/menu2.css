@@ -1,0 +1,266 @@
+.w100{
+    width: 100%;
+}
+
+section.ingredientes, section.adicionales{
+    display: none;
+}
+section.ingredientes>div{
+    /*background-color: lightgreen;*/
+    /*padding: 10px;*/
+}
+section.adicionales>div{
+    /*background-color: lightcoral;*/
+    /*padding: 10px;*/
+}
+
+button, section#tipo_productos>ul>li>a{
+    /*font-size: 22px !important;*/
+}
+
+div.contenedor-menu{
+    font-size: 20px;
+}
+section.fraccion button.producto{
+    padding: 10px;
+    height: 150px;
+}
+section.fraccion button.producto.active, section.fraccion button.producto.active>div>span{
+    background-color: #ffff8c !important;
+}
+section.fraccion button.producto>div{
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+}
+section.fraccion button.producto>div>span{
+    overflow-x: hidden;
+    position: relative;
+    top: 70px;
+    background-color: white;
+    display: block;
+}
+
+section.ingredientes button.ingrediente.active, section.ingredientes button.ingrediente.active>div>span{
+    background-color: #ffff8c !important;
+}
+section.ingredientes button.ingrediente{
+    padding: 10px;
+    height: 160px;
+}
+section.ingredientes button.ingrediente>div{
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+}
+section.ingredientes button.ingrediente>div>span{
+    overflow-x: hidden;
+    position: relative;
+    top: 70px;
+    background-color: white;
+    display: block;
+}
+
+section.adicionales button.adicional.active, section.adicionales button.adicional.active>div>span{
+    background-color: #ffff8c !important;
+}
+section.adicionales button.adicional{
+    padding: 10px;
+    height: 160px;
+}
+section.adicionales button.adicional>div{
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+}
+section.adicionales button.adicional>div>span{
+    overflow-x: hidden;
+    position: relative;
+    top: 70px;
+    background-color: white;
+    display: block;
+}
+
+
+section.fraccion{
+    margin-top: 20px;
+    padding: 10px 0px;
+}
+section.fraccion#\30, section.fraccion#\31, section.fraccion#\33{
+    background-color: white !important;
+}
+section.ingredientes-adicionales-buttons button.ingredientes,
+section.ingredientes-adicionales-buttons button.adicionales{
+    width: 200px;
+}
+.pl40{
+    padding-left: 40px;
+}
+button#agregar-pp{
+    width: 200px;
+    display: inline-block;
+}
+button#agregar-pp i{
+    width: 30px;
+}
+.input-group.number-spinner.cantidad input{
+    font-size: 1.8em;
+    height: 45px;
+    width: 80px;
+}
+section.fraccion section.ingredientes-adicionales-buttons,
+section#tamanos,
+section#fracciones,
+section#acciones{
+    padding-top: 12px;
+}
+
+@media screen and (max-device-width:1000px){
+    div.contenedor-menu button{
+        font-size: 2em !important;
+    }
+    section#tipo_productos>ul>li>a{
+        font-size: 2em !important;
+    }
+    section.fraccion button.producto{
+        padding: 4px;
+        height: 180px;
+    }
+    .input-group.number-spinner.cantidad input{
+        height: 70px !important;
+    }
+    section.ingredientes-adicionales-buttons button.ingredientes,
+    section.ingredientes-adicionales-buttons button.adicionales{
+        width: 300px;
+    }
+    section.adicionales button.adicional,
+    section.ingredientes button.ingrediente{
+        padding: 4px;
+        height: 180px;
+    }
+    section.fraccion button.producto>div>span{
+        font-size: 0.8em;
+    }
+    ul>a.usuario, ul>a.usuario:active, ul>a.usuario:visited, ul>a.usuario:hover,
+    div#usuario-dropdown>a, div#usuario-dropdown>a:active,
+    div#usuario-dropdown>a:visited, div#usuario-dropdown>a:hover{
+        font-size: 1em;
+    }
+    a#navbarDropdownMenuLink span:not(.fa){
+        display: none;
+    }
+    a#navbarDropdownMenuLink img{
+        height: 50px;
+    }
+}
+
+div#pedido{
+    height: 100%; /* 100% Full-height */
+    width: 380px; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 60px; /* Stay at the top */
+    right: -380px;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    z-index: 1031;
+}
+div#boton-abrir-cerrar-pedido{
+    float: right; /* Place content 60px from the top */
+    transition: 0.5s;
+}
+section#cabeza{
+    height: 100px;
+    background-color: #dd4b39;
+    margin-top: -2px;
+}
+section#cabeza #boton-abrir-cerrar-pedido>i{
+    color: white;
+    font-size: 2.2em;
+}
+div#pedido{
+    font-size: 20px;
+}
+div#pedido>div.container-pedido{
+    background-color: #f2f7f8;
+    padding: 8px 0px 8px 4px;
+    border: 0px solid #dd4b39;
+    border-left-width: 8px;
+    border-radius: 3px;
+}
+table.tag-valor{
+    width: 100%;
+    font-size: 2.2em;
+}
+table.tag-valor tr td:nth-child(2){
+    text-align: right;
+    color: red;
+}
+div#pedido>div.container-pedido button{
+    font-size: 2em;
+}
+div#pedido>div.container-pedido table.producto,
+div#pedido>div.container-pedido table.ingredientes-pedidos{
+    width: 100%;
+}
+div#pedido>div.container-pedido table.producto tr td:nth-child(2),
+div#pedido>div.container-pedido table.ingredientes-pedidos td:nth-child(2){
+    text-align: right;
+    width: 1px;
+    font-size: 0.8em;
+    padding: 4px 2px;
+}
+div#pedido>div.container-pedido table.producto tr td:nth-child(2) button,
+div#pedido>div.container-pedido table.ingredientes-pedidos td:nth-child(2) button{
+    padding: 0px 4px;
+}
+div#pedido>div.container-pedido table.producto tr{
+    border-bottom: thin solid #CECECE;
+}
+div#pedido>div.container-pedido table.producto tr{
+    padding: 4px 2px;
+    background-color: white;
+}
+div#pedido>div.container-pedido table.producto tr td:nth-child(1){
+    font-size: 1.5em;
+    color: gray;
+    line-height: 0.9em;
+}
+div#pedido>div.container-pedido table.producto tr td:nth-child(1),
+div#pedido>div.container-pedido table.producto tr td:nth-child(1){
+    padding-left: 0.1em;
+}
+div#pedido>div.container-pedido table.producto tr td:nth-child(1) div.adicionales,
+div#pedido>div.container-pedido table.producto tr td:nth-child(1) div.ingredientes{
+    display: initial;
+    font-size: 0.8em;
+    color: white;
+    padding-left: 0.1em;
+    padding-right: 0.1em;
+}
+div#pedido>div.container-pedido table.producto tr td:nth-child(1) div.adicionales{
+    background-color: #5cb85c;
+}
+div#pedido>div.container-pedido table.producto tr td:nth-child(1) div.ingredientes{
+    background-color: #ee5f5b;
+}
+div#pedido>div.container-pedido table.tipo-producto{
+    width: 100%;
+}
+div#pedido>div.container-pedido table.tipo-producto tr{
+}
+div#pedido>div.container-pedido table.tipo-producto tr td{
+    color: gray;
+    font-size: 2em;
+    text-align: center;
+}
+div#pedido>div.container-pedido table.producto tr td span.cantidad{
+    color: #5cb85c;
+    margin-right: 0.1em;
+}
+div#pedido>div.container-pedido table.tag-valor tr td{
+    color: gray;
+}
+div#pedido>div.container-pedido table.tag-valor tr td:nth-child(2){
+    color: #5cb85c;
+}
