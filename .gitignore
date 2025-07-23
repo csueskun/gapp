@@ -8,3 +8,4 @@ services/php/app/storage/framework/views/**
 services/php/app/storage/framework/views/
 services/php/app/storage/logs/**
 services/php/app/storage/logs/
+services/php/app/composer.lock
