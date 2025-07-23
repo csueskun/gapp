@@ -1,0 +1,19 @@
+.datatable.table{
+
+}
+.datatable.table thead th,
+.midatatable.table thead th{
+    line-height: 18px;
+    padding: 8px;
+}
+.datatable.table tbody td,
+.midatatable.table tbody td{
+    font-size: 14px;
+    padding: 6px 8px;
+}
+.datatable.table tbody td>button,
+.midatatable.table tbody td>button,
+.midatatable.table tbody td>a.btn{
+    font-size: 12px;
+    padding: 4px 8px;
+}
