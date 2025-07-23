@@ -1,11 +1,10 @@
-laravel/vendor/**
-laravel/storage/framework/cache/**
-laravel/storage/framework/sessions/**
-laravel/storage/framework/views/**
-laravel/storage/logs/**
-
 services/php/app/vendor/**
+services/php/app/vendor/
 services/php/app/storage/framework/cache/**
+services/php/app/storage/framework/cache/
 services/php/app/storage/framework/sessions/**
+services/php/app/storage/framework/sessions/
 services/php/app/storage/framework/views/**
+services/php/app/storage/framework/views/
 services/php/app/storage/logs/**
+services/php/app/storage/logs/
