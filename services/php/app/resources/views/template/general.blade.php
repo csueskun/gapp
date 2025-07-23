@@ -326,7 +326,7 @@
             var mesa = data.order.mesa;
             var version = menuVersionFromDevice();
             const message = `<p>Cocina ha terminado una preparación en este pedido</p>`;
-            const linkMessage = `<p>Cocina ha terminado una preparación: <a href="/mesa/${mesa}/?v=${version}&highlight=${data.order.id}"><u>Ir a pedido</u></a></p>`;
+            const linkMessage = `<p>Cocina ha terminado una preparación para mesa: ${mesa}: <a href="/mesa/${mesa}/?v=${version}&highlight=${data.order.id}"><u>Ir a pedido</u></a></p>`;
             if (window.location.pathname === `/mesa/${mesa}/`) {
                 mostrarInfo(message);
                 itemPreparado(data.order.id);
