@@ -1421,10 +1421,10 @@ class PedidoController extends Controller
 
     public function cancelarPedido($pedido){
         $data = array(
-            'id' => $pedido->id,
+            'id' => $pedido,
             'user_id' => Auth::user()->id
         );
         // app(\App\Services\PushNotifier::class)->sendNewOrder($data);
-        Pedido::destroy($pedido->id);
+        Pedido::destroy($pedido);
     } 
 }

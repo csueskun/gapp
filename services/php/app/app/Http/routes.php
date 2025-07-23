@@ -150,15 +150,7 @@ Route::post('/pedidos/pedido/{id}', function ($id = null) {
     return $pedido;
 });
 
-Route::post('/pedidos/cancelar/{id}', 'ProductoController@cancelarPedido');
-// Route::post('/pedidos/cancelar/{id}', function ($id = null) {
-//     try {
-//         $controller = app('App\Http\Controllers\PedidoController');
-//         $pedido = $controller->buscar($id);
-//         $controller->borrarPorId($pedido->id);
-//     } catch (Exception $exc) {
-//     }
-// });
+Route::post('/pedidos/cancelar/{id}', 'PedidoController@cancelarPedido');
 
 Route::post('/pedidos/cancelarProductoPedido/{producto_pedido_id}', function ($producto_pedido_id = null, $mesa = null) {
     $controller = app('App\Http\Controllers\ProductoPedidoController');
