@@ -5,7 +5,13 @@ ARG DEBUG_HOST
 RUN apk update && apk add libpng-dev memcached
 
 # Install CUPS client and dependencies linux only
-RUN apk add --no-cache cups cups-client
+RUN apk add --no-cache \
+  cups \
+  cups-client \
+  avahi \
+  dbus \
+  bash
+RUN echo "ServerName cups" > /etc/cups/client.conf
 
 # Lumen packages
 RUN docker-php-ext-install mbstring tokenizer mysqli pdo_mysql gd zip
@@ -43,4 +49,4 @@ RUN echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-x
     && echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_log=/tmp/xdebug.log" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.idekey=tdplusapi" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo 'xdebug.remote_host="192.168.1.35"' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    && echo 'xdebug.remote_host="192.168.1.9"' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
