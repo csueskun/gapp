@@ -224,6 +224,7 @@ class PrinterService
     
     private function createConnector(string $impresora)
     {
+        return new CupsPrintConnector($impresora); //All
         if(env('OS') == 'linux'){
             return new CupsPrintConnector($impresora); //linux
         }
